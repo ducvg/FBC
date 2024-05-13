@@ -1,55 +1,143 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@section Stylesheets{
+@section Stylesheets {
     <link href='https://fonts.googleapis.com/css?family=Prociono' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Rancho' rel='stylesheet'>
     <style>
-        .welcome-banner{
-            text-align:center;
+        .welcome-banner {
+            text-align: center;
             background-image: url(/asset/image/welcome_banner.png);
             box-shadow: 0 1px 5px black;
         }
-        .welcome-box{
-            width:666px;
+
+        .welcome-box {
+            max-width: 666px;
+            min-width: 111px;
             background-color: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(5px);
             padding: 69px 0;
-            text-align: -webkit-center; 
+            text-align: -webkit-center;
             box-shadow: 0 5px 5px black;
         }
-        .near-shadow{
+
+        .near-shadow {
             text-shadow: 2px 2px rgba(0, 0, 0, 0.1)
         }
-        .welcome-quote{
-            display:inline-block;
-            max-width:500px;
+
+        .welcome-quote {
+            display: inline-block;
+            max-width: 500px;
         }
-        .welcome-btn{        
-            font-size:22px;
+
+        .welcome-btn {
+            font-size: 22px;
             color: #fff;
             background-color: #57c592;
         }
-        .new-books{
-            text-align:center;
+
+        .new-books {
+            text-align: center;
             font-family: Roboto
         }
+
+        .new-list {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 50px;
+        }
+
+        .book img {
+            width: 60%;
+            min-width: 150px;
+            filter: drop-shadow(0 0 5px black);
+        }
+
+        .book {
+            max-width: 456px;
+            box-shadow: 0 5px 25px #00000047;
+            border-radius: 10px;
+        }
+
+        .filler {
+            padding: 50px 50px;
+            background-color: #c4f9c457;
+        }
+
+            .filler li::marker {
+                content: image()
+            }
     </style>
 }
 <div class="welcome-banner">
     <div style="padding: 150px 0;border: 1px solid white;text-align: -webkit-center;">
         <div class="welcome-box">
             <div class="welcome-content">
-                <img style="box-shadow:1px 2px rgba(0, 0, 0, 0.1)" src="asset/image/book.png" height="33px"/><br />
+                <img style="filter: drop-shadow(0 5px 2px rgb(0, 0, 0, 0.4));" src="asset/image/book.png" height="33px" /><br />
                 <h1 class="near-shadow" style="font-family:Prociono">FBookCycle</h1>
-                <span class="welcome-quote near-shadow">One glance at a book and you hear the voice of another person, perhaps someone dead for 1,000 years. To read is to voyage through time.</span><br/>
+                <span class="welcome-quote near-shadow">One glance at a book and you hear the voice of another person, perhaps someone dead for 1,000 years. To read is to voyage through time.</span><br />
                 <br /><a href="#" class="btn welcome-btn">Get New Books !</a>
             </div>
         </div>
-     </div>
+    </div>
 </div>
-<br/><br />
+<br />
+<br />
 <div class="new-books">
     <h1>New Books !</h1>
-    <h5> Check out our newly imported books and customer's books !</h5>
+    <h3> Check out our newly imported books and customer's books !</h3><br /><br />
+    <div class="container new-list">
+        @for (int i = 0; i < 8; i++)
+        {
+            <a href="#" style="text-decoration:none;">
+                <div class="book">
+                    <div style="background-color:#0000000f;padding:10px 0">
+                        <img src="~/asset/image/testbook.jpg" />
+                    </div><br />
+                    <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">Name - author</h6>
+                    <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">69.0 Bookcoin</h6>
+                    <br />
+                </div>
+            </a>
+        }
+        <br /><br /><br />
+    </div>
+</div>
 
+<div class="filler">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 style="font-family:Rancho">Fast and Easy from Book to Bookcoin</h1>
+                <h5 style="font-family:Roboto">Today a reader, tomorrow a leader.</h5><br />
+                <ul class="fa-ul">
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Exploring new perspectives: </b>Different books offer different views of the world</p>
+                    </li>
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Avoiding boredom: </b>Different books offer different views of the world</p>
+                    </li>
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Catering to your mood: </b>Different books offer different views of the world</p>
+                    </li>
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Challenging yourself: </b>Different books offer different views of the world</p>
+                    </li>
+                </ul>
+                <form class="input-group rounded">
+                    <input type="search" class="form-control rounded" placeholder="Find Your Book Here" aria-label="Search" aria-describedby="search-addon" />
+                    <button type="submit" class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                    </btn>
+                </form>
+            </div>
+            <div class="col-md-5">
+                <img src="~/asset/image/reading.jpg" style="max-width:100%;filter: drop-shadow(5px 0px 10px rgb(0, 0, 0, 0.4));" />
+            </div>
+        </div>
+    </div>
 </div>
