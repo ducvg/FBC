@@ -1,3 +1,6 @@
+using FBC.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace FBC
 {
     public class Program
@@ -8,6 +11,9 @@ namespace FBC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<Fbc1Context>(options =>
+  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 

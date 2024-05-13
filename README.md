@@ -1,1 +1,4 @@
 # FBC
+
+# Ignore:
+appsetting.json
