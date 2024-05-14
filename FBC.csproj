@@ -12,6 +12,10 @@
     <EmbeddedResource Remove="Views\asset\**" />
     <None Remove="Views\asset\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\asset\image\maglass.png" />
+  </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">

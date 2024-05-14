@@ -12,13 +12,26 @@
 
     @RenderSection("Stylesheets", required: false)
     <style>
+        body{
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
         br {
             user-select: none;
         }
 
-        .container-fill{
-            min-height:100%;
-            height:100%;
+        .container-fill {
+            min-height: 100%;
+            height: 100%;
         }
 
         .header-nav {
@@ -34,48 +47,46 @@
             }
 
         @@media (min-width: 1666px) {
-            .container {
+            .container, .container-xxl {
                 max-width: 1555px;
             }
         }
 
-        @@media (min-width: 1966px) {
-            .container {
-                max-width: 1855px;
-            }
-        }
-
-        @@media (min-width: 2166px) {
-            .container {
-                max-width: 2055px;
-            }
-        }
-        .footer-top{
+        .footer-top {
             color: white;
         }
-        .footer-top ul{
-            list-style-type:none;
+
+        .footer-top ul {
+            list-style-type: none;
         }
 
         .footer-top li:first-child {
             color: lightgreen;
         }
-        .footer-top li:not(:last-child){
-            margin-bottom:10px;
+
+        .footer-top li:not(:last-child) {
+            margin-bottom: 10px;
         }
+
         .footer-top {
             padding: 10px 0;
             background-color: #272727;
         }
+        .footer-bottom{
+            line-height:25px;
+        }
+        .navbar {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
-    <header style="font-family:roboto;font-weight:bold">
-        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header style="font-family:roboto;font-weight:bold" class="sticky-top">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
                 <ul class="header-nav">
                     <li class="col-md-3">
-                        <a href="/"><img src="~/asset/image/logo.png" height="50px" /></a>
+                        <a href="/"><img src="~/asset/image/logo_whitebg.png" height="50px" /></a>
                     </li>
                     <li class="col-md-6">
                         <a asp-area="" asp-controller="Home" asp-action="Index">
@@ -95,54 +106,56 @@
             </div>
         </nav>
     </header>
-
-    @RenderBody()
-
+    <main>
+        @RenderBody()
+    </main>
     <br />
     <br />
-    <div class="footer-top">
-        <div class="container">
-            <hr style="border: 1.5px solid white;opacity: 1;">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="~/asset/image/logo_blackbg.png" width="80%"/>
-                </div>
-                <div class="col-md-8">
-                    <div class="container-fluid container-fill">
-                        <div class="container-fill row align-items-center">
-                            <div class="col-md-4">
-                                <ul>
-                                    <li>Discovery</li>
-                                    <li>Categories</li>
-                                    <li>Book List</li>
-                                    <li>Most Search</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-4">
-                                <ul>
-                                    <li>About</li>
-                                    <li>Help</li>
-                                    <li>Shipping</li>
-                                    <li>Affiliate</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-4">
-                                <ul>
-                                    <li>Info</li>
-                                    <li>Contact us</li>
-                                    <li>Privacy Policies</li>
-                                    <li>Terms & Conditions</li>
-                                </ul>
+    <footer class="">
+        <div class="footer-top">
+            <div class="container">
+                <hr style="border: 1.5px solid white;opacity: 1;">
+                <div class="row">
+                    <div class="col-md-4" style="text-align:center">
+                        <img src="~/asset/image/logo_blackbg.png" width="69%" style="max-height:150px;width:auto;padding-bottom:10px"/>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="container-fluid container-fill">
+                            <div class="container-fill row align-items-center">
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li>Discovery</li>
+                                        <li>Categories</li>
+                                        <li><a href="/Books">Book List</a></li>
+                                        <li>Most Search</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li>About</li>
+                                        <li>Help</li>
+                                        <li>Shipping</li>
+                                        <li>Affiliate</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li>Info</li>
+                                        <li>Contact us</li>
+                                        <li>Privacy Policies</li>
+                                        <li>Terms & Conditions</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FBC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="border-top footer-bottom text-muted">
+            <div class="container">
+                &copy; 2024 - FBC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
