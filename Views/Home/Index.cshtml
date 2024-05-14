@@ -72,7 +72,16 @@
                 <img style="filter: drop-shadow(0 5px 2px rgb(0, 0, 0, 0.4));" src="asset/image/book.png" height="33px" /><br />
                 <h1 class="near-shadow" style="font-family:Prociono">FBookCycle</h1>
                 <span class="welcome-quote near-shadow">One glance at a book and you hear the voice of another person, perhaps someone dead for 1,000 years. To read is to voyage through time.</span><br />
-                <br /><a href="#" class="btn welcome-btn">Get New Books !</a>
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <br />
+                    <a asp-controller="" asp-action="" class="btn welcome-btn">Get New Books !</a>
+                }
+                else
+                {
+                    <br />
+                    <a asp-controller="Login" asp-action="Index" class="btn welcome-btn">Login Now !</a>
+                }               
             </div>
         </div>
     </div>
