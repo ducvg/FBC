@@ -1,36 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@section Stylesheets{
+@section Stylesheets {
     <link href='https://fonts.googleapis.com/css?family=Prociono' rel='stylesheet'>
     <style>
-        .welcome-banner{
-            text-align:center;
+        .welcome-banner {
+            text-align: center;
             background-image: url(/asset/image/welcome_banner.png);
             box-shadow: 0 1px 5px black;
         }
-        .welcome-box{
-            width:666px;
+
+        .welcome-box {
+            width: 666px;
             background-color: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(5px);
             padding: 69px 0;
-            text-align: -webkit-center; 
+            text-align: -webkit-center;
             box-shadow: 0 5px 5px black;
         }
-        .near-shadow{
+
+        .near-shadow {
             text-shadow: 2px 2px rgba(0, 0, 0, 0.1)
         }
-        .welcome-quote{
-            display:inline-block;
-            max-width:500px;
+
+        .welcome-quote {
+            display: inline-block;
+            max-width: 500px;
         }
-        .welcome-btn{        
-            font-size:22px;
+
+        .welcome-btn {
+            font-size: 22px;
             color: #fff;
             background-color: #57c592;
         }
-        .new-books{
-            text-align:center;
+
+        .new-books {
+            text-align: center;
             font-family: Roboto
         }
     </style>
@@ -39,15 +44,25 @@
     <div style="padding: 150px 0;border: 1px solid white;text-align: -webkit-center;">
         <div class="welcome-box">
             <div class="welcome-content">
-                <img style="box-shadow:1px 2px rgba(0, 0, 0, 0.1)" src="asset/image/book.png" height="33px"/><br />
+                <img style="box-shadow:1px 2px rgba(0, 0, 0, 0.1)" src="asset/image/book.png" height="33px" /><br />
                 <h1 class="near-shadow" style="font-family:Prociono">FBookCycle</h1>
-                <span class="welcome-quote near-shadow">One glance at a book and you hear the voice of another person, perhaps someone dead for 1,000 years. To read is to voyage through time.</span><br/>
-                <br /><a href="#" class="btn welcome-btn">Get New Books !</a>
+                <span class="welcome-quote near-shadow">One glance at a book and you hear the voice of another person, perhaps someone dead for 1,000 years. To read is to voyage through time.</span><br />
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <br />
+                    <a asp-controller="" asp-action="" class="btn welcome-btn">Get New Books !</a>
+                }
+                else
+                {
+                    <br />
+                    <a asp-controller="Login" asp-action="Index" class="btn welcome-btn">Login Now !</a>
+                }               
             </div>
         </div>
-     </div>
+    </div>
 </div>
-<br/><br />
+<br />
+<br />
 <div class="new-books">
     <h1>New Books !</h1>
     <h5> Check out our newly imported books and customer's books !</h5>

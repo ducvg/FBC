@@ -42,12 +42,21 @@
                         <a href="facebook.com">Contact us</a>
                     </li>
                     <li class="col-md-3">
+
                         <i class="fa-regular fa-user"></i> &nbsp;
+                        @if(Context.User.Identity.IsAuthenticated)
+                        {
+                            <a>@User.Identity.Name</a>
+                        }
                         <i class="fas fa-shopping-cart"></i> &nbsp;
                         0 BookCoin
                     </li>
                 </ul>
             </div>
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                <a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+            }
         </nav>
     </header>
 
