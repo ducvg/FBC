@@ -33,7 +33,8 @@
         .welcome-btn {
             font-size: 22px;
             color: #fff;
-            background-color: #57c592;
+            background-color: #57c592; 
+            padding:5px 50px;
         }
 
         .new-books {
@@ -63,6 +64,10 @@
             padding: 50px 50px;
             background-color: #c4f9c457;
         }
+
+        .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus{
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+        }
     </style>
 }
 <div class="welcome-banner">
@@ -75,12 +80,12 @@
                 @if (Context.User.Identity.IsAuthenticated)
                 {
                     <br />
-                    <a asp-controller="" asp-action="" class="btn welcome-btn">Get New Books !</a>
+                    <a asp-controller="" asp-action="" class="btn btn-outline-success welcome-btn">Get New Books !</a>
                 }
                 else
                 {
                     <br />
-                    <a asp-controller="Login" asp-action="Index" class="btn welcome-btn">Login Now !</a>
+                    <a asp-controller="Login" asp-action="Index" class="btn btn-outline-success welcome-btn">Login Now !</a>
                 }               
             </div>
         </div>

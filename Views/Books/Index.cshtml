@@ -61,29 +61,30 @@
         .price-sort{
            
         }
+        .list-book{
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+            grid-gap: 30px 5px;
+            place-items: center;
+        }
+        .book-image{
+            max-width:200px;
+            text-align:center;
+            aspect-ratio: 1 / 1;
+        }
+        .book img {
+            height:100%;
+        }
 
-        .sort-price-select {
-            align-items: center;
-            background: #fff;
-            border: 0;
-            border-radius: 2px;
-            box-shadow: 0 1px 1px 0 rgba(0,0,0,.02);
-            box-sizing: border-box;
-            cursor: pointer;
-            display: flex;
-            height: 2.125rem;
-            justify-content: space-between;
-            line-height: 2.125rem;
-            min-width: 12.5rem;
-            padding-left: .75rem;
-            position: relative;
-            text-align: left;
-            transition: border-color .1s ease;
+        .book {
+            max-width: 200px;
+            box-shadow: 0 5px 25px #00000047;
+            border-radius: 0px;
         }
     </style>
 }
 
-<div class="container-xxl mt-3 p-2 pe-4" style="width:1678px;">
+<div class="container-xxl mt-3 p-2 pe-4">
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-10">
@@ -133,9 +134,27 @@
                         <option value="desc">Descending</option>
                     </select>
                     <select name="conditionSort" class="condition-sort btn filter-button">
-
+                        <option value="" disabled hidden selected>Sort by book's condition</option>
+                        <option value="desc">Best to Old</option>
+                        <option value="asc">Old to Best</option>
                     </select>
                 </div>
+            </div>
+            <div class="list-book mt-3">
+                @for(int i=0; i<50; i++)
+                {
+                    <a href="/Books/testbook" style="text-decoration:none;">
+                        <div class="book">
+                            <div class="book-image">
+                                <img src="~/asset/image/testbook.jpg" />
+                            </div>
+                            <div class="pt-2 pb-2">
+                            <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">Name - author</h6>
+                            <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">69.0 Bookcoin</h6>
+                            </div>
+                        </div>
+                    </a>
+                }
             </div>
         </div>
     </div>

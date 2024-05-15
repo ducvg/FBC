@@ -24,7 +24,10 @@ namespace FBC.Controllers
             var fbc1Context = _context.Books.Include(b => b.Category);
             return View(await fbc1Context.ToListAsync());
         }
-
+        public async Task<IActionResult> testbook()
+        {
+            return View();
+        }
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
