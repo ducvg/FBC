@@ -21,8 +21,7 @@ namespace FBC.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            var fbc1Context = _context.Books.Include(b => b.Category);
-            return View(await fbc1Context.ToListAsync());
+            return View(await _context.Books.ToListAsync());
         }
         public async Task<IActionResult> testbook()
         {
@@ -37,7 +36,6 @@ namespace FBC.Controllers
             }
 
             var book = await _context.Books
-                .Include(b => b.Category)
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
@@ -50,7 +48,6 @@ namespace FBC.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
             return View();
         }
 
@@ -59,7 +56,7 @@ namespace FBC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Title,CategoryId,Author,Description,Condition,Image1,Image2,Image3,Image4,Status,Credit")] Book book)
+        public async Task<IActionResult> Create([Bind("BookId,Title,Author,Publisher,Description,Condition,NoPage,Weight,Width,Length,Height,Image1,Image2,Image3,Image4,Status,Credit")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +64,6 @@ namespace FBC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", book.CategoryId);
             return View(book);
         }
 
@@ -84,7 +80,6 @@ namespace FBC.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", book.CategoryId);
             return View(book);
         }
 
@@ -93,7 +88,7 @@ namespace FBC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,CategoryId,Author,Description,Condition,Image1,Image2,Image3,Image4,Status,Credit")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,Author,Publisher,Description,Condition,NoPage,Weight,Width,Length,Height,Image1,Image2,Image3,Image4,Status,Credit")] Book book)
         {
             if (id != book.BookId)
             {
@@ -120,7 +115,6 @@ namespace FBC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", book.CategoryId);
             return View(book);
         }
 
@@ -133,7 +127,6 @@ namespace FBC.Controllers
             }
 
             var book = await _context.Books
-                .Include(b => b.Category)
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {

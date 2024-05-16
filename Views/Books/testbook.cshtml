@@ -54,7 +54,6 @@
         }
         .book-origin{
             display: flex;
-            justify-content: space-between;
         }
         .all-conditions{
             display:grid;
@@ -87,6 +86,14 @@
         .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
             box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
         }
+        .detail-box{
+            border: 1px solid rgba(0, 0, 0, .125);
+        }
+        .book-general-info{
+            display: flex;
+            justify-content:space-between
+        }
+        .book-description
     </style>
 }
 <div class="container mt-3 " style="font-family:Philosopher">
@@ -121,9 +128,10 @@
             <div>
                 <h3>[Book condition] Testbook Title</h3>
                 <div class="book-origin mt-3 mb-1">
+                    <span><b>Category: &nbsp;</b></span>
                     @for(int i=0; i<5; i++)
                     {
-                        <span>Category @i</span>
+                        <span>Category @i, &nbsp;</span>
                     }
                 </div>
                 <h3 style="font-weight:bold;color:#56B280">69.00 Bookcoin</h3>
@@ -146,13 +154,16 @@
                         </a>
                     }
                 </div>
-                <div class="detail-box">
-                    <div style="font-family: Philosopher">
+                <div class="detail-box mt-4 p-4">
+                    <div class="book-general-info" style="font-family: Philosopher">
                         <span><b>Pages: </b>300 pages</span>
                         <span><b>Dimension: </b> 20cm x 10cm x 5cm</span>
-                        <span><b>Weight: </b></span>
+                        <span><b>Weight: </b> 0.8 kg</span>
                     </div>
-
+                    <div class="book-description mt-3">
+                        <b>About this book:</b><br />
+                        <p style="text-align:justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    </div>
                 </div>
             </div>
         </div>
