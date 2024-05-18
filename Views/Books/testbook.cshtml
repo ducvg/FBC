@@ -1,0 +1,199 @@
+﻿@section Stylesheets{
+    <style>
+        @@media (min-width: 1666px){
+            .container, .container-xxl {
+                max-width:1320px;
+            }
+        }
+        .navbar-detail a{
+            text-decoration: none;
+            color: #239523;
+        }
+        .navbar-detail a:last-child{
+            color:black;
+        }
+        
+        .r{
+            background:white;
+            aspect-ratio: 1/1;
+            max-width:500px;
+            text-align:center;
+        }
+        .square img{
+            height:100%
+        }
+        .image-set{
+            display:grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap:10px;
+        }
+        .book-image{
+            text-align: center;
+            aspect-ratio: 1/1;
+        }
+        .book-image:hover{
+            cursor:pointer;
+        }
+        .book-image img{
+            width:90%;
+        }
+        main{
+            background: #d3d3d33d;
+        }
+        .main{
+            background: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+        }
+        .active-image{
+            border: 2px solid limegreen;
+        }
+        .seperate{
+            border-right: 1px solid black;
+            right: -1rem;
+        }
+        .book-origin{
+            display: flex;
+        }
+        .all-conditions{
+            display:grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap:10px;
+            text-align: center;
+        }
+        .all-conditions a{
+            text-decoration:none;
+            color:black;
+        }
+        .book-item{
+            border: 1px solid limegreen;
+            border-radius:10px;
+        }
+        .btn-cart{
+            width:50%;
+            color:white;
+            background: #56B280;
+            font-size: 1.5rem;
+        }
+
+        .hue{
+            color: rgba(132, 154, 142, 1);
+        }
+        .black{
+            color:black;
+        }
+
+        .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+        }
+        .detail-box{
+            border: 1px solid rgba(0, 0, 0, .125);
+        }
+        .book-general-info{
+            display: flex;
+            justify-content:space-between
+        }
+        .book-description
+    </style>
+}
+<div class="container mt-3 " style="font-family:Philosopher">
+    <div class="navbar-detail">
+        <a href="/" class="nav-detail">FBC</a>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <a href="#" class="nav-detail">Category</a>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <a href="#" class="nav-detail">Author</a>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <a href="/Books" class="nav-detail">Books</a>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <a class="nav-detail">Testbook Title</a>
+    </div>
+    <div class="row mt-3 main">
+        <div class="col-md-5 ps-3 pe-3 mt-3 mb-3 seperate">
+            <div class="square">
+                <div class="r">
+                    <img src="\asset\image\testbook.jpg" />
+                </div>
+                <div class="image-set mt-3">
+                    @for(int i=0; i<4; i++)
+                    {
+                        <div class="book-image p-1">
+                            <img src="\asset\image\testbook.jpg" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7 ps-4 pt-3 pb-3 pe-4">
+            <div>
+                <h3>[Book condition] Testbook Title</h3>
+                <div class="book-origin mt-3 mb-1">
+                    <span><b>Category: &nbsp;</b></span>
+                    @for(int i=0; i<5; i++)
+                    {
+                        <span>Category @i, &nbsp;</span>
+                    }
+                </div>
+                <h3 style="font-weight:bold;color:#56B280">69.00 Bookcoin</h3>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-outline-success btn-cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"></path>
+                        </svg>
+                         + Add to cart
+                    </button>
+                </div>
+                <div class="all-conditions mt-4">
+                    @for(int i=0; i<10; i++)
+                    {
+                        <a href="#">
+                        <div class="book-item pt-2 pb-2">
+                            <h6>[condition @i]</h6>
+                            <h6 style="font-weight:bold;">@(69.00-i*2) Bookcoin</h6>
+                        </div>
+                        </a>
+                    }
+                </div>
+                <div class="detail-box mt-4 p-4">
+                    <div class="book-general-info" style="font-family: Philosopher">
+                        <span><b>Pages: </b>300 pages</span>
+                        <span><b>Dimension: </b> 20cm x 10cm x 5cm</span>
+                        <span><b>Weight: </b> 0.8 kg</span>
+                    </div>
+                    <div class="book-description mt-3">
+                        <b>About this book:</b><br />
+                        <p style="text-align:justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var firstBookImage = document.querySelector('.book-image');
+        if (firstBookImage) {
+            firstBookImage.classList.add('active-image');
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var bookImages = document.querySelectorAll('.book-image');
+
+        function addRedBorder(event) {
+            // Remove the red border from any currently highlighted item
+            var currentRedBorder = document.querySelector('.book-image.active-image');
+            if (currentRedBorder) {
+                currentRedBorder.classList.remove('active-image');
+            }
+
+            // Add the red border to the hovered item
+            event.currentTarget.classList.add('active-image');
+        }
+
+        bookImages.forEach(function (bookImage) {
+            bookImage.addEventListener('mouseenter', addRedBorder);
+        });
+    });
+
+</script>

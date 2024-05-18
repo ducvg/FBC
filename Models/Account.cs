@@ -11,5 +11,5 @@ public partial class Account
 
     public bool? Ban { get; set; }
 
-    public virtual ICollection<User> Users { get; set; } = new List<User>(); 
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

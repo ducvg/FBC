@@ -9,13 +9,23 @@ public partial class Book
 
     public string Title { get; set; } = null!;
 
-    public int CategoryId { get; set; }
-
     public string? Author { get; set; }
+
+    public string? Publisher { get; set; }
 
     public string? Description { get; set; }
 
-    public int Condition { get; set; }
+    public string Condition { get; set; } = null!;
+
+    public int NoPage { get; set; }
+
+    public decimal? Weight { get; set; }
+
+    public decimal? Width { get; set; }
+
+    public decimal? Length { get; set; }
+
+    public decimal? Height { get; set; }
 
     public string? Image1 { get; set; }
 
@@ -29,9 +39,9 @@ public partial class Book
 
     public decimal? Credit { get; set; }
 
-    public virtual Category Category { get; set; } = null!;
-
     public virtual ICollection<BookOrder> BookOrders { get; set; } = new List<BookOrder>();
 
     public virtual ICollection<CartOrder> Carts { get; set; } = new List<CartOrder>();
+
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 }
