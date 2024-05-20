@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using FBC.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -95,36 +101,46 @@
                             </a>
                         </div>
                     </li>
-                    <li class="col-md-6">
+                    <li class="col-md-5">
                         <a asp-area="" asp-controller="Home" asp-action="Index">
                             Browse
                             <i class="fas fa-chevron-down"></i>
                         </a>
                         <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         <a asp-area="" asp-controller="Home" asp-action="About">About</a>
-                        <a href="facebook.com">Contact us</a>
+                        <a href="https://www.facebook.com/profile.php?id=61559811297067">Contact us</a>
+                    </li> 
+                    @*  @if(Context.User.Identity.IsAuthenticated)
+                    {
+                        <a>@User.Identity.Name</a>
+                    }  *@
+                         <li class="col-md-4">
+                        @if (SignInManager.IsSignedIn(User))
+{
+                    @* <li class="nav-item"> *@
+                    <i class="fa-regular fa-user"></i>
+                        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
+                        <i class="fas fa-shopping-cart"></i> 
+                    @* </li> *@
+
+                    <li class="nav-item"> 
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                         </form>       
+                    </li> 
+}
+                    &nbsp;
+                         
+                    &nbsp;
+             @*        0 BookCoin *@
                     </li>
-                    <li class="col-md-3 d-flex justify-content-around">
-                        <div>
-                            <i class="fa-regular fa-user"></i>
-                            @if (Context.User.Identity.IsAuthenticated)
-                            {
-                                <a>@User.Identity.Name</a>
-                            }
-                        </div>
-                        
-                        <div>
-                            <a href="/Cart"><i class="fas fa-shopping-cart"></i></a>
-                             &nbsp;
-                            0 BookCoin
-                        </div>
-                    </li>
+                    
                 </ul>
             </div>
-            @if (Context.User.Identity.IsAuthenticated)
+            @* @if (Context.User.Identity.IsAuthenticated)
             {
                 <a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
-            }
+            }  *@
         </nav>
     </header>
     <main>

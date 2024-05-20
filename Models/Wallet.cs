@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FBC.Models;
 
@@ -15,7 +16,7 @@ public partial class Wallet
 
     public decimal? Credit { get; set; }
 
-    public int? UserId { get; set; }
-
-    public virtual User? User { get; set; }
+    public string Id { get; set; }
+    [ForeignKey("Id")]
+    public virtual User User { get; set; } = null!;
 }
