@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /appsettings.Development.json
 /appsettings.json
 /appsettings.Development.json
+/Models/User.cs
+/Models/User.cs
