@@ -65,7 +65,6 @@ namespace FBC.Controllers
                 };
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                 AuthenticationProperties properties = new AuthenticationProperties()
                 {
                     AllowRefresh = true,
@@ -78,7 +77,6 @@ namespace FBC.Controllers
             }
 
             ViewData["ValidateMessage"] = "user not found";
-
             return RedirectToAction("Index", "Login");
         }
     }

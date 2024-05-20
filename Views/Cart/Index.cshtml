@@ -1,0 +1,60 @@
+﻿@model IEnumerable<FBC.Models.CartOrder>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+@section Stylesheets{
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        .mt-large{
+            margin-top:5rem;
+        }
+        .active-header{
+            color:#56B280;
+        }
+        .cart-nav a{
+            text-decoration:none;
+        }
+
+        .book-image {
+            text-align: center;
+            aspect-ratio: 1/1;
+        }
+        .book-image img {
+            width: 100%;
+        }
+    </style>
+}
+<div class="container mt-large" style="font-family:Philosopher">
+    <h3 style="font-family: Poppins;text-align:center"> Your cart items</h3>
+    <div class="cart-nav mb-4">
+        <a href="/" class="active-header">FBC</a>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <a href="#" class="active-header">Cart</a>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <span >Shipping</span>
+        <img alt="icon arrow right" class="EB95ts" src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/966fbe37fe1c72e3f2dd.svg">
+        <span >Payment</span>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Book</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(int i=0; i<15; i++)
+                {
+                    
+                }
+                <tr>
+                    <td class="book-image"><img src="~/asset/image/testbook.jpg" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

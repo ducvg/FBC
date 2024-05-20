@@ -87,8 +87,13 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
                 <ul class="header-nav">
-                    <li class="col-md-2">
-                        <a href="/"><img src="~/asset/image/logo_whitebg.png" height="50px" /></a>
+                    <li class="col-md-3">
+                        <div>
+                            <a href="/">
+                                <img class="me-4" src="~/asset/image/logo_icon.png" height="35px" />
+                                <img src="~/asset/image/logo_text.png" height="25px" />
+                            </a>
+                        </div>
                     </li>
                     <li class="col-md-6">
                         <a asp-area="" asp-controller="Home" asp-action="Index">
@@ -99,16 +104,20 @@
                         <a asp-area="" asp-controller="Home" asp-action="About">About</a>
                         <a href="facebook.com">Contact us</a>
                     </li>
-                    <li class="col-md-4">
-
-                        <i class="fa-regular fa-user"></i>
-                        @if(Context.User.Identity.IsAuthenticated)
-                        {
-                            <a>@User.Identity.Name</a>
-                        }
-                        &nbsp;
-                        <i class="fas fa-shopping-cart"></i> &nbsp;
-                        0 BookCoin
+                    <li class="col-md-3 d-flex justify-content-around">
+                        <div>
+                            <i class="fa-regular fa-user"></i>
+                            @if (Context.User.Identity.IsAuthenticated)
+                            {
+                                <a>@User.Identity.Name</a>
+                            }
+                        </div>
+                        
+                        <div>
+                            <a href="/Cart"><i class="fas fa-shopping-cart"></i></a>
+                             &nbsp;
+                            0 BookCoin
+                        </div>
                     </li>
                 </ul>
             </div>
