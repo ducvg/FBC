@@ -12,7 +12,6 @@ public partial class User : IdentityUser
 
     public bool? Gender { get; set; }
 
-
     public virtual ICollection<BookOrder> BookOrders { get; set; } = new List<BookOrder>();
 
     public virtual ICollection<CartOrder> CartOrders { get; set; } = new List<CartOrder>();
