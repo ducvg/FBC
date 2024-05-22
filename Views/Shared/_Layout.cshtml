@@ -84,10 +84,6 @@
         .navbar {
             margin-bottom: 0;
         }
-
-        .fa-user:before, .fa-shopping-cart:before{
-            vertical-align: -webkit-baseline-middle;
-        }
     </style>
         @RenderSection("Stylesheets", required: false)
     
@@ -122,11 +118,11 @@
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <div class="d-flex">
-                        <i class="fa-regular fa-user"></i>
+                        <a class="ps-0 pe-0"><i class="fa-regular fa-user"></i></a>
                         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
                     </div>
                     <div class="d-flex">
-                        <i class="fas fa-shopping-cart"></i>
+                                <a class="ps-0 pe-0" href="/Cart"><i class="fas fa-shopping-cart" style="height: 100%;"></i></a>
                         <a href="#Wallet">0 BookCoin</a>
                     </div>
                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -147,6 +143,7 @@
         <br />
         <br />
     </main>
+    @RenderSection("Body", required: false)
     <footer class="">
         <div class="footer-top">
             <div class="container">
