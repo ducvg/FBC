@@ -38,7 +38,7 @@
         .welcome-btn {
             font-size: 22px;
             color: #fff;
-            background-color: #57c592; 
+            background-color: #37a572;
             padding:5px 50px;
         }
 
@@ -71,7 +71,7 @@
         }
 
         .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus{
-            box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,.8);
         }
     </style>
 }
@@ -90,11 +90,11 @@
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <br />
-                    <a asp-controller="" asp-action="" class="btn btn-outline-success welcome-btn">Get New Books !</a>               
+                    <a href="/Exchange" class="btn btn-outline-success welcome-btn">Show Us Your Books !</a>
                 }
                 else
                 {
-                    <a id="login" asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success welcome-btn">Login Now !</a>
+                    <a id="login" asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success welcome-btn">Join Us Now!</a>
                 }
             </div>
         </div>
