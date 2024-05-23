@@ -21,11 +21,26 @@ namespace FBC.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Books.ToListAsync());
+            var booklist = await _context.Books.ToListAsync();
+            var catelist = await _context.Categories.ToListAsync();
+            ViewData["catelist"] = catelist;
+            return View(booklist);
         }
-        public async Task<IActionResult> testbook()
+        public async Task<IActionResult> testbook(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Books
+                .FirstOrDefaultAsync(m => m.BookId == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);;
         }
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)

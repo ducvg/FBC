@@ -1,4 +1,10 @@
-﻿@section Stylesheets{
+﻿@model IEnumerable<FBC.Models.Book>
+
+@{
+    var cate = (IEnumerable<dynamic>)ViewData["catelist"];
+}
+
+@section Stylesheets{
     <style>
         .input-group-text{
             background-color:unset;
@@ -116,9 +122,11 @@
             <h5 style="">Discovery by Category</h5>
             <div class="category-list me-10">
                 <p>All Categories</p>
-                @for(int i=0; i < 10; i++)
+                @foreach(var item in cate)
                 {
-                    <p>Category @i</p>
+                    <p>
+                        <a>@item.Name</a>
+                    </p>
                 }
             </div>
         </div>
@@ -142,16 +150,16 @@
                 </div>
             </div>
             <div class="list-book mt-3">
-                @for(int i=0; i<50; i++)
+                @foreach(var item in Model)
                 {
-                    <a href="/Books/testbook" style="text-decoration:none;">
+                    <a asp-controller="Books" asp-action="testbook" asp-route-id="@item.BookId" style="text-decoration:none;">
                         <div class="book pt-2 pb-2">
                             <div class="book-image">
-                                <img src="~/asset/image/testbook.jpg" />
+                                <img src="@item.Image1" />
                             </div>
                             <div class="pt-2 pb-2">
-                            <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">Name - author</h6>
-                            <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">69.0 Bookcoin</h6>
+                            <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">@item.Title - @item.Author</h6>
+                            <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">@item.Credit Credit</h6>
                             </div>
                         </div>
                     </a>
