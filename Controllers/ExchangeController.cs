@@ -20,9 +20,8 @@ namespace FBC.Controllers
 
         // GET: Exchange
         public async Task<IActionResult> Index()
-        {
-            var fbc1Context = _context.ExchangeRequests.Include(e => e.User);
-            return View(await fbc1Context.ToListAsync());
+        {            
+            return View();
         }
 
         // GET: Exchange/Details/5

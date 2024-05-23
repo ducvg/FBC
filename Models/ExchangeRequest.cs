@@ -16,7 +16,7 @@ public partial class ExchangeRequest
 
     public string? Description { get; set; }
 
-    public int Condition { get; set; }
+    public string Condition { get; set; } = null!;
 
     public string? Image1 { get; set; }
 
@@ -29,8 +29,11 @@ public partial class ExchangeRequest
     public int Status { get; set; }
 
     public decimal? Credit { get; set; }
+    
 
     public string Id { get; set; }
     [ForeignKey("Id")]
     public virtual User User { get; set; } = null!;
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+
 }

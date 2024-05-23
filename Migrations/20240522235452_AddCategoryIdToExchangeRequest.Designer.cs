@@ -4,6 +4,7 @@ using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBC.Migrations
 {
     [DbContext(typeof(Fbc1Context))]
-    partial class Fbc1ContextModelSnapshot : ModelSnapshot
+    [Migration("20240522235452_AddCategoryIdToExchangeRequest")]
+    partial class AddCategoryIdToExchangeRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +55,6 @@ namespace FBC.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("CartDetail", (string)null);
-                });
-
-            modelBuilder.Entity("CategoryExchangeRequest", b =>
-                {
-                    b.Property<int>("CategoriesCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExchangeRequestsExchangeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesCategoryId", "ExchangeRequestsExchangeId");
-
-                    b.HasIndex("ExchangeRequestsExchangeId");
-
-                    b.ToTable("CategoryExchangeRequest");
                 });
 
             modelBuilder.Entity("FBC.Models.Book", b =>
@@ -217,6 +205,9 @@ namespace FBC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
+                    b.Property<int?>("ExchangeRequestExchangeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -224,6 +215,8 @@ namespace FBC.Migrations
 
                     b.HasKey("CategoryId")
                         .HasName("PK__Category__19093A0B456777E8");
+
+                    b.HasIndex("ExchangeRequestExchangeId");
 
                     b.ToTable("Category", (string)null);
                 });
@@ -425,13 +418,13 @@ namespace FBC.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "04c451db-3ed9-49c0-a6cb-62b89f6bc8c6",
+                            Id = "679004a7-910c-4ce6-ad72-d47b7c449906",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "8cc7265f-795c-4895-b319-6846ce38f791",
+                            Id = "65acc9bf-9e8c-4cfc-84c3-091265508eff",
                             Name = "client",
                             NormalizedName = "client"
                         });
@@ -593,21 +586,6 @@ namespace FBC.Migrations
                         .HasConstraintName("FK__CartDetai__CartI__4316F928");
                 });
 
-            modelBuilder.Entity("CategoryExchangeRequest", b =>
-                {
-                    b.HasOne("FBC.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FBC.Models.ExchangeRequest", null)
-                        .WithMany()
-                        .HasForeignKey("ExchangeRequestsExchangeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FBC.Models.BookOrder", b =>
                 {
                     b.HasOne("FBC.Models.User", "User")
@@ -628,6 +606,13 @@ namespace FBC.Migrations
                         .HasConstraintName("FK__CartOrder__UserI__403A8C7D");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FBC.Models.Category", b =>
+                {
+                    b.HasOne("FBC.Models.ExchangeRequest", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ExchangeRequestExchangeId");
                 });
 
             modelBuilder.Entity("FBC.Models.ExchangeRequest", b =>
@@ -717,6 +702,11 @@ namespace FBC.Migrations
                         .HasForeignKey("BookOrderId")
                         .IsRequired()
                         .HasConstraintName("FK__OrderDeta__BookO__3C69FB99");
+                });
+
+            modelBuilder.Entity("FBC.Models.ExchangeRequest", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("FBC.Models.User", b =>
