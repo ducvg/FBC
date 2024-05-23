@@ -4,6 +4,7 @@ using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBC.Migrations
 {
     [DbContext(typeof(Fbc1Context))]
-    partial class Fbc1ContextModelSnapshot : ModelSnapshot
+    [Migration("20240522140912_NameMigration2")]
+    partial class NameMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +55,6 @@ namespace FBC.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("CartDetail", (string)null);
-                });
-
-            modelBuilder.Entity("CategoryExchangeRequest", b =>
-                {
-                    b.Property<int>("CategoriesCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExchangeRequestsExchangeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesCategoryId", "ExchangeRequestsExchangeId");
-
-                    b.HasIndex("ExchangeRequestsExchangeId");
-
-                    b.ToTable("CategoryExchangeRequest");
                 });
 
             modelBuilder.Entity("FBC.Models.Book", b =>
@@ -425,13 +413,13 @@ namespace FBC.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "04c451db-3ed9-49c0-a6cb-62b89f6bc8c6",
+                            Id = "4aa0b4a0-829d-4523-bda7-94e2e13b7861",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "8cc7265f-795c-4895-b319-6846ce38f791",
+                            Id = "d40e4469-1705-4ca6-82ff-06a049992ad7",
                             Name = "client",
                             NormalizedName = "client"
                         });
@@ -591,21 +579,6 @@ namespace FBC.Migrations
                         .HasForeignKey("CartId")
                         .IsRequired()
                         .HasConstraintName("FK__CartDetai__CartI__4316F928");
-                });
-
-            modelBuilder.Entity("CategoryExchangeRequest", b =>
-                {
-                    b.HasOne("FBC.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FBC.Models.ExchangeRequest", null)
-                        .WithMany()
-                        .HasForeignKey("ExchangeRequestsExchangeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FBC.Models.BookOrder", b =>

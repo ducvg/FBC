@@ -1,4 +1,6 @@
-﻿@section Stylesheets {
+﻿@model ExchangeRequest
+
+@section Stylesheets {
     <link href="~/js/cropper/cropper.css" rel="stylesheet" />
     <script src="~/js/cropper/cropper.js"></script>
     <style>
@@ -59,8 +61,36 @@
         .roboto {
             font-family: roboto
         }
-        .category-item{
-            
+
+        .category-item {
+            display: inline-block;
+            border: 1px solid rgba(40,167,69,.8);
+            border-radius: 10px;
+            padding: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .category-active {
+            background: #37a572;
+            color: white;
+        }
+
+        .w-30 {
+            width: 30% !important
+        }
+
+        .w-875 {
+            width: 87.5% !important;
+        }
+
+        .w-95 {
+            width: 95% !important;
+        }
+
+        .general-info {
+            display: grid;
+            grid-template-columns: 45% 32% 33%;
         }
     </style>
     <style>
@@ -74,7 +104,6 @@
             text-transform: inherit;
             align-self: flex-end;
             box-sizing: border-box;
-            width: 100%;
             padding: 1px 16px 1px;
             transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
@@ -100,95 +129,113 @@
 }
 <h3 class="mt-large" style="text-align:center"><b>Describe Your Book</b></h3>
 <div class="container mt-large container-shadow p-4" style="font-family:Philosopher">
-    <div class="book-images">
-        <h3 class="roboto">Images:</h3>
-        <div class="row mt-4">
-            <div class="col-3">
-                <div class="image-box">
-                    <img src="" id="image-front" />
-                    <div class="upload" onclick="document.getElementById('front').click()">
-                        <input required id="front" type="file" accept="image/*" hidden onchange="uploadImage('front')" />
-                        <div id="placeholder-front">
-                            <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
-                            <h5><b>Front Book's Cover</b></h5>
+    <form>
+        <div class="book-images">
+            <h3 class="roboto">Images:</h3>
+            <div class="row mt-4">
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-front" />
+                        <div class="upload" onclick="document.getElementById('front').click()">
+                            <input required id="front" type="file" accept="image/*" hidden onchange="uploadImage('front')" />
+                            <div id="placeholder-front">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Front Book's Cover</b></h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="crop-controls" id="controls-front">
-                    <button class="btn btn-outline-success crop-btn" onclick="cropImage('front')">Crop</button>
-                    <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('front')">Reset</button>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="image-box">
-                    <img src="" id="image-back" />
-                    <div class="upload" onclick="document.getElementById('back').click()">
-                        <input required id="back" type="file" accept="image/*" hidden onchange="uploadImage('back')" />
-                        <div id="placeholder-back">
-                            <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
-                            <h5><b>Back Book's Cover</b></h5>
-                        </div>
+                    <div class="crop-controls" id="controls-front">
+                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('front')">Crop</button>
+                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('front')">Reset</button>
                     </div>
                 </div>
-                <div class="crop-controls" id="controls-back">
-                    <button class="btn btn-outline-success crop-btn" onclick="cropImage('back')">Crop</button>
-                    <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('back')">Reset</button>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="image-box">
-                    <img src="" id="image-spine" />
-                    <div class="upload" onclick="document.getElementById('spine').click()">
-                        <input required id="spine" type="file" accept="image/*" hidden onchange="uploadImage('spine')" />
-                        <div id="placeholder-spine">
-                            <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
-                            <h5><b>Book's Spine</b></h5>
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-back" />
+                        <div class="upload" onclick="document.getElementById('back').click()">
+                            <input required id="back" type="file" accept="image/*" hidden onchange="uploadImage('back')" />
+                            <div id="placeholder-back">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Back Book's Cover</b></h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="crop-controls" id="controls-spine">
-                    <button class="btn btn-outline-success crop-btn" onclick="cropImage('spine')">Crop</button>
-                    <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('spine')">Reset</button>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="image-box">
-                    <img src="" id="image-edge" />
-                    <div class="upload" onclick="document.getElementById('edge').click()">
-                        <input required id="edge" type="file" accept="image/*" hidden onchange="uploadImage('edge')" />
-                        <div id="placeholder-edge">
-                            <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
-                            <h5><b>Book's Fore-edge</b></h5>
-                        </div>
+                    <div class="crop-controls" id="controls-back">
+                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('back')">Crop</button>
+                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('back')">Reset</button>
                     </div>
                 </div>
-                <div class="crop-controls" id="controls-edge">
-                    <button class="btn btn-outline-success crop-btn" onclick="cropImage('edge')">Crop</button>
-                    <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('edge')">Reset</button>
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-spine" />
+                        <div class="upload" onclick="document.getElementById('spine').click()">
+                            <input required id="spine" type="file" accept="image/*" hidden onchange="uploadImage('spine')" />
+                            <div id="placeholder-spine">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Book's Spine</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls" id="controls-spine">
+                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('spine')">Crop</button>
+                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('spine')">Reset</button>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-edge" />
+                        <div class="upload" onclick="document.getElementById('edge').click()">
+                            <input required id="edge" type="file" accept="image/*" hidden onchange="uploadImage('edge')" />
+                            <div id="placeholder-edge">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Book's Fore-edge</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls" id="controls-edge">
+                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('edge')">Crop</button>
+                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('edge')">Reset</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="mt-large">
-        <h3 class="roboto">General Information</h3>
-        <div class="row mt-4" style="text-align: ;">
-            <div class="col-6">
-                <input required class="input-text w-75" type="text" placeholder="Book's Title" name="Title" id="Title">
+        <div class="mt-large">
+            <h3 class="roboto">General Information</h3>
+            <div class="row mt-4" style="text-align: ;">
+                <div class="col-5">
+                    <input required class="input-text w-875" type="text" placeholder="Book's Title" name="Title" id="Title">
+                </div>
+                <div class="col-4">
+                    <input required class="input-text w-875" type="text" placeholder="Author" name="Author" id="Author">
+                </div>
+                <div class="col-3">
+                    <input required class="input-text w-95" type="text" placeholder="Publisher" name="Publisher" id="Publisher">
+                </div>
             </div>
-            <div class="col-3">
-                <input required class="input-text w-75" type="text" placeholder="Author" name="Author" id="Author">
+            <div class="row mt-4" style="text-align: ;">
+                <div class="col-5">
+                    <input required class="input-text w-875" type="text" placeholder="Describe Book's condition" name="Condition" id="Condition">
+                </div>
+                <div class="col-2">
+                    <input required class="input-text w-75" type="text" placeholder="Page amount" name="Pages" id="Pages">
+                </div>
+                <div class="col-2">
+                    <input required class="input-text w-75" type="text" placeholder="Weight (kg)" name="Weight" id="Weight">
+                </div>
+                <div class="col-3">
+                    <input required class="input-text w-30" type="text" placeholder="Width" name="Width" id="Width">x
+                    <input required class="input-text w-30" type="text" placeholder="Height" name="Height" id="Height">x
+                    <input required class="input-text w-30" type="text" placeholder="Thickness" name="Length" id="Length">
+                </div>
             </div>
-            <div class="col-3">
-                <input required class="input-text w-75" type="text" placeholder="Publisher" name="Publisher" id="Publisher">
-            </div>
-        </div>
-        <div class="category-box mt-3">
-            <div>
-                @for (int i = 0; i < 15; i++)
-                {
-                    <span onclick="selectCategory(this)" class="category-item" data-category="@i">Category @i</span>
-                }
-
+            <h5 class="roboto mt-4">Select suitable categories:</h5>
+            <div class="category-box mt-1">
+                <div>
+                    @for (int i = 0; i < 15; i++)
+                    {
+                        <span onclick="selectCategory(this)" class="category-item ms-1 me-1" data-category="@i">Category @i</span>
+                    }
+                </div>
                 <select id="categories" name="categories" required hidden multiple>
                     @for (int i = 0; i < 15; i++)
                     {
@@ -196,11 +243,38 @@
                     }
                 </select>
             </div>
+            <div class="desired-bc">
+                <h5 class="roboto mt-4">How much you want for this book ?&nbsp;  (Optional)</h5>
+                <input required class="input-text w-30" type="text" placeholder="Desired Bookcoin !" name="Credit" id="Credit">
+            </div>
+            <div class="description">
+                <h5 class="roboto mt-4">Message for us:  &nbsp;&nbsp;(Optional)</h5>
+                <textarea id="Description" name="Description" rows="10" style="width:100%"></textarea>
+            </div>
         </div>
-    </div>
+        <div class="mt-4">
+            <button class="btn btn-outline-dark reset-btn pe-4 ps-4 me-4">Cancel</button>
+            <button class="btn btn-outline-success crop-btn  pe-4 ps-4">Submit</button>
+        </div>
+    </form>
 </div>
 
 <script>
+    function selectCategory(element) {
+        const categoryIndex = element.getAttribute('data-category');
+        const selectElement = document.getElementById('categories');
+        const option = selectElement.querySelector(`option[value="${categoryIndex}"]`);
+
+        // Toggle 'category-active' class on the clicked span
+        if (element.classList.contains('category-active')) {
+            element.classList.remove('category-active');
+            option.selected = false;
+        } else {
+            element.classList.add('category-active');
+            option.selected = true;
+        }
+    }
+
     let croppers = {};
 
     function uploadImage(inputId) {

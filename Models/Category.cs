@@ -10,4 +10,6 @@ public partial class Category
     public string Name { get; set; } = null!;
 
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual ICollection<ExchangeRequest> ExchangeRequests { get; set; } = new List<ExchangeRequest>();
+
 }
