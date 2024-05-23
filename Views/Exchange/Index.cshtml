@@ -138,6 +138,7 @@
                         <img src="" id="image-front" />
                         <div class="upload" onclick="document.getElementById('front').click()">
                             <input required id="front" type="file" accept="image/*" hidden onchange="uploadImage('front')" />
+                            <input required type="hidden" name="front" />
                             <div id="placeholder-front">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Front Book's Cover</b></h5>
@@ -145,8 +146,8 @@
                         </div>
                     </div>
                     <div class="crop-controls" id="controls-front">
-                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('front')">Crop</button>
-                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('front')">Reset</button>
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('front')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('front')">Reset</button>
                     </div>
                 </div>
                 <div class="col-3">
@@ -154,6 +155,7 @@
                         <img src="" id="image-back" />
                         <div class="upload" onclick="document.getElementById('back').click()">
                             <input required id="back" type="file" accept="image/*" hidden onchange="uploadImage('back')" />
+                            <input required type="hidden" name="back" />
                             <div id="placeholder-back">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Back Book's Cover</b></h5>
@@ -161,8 +163,8 @@
                         </div>
                     </div>
                     <div class="crop-controls" id="controls-back">
-                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('back')">Crop</button>
-                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('back')">Reset</button>
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('back')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('back')">Reset</button>
                     </div>
                 </div>
                 <div class="col-3">
@@ -170,6 +172,7 @@
                         <img src="" id="image-spine" />
                         <div class="upload" onclick="document.getElementById('spine').click()">
                             <input required id="spine" type="file" accept="image/*" hidden onchange="uploadImage('spine')" />
+                            <input required type="hidden" name="spine" />
                             <div id="placeholder-spine">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Book's Spine</b></h5>
@@ -177,8 +180,8 @@
                         </div>
                     </div>
                     <div class="crop-controls" id="controls-spine">
-                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('spine')">Crop</button>
-                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('spine')">Reset</button>
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('spine')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('spine')">Reset</button>
                     </div>
                 </div>
                 <div class="col-3">
@@ -186,6 +189,7 @@
                         <img src="" id="image-edge" />
                         <div class="upload" onclick="document.getElementById('edge').click()">
                             <input required id="edge" type="file" accept="image/*" hidden onchange="uploadImage('edge')" />
+                            <input required type="hidden" name="edge" />
                             <div id="placeholder-edge">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Book's Fore-edge</b></h5>
@@ -193,8 +197,8 @@
                         </div>
                     </div>
                     <div class="crop-controls" id="controls-edge">
-                        <button class="btn btn-outline-success crop-btn" onclick="cropImage('edge')">Crop</button>
-                        <button class="btn btn-outline-dark reset-btn" onclick="clearCrop('edge')">Reset</button>
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('edge')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('edge')">Reset</button>
                     </div>
                 </div>
             </div>
@@ -245,7 +249,7 @@
             </div>
             <div class="desired-bc">
                 <h5 class="roboto mt-4">How much you want for this book ?&nbsp;  (Optional)</h5>
-                <input required class="input-text w-30" type="text" placeholder="Desired Bookcoin !" name="Credit" id="Credit">
+                <input class="input-text w-30" type="text" placeholder="Desired Bookcoin !" name="Credit" id="Credit">
             </div>
             <div class="description">
                 <h5 class="roboto mt-4">Message for us:  &nbsp;&nbsp;(Optional)</h5>
@@ -291,7 +295,7 @@
                 imgSrc.style.display = 'block';
                 placeholderDiv.style.display = 'none';
                 controlsDiv.style.display = 'flex';
-
+                console.log(inputId+': '+e.target.result);
                 // Initialize Cropper
                 if (croppers[inputId]) {
                     croppers[inputId].destroy();
@@ -314,13 +318,23 @@
         const croppedImage = canvas.toDataURL('image/png');
 
         const imgSrc = document.getElementById('image-' + inputId);
+        const input = document.getElementById(inputId);
+        const inputs = document.getElementsByName(inputId);
+
+
         imgSrc.src = croppedImage;
         imgSrc.style.display = 'block';
         imgSrc.style.height = '100%';
 
+        // Set the value of each hidden input with the cropped image data
+        inputs.forEach(function (input) {
+            input.value = croppedImage;
+        });
+
         // Destroy Cropper instance after cropping
         cropper.destroy();
         croppers[inputId] = null;
+        
     }
 
     function clearCrop(inputId) {
