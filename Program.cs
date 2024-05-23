@@ -31,7 +31,12 @@ namespace FBC
 
                 });
 
-
+            builder.Services.AddSession(op =>
+            {
+                op.IdleTimeout = TimeSpan.FromMinutes(60);
+                op.Cookie.HttpOnly = true;
+                op.Cookie.IsEssential = true;
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -78,6 +83,8 @@ namespace FBC
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();
