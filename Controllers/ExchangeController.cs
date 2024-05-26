@@ -40,7 +40,10 @@ namespace FBC.Controllers
                 Title = exchangeRequest.Title,
                 Author = exchangeRequest.Author,
                 Publisher = exchangeRequest.Publisher,
-
+                Description = exchangeRequest.Description,
+                Condition = exchangeRequest.Condition,
+                Status = 0,
+                Credit = exchangeRequest.Credit
             };
             foreach (var id in categories)
             {
@@ -55,28 +58,32 @@ namespace FBC.Controllers
 
                 // Crop and Save image;
                 CropSaveImage(cropData, frontImage, filePath);
+                rq.Image1 = filePath;
             }
             if (!string.IsNullOrEmpty(back))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(back);
                 filePath = Path.Combine(path, filename + "_back.png");
                 CropSaveImage(cropData, backImage, filePath);
-
+                rq.Image2 = filePath;
             }
             if (!string.IsNullOrEmpty(spine))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(spine);
                 filePath = Path.Combine(path, filename + "_spine.png");
                 CropSaveImage(cropData, spineImage, filePath);
-
+                rq.Image3 = filePath;
             }
             if (!string.IsNullOrEmpty(edge))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(edge);
                 filePath = Path.Combine(path, filename + "_edge.png");
                 CropSaveImage(cropData,edgeImage, filePath);
+                rq.Image4 = filePath;
             }
+            await Console.Out.WriteLineAsync(rq.ToString());
 
+            _context.SaveChanges();
             return RedirectToAction("Index", "");
         }
 

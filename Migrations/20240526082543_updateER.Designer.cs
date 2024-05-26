@@ -4,6 +4,7 @@ using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBC.Migrations
 {
     [DbContext(typeof(Fbc1Context))]
-    partial class Fbc1ContextModelSnapshot : ModelSnapshot
+    [Migration("20240526082543_updateER")]
+    partial class updateER
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -460,13 +463,13 @@ namespace FBC.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d419b02f-ce4c-43f0-ad05-158ff3a1db3c",
+                            Id = "b4e6ee85-5d9a-416a-8f1e-2987daffd2d1",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "2a62894a-0a28-44cc-8bff-0ef04e0e3ae1",
+                            Id = "f4284eb6-e680-42ec-8d7a-0405b8ae257b",
                             Name = "client",
                             NormalizedName = "client"
                         });
