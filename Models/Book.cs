@@ -16,7 +16,7 @@ public partial class Book
     public string? Description { get; set; }
 
     public string Condition { get; set; } = null!;
-
+    public int? ConditionNumeric { get; set; }
     public int NoPage { get; set; }
 
     public decimal? Weight { get; set; }

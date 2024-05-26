@@ -33,6 +33,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.4" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Models\User.cs">
@@ -40,6 +41,8 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
+	  <Folder Include="wwwroot\asset\books\" />
+	  <Folder Include="wwwroot\asset\image\exchange\" />
 	  <Folder Include="wwwroot\js\cropper\" />
 	</ItemGroup>
 </Project>
