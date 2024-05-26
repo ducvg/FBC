@@ -26,7 +26,7 @@ namespace FBC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("Title,Author,Publisher,Description,Condition,Credit")] ExchangeRequest exchangeRequest, int[] categories,
+        public async Task<IActionResult> Index([Bind("Title,Author,Publisher,Description,Condition,Credit,NoPage,Weight,Width,Height,Length")] ExchangeRequest exchangeRequest, int[] categories,
             IFormFile frontImage, IFormFile backImage, IFormFile spineImage, IFormFile edgeImage,
             string front, string back, string spine, string edge)
         {
@@ -35,6 +35,16 @@ namespace FBC.Controllers
             CropData cropData = new();
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
             string filePath;
+
+            var user = HttpContext.Current.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var userId = user.Identity.Name; // Lấy ID người dùng
+                var username = user.Claims.FirstOrDefault(c => c.Type == "name")?.Value; // Lấy tên người dùng
+                var email = user.Claims.FirstOrDefault(c => c.Type == "email")?.Value; // Lấy email người dùng
+            }
+
             ExchangeRequest rq = new()
             {
                 Title = exchangeRequest.Title,
@@ -102,20 +112,5 @@ namespace FBC.Controllers
             }
             bmp.Save(filePath);
         }
-
-        private async Task SaveCroppedImage(string base64ImageData, string fileName)
-        {
-            if (!string.IsNullOrEmpty(base64ImageData))
-            {
-                // Remove data:image/png;base64, part from the string
-                var base64Data = Regex.Match(base64ImageData, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-                var imageBytes = Convert.FromBase64String(base64Data);
-
-                // Save the image to a file
-                var filePath = Path.Combine("wwwroot/asset/books", fileName);
-                await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
-            }
-        }
-
     }
 }
