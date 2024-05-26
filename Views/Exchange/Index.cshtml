@@ -92,6 +92,9 @@
             display: grid;
             grid-template-columns: 45% 32% 33%;
         }
+        .hidden{
+            display:none;
+        }
     </style>
     <style>
         .input-text {
@@ -129,7 +132,7 @@
 }
 <h3 class="mt-large" style="text-align:center"><b>Describe Your Book</b></h3>
 <div class="container mt-large container-shadow p-4" style="font-family:Philosopher">
-    <form>
+    <form action="" method="post" enctype="multipart/form-data">
         <div class="book-images">
             <h3 class="roboto">Images:</h3>
             <div class="row mt-4">
@@ -137,8 +140,8 @@
                     <div class="image-box">
                         <img src="" id="image-front" />
                         <div class="upload" onclick="document.getElementById('front').click()">
-                            <input required id="front" type="file" accept="image/*" hidden onchange="uploadImage('front')" />
-                            <input required type="hidden" name="front" />
+                            <input required id="front" name="frontImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('front')" />
+                            <input class="hidden" required type="text" name="front" />
                             <div id="placeholder-front">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Front Book's Cover</b></h5>
@@ -154,8 +157,8 @@
                     <div class="image-box">
                         <img src="" id="image-back" />
                         <div class="upload" onclick="document.getElementById('back').click()">
-                            <input required id="back" type="file" accept="image/*" hidden onchange="uploadImage('back')" />
-                            <input required type="hidden" name="back" />
+                            <input required id="back" name="backImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('back')" />
+                            <input class="hidden" required type="text" name="back" />
                             <div id="placeholder-back">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Back Book's Cover</b></h5>
@@ -171,8 +174,8 @@
                     <div class="image-box">
                         <img src="" id="image-spine" />
                         <div class="upload" onclick="document.getElementById('spine').click()">
-                            <input required id="spine" type="file" accept="image/*" hidden onchange="uploadImage('spine')" />
-                            <input required type="hidden" name="spine" />
+                            <input required id="spine" name="spineImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('spine')" />
+                            <input class="hidden" required type="text" name="spine" />
                             <div id="placeholder-spine">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Book's Spine</b></h5>
@@ -188,8 +191,8 @@
                     <div class="image-box">
                         <img src="" id="image-edge" />
                         <div class="upload" onclick="document.getElementById('edge').click()">
-                            <input required id="edge" type="file" accept="image/*" hidden onchange="uploadImage('edge')" />
-                            <input required type="hidden" name="edge" />
+                            <input required id="edge" name="edgeImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('edge')" />
+                            <input class="hidden" required type="text" name="edge" />
                             <div id="placeholder-edge">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Book's Fore-edge</b></h5>
@@ -221,15 +224,15 @@
                     <input required class="input-text w-875" type="text" placeholder="Describe Book's condition" name="Condition" id="Condition">
                 </div>
                 <div class="col-2">
-                    <input required class="input-text w-75" type="text" placeholder="Page amount" name="Pages" id="Pages">
+                    <input required class="input-text w-75" type="text" placeholder="Page amount" name="NoPage" id="Pages">
                 </div>
                 <div class="col-2">
                     <input required class="input-text w-75" type="text" placeholder="Weight (kg)" name="Weight" id="Weight">
                 </div>
                 <div class="col-3">
-                    <input required class="input-text w-30" type="text" placeholder="Width" name="Width" id="Width">x
-                    <input required class="input-text w-30" type="text" placeholder="Height" name="Height" id="Height">x
-                    <input required class="input-text w-30" type="text" placeholder="Thickness" name="Length" id="Length">
+                    <input required class="input-text w-30" type="text" placeholder="Width (cm)" name="Width" id="Width">x
+                    <input required class="input-text w-30" type="text" placeholder="Height (cm)" name="Height" id="Height">x
+                    <input required class="input-text w-30" type="text" placeholder="Thickness (cm)" name="Length" id="Length">
                 </div>
             </div>
             <h5 class="roboto mt-4">Select suitable categories:</h5>
@@ -237,10 +240,10 @@
                 <div>
                     @for (int i = 0; i < 15; i++)
                     {
-                        <span onclick="selectCategory(this)" class="category-item ms-1 me-1" data-category="@i">Category @i</span>
+                        <span onclick="selectCategory(this)" class="category-item m-1" data-category="@i">Category @i</span>
                     }
                 </div>
-                <select id="categories" name="categories" required hidden multiple>
+                <select id="categories" name="categories" required class="hidden" multiple>
                     @for (int i = 0; i < 15; i++)
                     {
                         <option value="@i">Category @i</option>
@@ -295,7 +298,6 @@
                 imgSrc.style.display = 'block';
                 placeholderDiv.style.display = 'none';
                 controlsDiv.style.display = 'flex';
-                console.log(inputId+': '+e.target.result);
                 // Initialize Cropper
                 if (croppers[inputId]) {
                     croppers[inputId].destroy();
@@ -321,14 +323,15 @@
         const input = document.getElementById(inputId);
         const inputs = document.getElementsByName(inputId);
 
-
         imgSrc.src = croppedImage;
         imgSrc.style.display = 'block';
         imgSrc.style.height = '100%';
 
         // Set the value of each hidden input with the cropped image data
+        const temp = JSON.stringify(cropper.getData(true));
+        // document.cookie = `${inputId}CropData=${temp}; path=/;SameSite=Lax`;
         inputs.forEach(function (input) {
-            input.value = croppedImage;
+            input.value = temp;
         });
 
         // Destroy Cropper instance after cropping
@@ -352,6 +355,11 @@
         placeholderDiv.style.display = 'block';
         const input = document.getElementById(inputId);
         input.value = '';
+
+        const inputs = document.getElementsByName(inputId);
+        inputs.forEach(function (input) {
+            input.value = '';
+        });
 
     }
 </script>

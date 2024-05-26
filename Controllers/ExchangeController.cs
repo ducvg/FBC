@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FBC.Models;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace FBC.Controllers
 {
+
     public class ExchangeController : Controller
     {
         private readonly Fbc1Context _context;
@@ -20,153 +20,97 @@ namespace FBC.Controllers
 
         // GET: Exchange
         public async Task<IActionResult> Index()
-        {            
+        {
             return View();
         }
-
-        // GET: Exchange/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var exchangeRequest = await _context.ExchangeRequests
-                .Include(e => e.User)
-                .FirstOrDefaultAsync(m => m.ExchangeId == id);
-            if (exchangeRequest == null)
-            {
-                return NotFound();
-            }
-
-            return View(exchangeRequest);
-        }
-
-        // GET: Exchange/Create
-        public IActionResult Create()
-        {
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
-
-        // POST: Exchange/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("ExchangeId,Title,Category,Author,Description,Condition,Image1,Image2,Image3,Image4,Status,Credit,Id")] ExchangeRequest exchangeRequest)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(exchangeRequest);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", exchangeRequest.Id);
-            return View(exchangeRequest);
-        }
-
-        // GET: Exchange/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var exchangeRequest = await _context.ExchangeRequests.FindAsync(id);
-            if (exchangeRequest == null)
-            {
-                return NotFound();
-            }
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", exchangeRequest.Id);
-            return View(exchangeRequest);
-        }
-
-        // POST: Exchange/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int id, [Bind("Title,Author,Description,Condition,Credit")] ExchangeRequest exchangeRequest, IFormFile front, IFormFile back, IFormFile spine, IFormFile edge)
+        public async Task<IActionResult> Index([Bind("Title,Author,Publisher,Description,Condition,Credit,NoPage,Weight,Width,Height,Length")] ExchangeRequest exchangeRequest, int[] categories,
+            IFormFile frontImage, IFormFile backImage, IFormFile spineImage, IFormFile edgeImage,
+            string front, string back, string spine, string edge)
         {
+            var lastId = await _context.ExchangeRequests.OrderByDescending(e => e.Id).Select(e => e.Id).FirstOrDefaultAsync();
+            var filename = 1;
+            CropData cropData = new();
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
+            string filePath;
 
+            var user = HttpContext.Current.User;
 
-            return View();
-        }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("ExchangeId,Title,Category,Author,Description,Condition,Image1,Image2,Image3,Image4,Status,Credit,Id")] ExchangeRequest exchangeRequest)
-        //{
-        //    if (id != exchangeRequest.ExchangeId)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(exchangeRequest);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ExchangeRequestExists(exchangeRequest.ExchangeId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", exchangeRequest.Id);
-        //    return View(exchangeRequest);
-        //}
-
-        // GET: Exchange/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+            if (user.Identity.IsAuthenticated)
             {
-                return NotFound();
+                var userId = user.Identity.Name; // Lấy ID người dùng
+                var username = user.Claims.FirstOrDefault(c => c.Type == "name")?.Value; // Lấy tên người dùng
+                var email = user.Claims.FirstOrDefault(c => c.Type == "email")?.Value; // Lấy email người dùng
             }
 
-            var exchangeRequest = await _context.ExchangeRequests
-                .Include(e => e.User)
-                .FirstOrDefaultAsync(m => m.ExchangeId == id);
-            if (exchangeRequest == null)
+            ExchangeRequest rq = new()
             {
-                return NotFound();
+                Title = exchangeRequest.Title,
+                Author = exchangeRequest.Author,
+                Publisher = exchangeRequest.Publisher,
+                Description = exchangeRequest.Description,
+                Condition = exchangeRequest.Condition,
+                Status = 0,
+                Credit = exchangeRequest.Credit
+            };
+            foreach (var id in categories)
+            {
+                var cat = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
+                rq.Categories.Add(cat);
             }
 
-            return View(exchangeRequest);
-        }
-
-        // POST: Exchange/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var exchangeRequest = await _context.ExchangeRequests.FindAsync(id);
-            if (exchangeRequest != null)
+            if (!string.IsNullOrEmpty(front))
             {
-                _context.ExchangeRequests.Remove(exchangeRequest);
-            }
+                cropData = JsonConvert.DeserializeObject<CropData>(front);
+                filePath = Path.Combine(path, filename+"_front.png");
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                // Crop and Save image;
+                CropSaveImage(cropData, frontImage, filePath);
+                rq.Image1 = filePath;
+            }
+            if (!string.IsNullOrEmpty(back))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(back);
+                filePath = Path.Combine(path, filename + "_back.png");
+                CropSaveImage(cropData, backImage, filePath);
+                rq.Image2 = filePath;
+            }
+            if (!string.IsNullOrEmpty(spine))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(spine);
+                filePath = Path.Combine(path, filename + "_spine.png");
+                CropSaveImage(cropData, spineImage, filePath);
+                rq.Image3 = filePath;
+            }
+            if (!string.IsNullOrEmpty(edge))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(edge);
+                filePath = Path.Combine(path, filename + "_edge.png");
+                CropSaveImage(cropData,edgeImage, filePath);
+                rq.Image4 = filePath;
+            }
+            await Console.Out.WriteLineAsync(rq.ToString());
+
+            _context.SaveChanges();
+            return RedirectToAction("Index", "");
         }
 
-        private bool ExchangeRequestExists(int id)
+        private void CropSaveImage(CropData? cropData, IFormFile image, string filePath)
         {
-            return _context.ExchangeRequests.Any(e => e.ExchangeId == id);
+            Rectangle crop = new Rectangle(cropData.x, cropData.y, cropData.width, cropData.height);
+            Image img;
+            using (Stream stream = image.OpenReadStream())
+            {
+                img = Image.FromStream(stream);
+            }
+            var bmp = new Bitmap(crop.Width, crop.Height);
+            using (var gr = Graphics.FromImage(bmp))
+            {
+                gr.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), crop, GraphicsUnit.Pixel);
+            }
+            bmp.Save(filePath);
         }
     }
 }

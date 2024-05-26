@@ -4,6 +4,7 @@ using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBC.Migrations
 {
     [DbContext(typeof(Fbc1Context))]
-    partial class Fbc1ContextModelSnapshot : ModelSnapshot
+    [Migration("20240526074316_BookandExchangeRequest")]
+    partial class BookandExchangeRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,6 +263,9 @@ namespace FBC.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -269,9 +275,6 @@ namespace FBC.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("Height")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Id")
                         .IsRequired()
@@ -289,12 +292,6 @@ namespace FBC.Migrations
                     b.Property<string>("Image4")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Length")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("NoPage")
-                        .HasColumnType("int");
-
                     b.Property<string>("Publisher")
                         .HasColumnType("nvarchar(max)");
 
@@ -305,12 +302,6 @@ namespace FBC.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<decimal?>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("Width")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ExchangeId")
                         .HasName("PK__Exchange__72E6008B0E8B6472");
@@ -460,13 +451,13 @@ namespace FBC.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d419b02f-ce4c-43f0-ad05-158ff3a1db3c",
+                            Id = "8b96a2ed-9f9b-4c7c-97c7-749599e153ec",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "2a62894a-0a28-44cc-8bff-0ef04e0e3ae1",
+                            Id = "9af40ede-6a58-4cca-a328-a341184f2edf",
                             Name = "client",
                             NormalizedName = "client"
                         });
