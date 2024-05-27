@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace FBC.Controllers
 {
@@ -21,7 +24,8 @@ namespace FBC.Controllers
         // GET: Exchange
         public async Task<IActionResult> Index()
         {
-            return View();
+            var categories = await _context.Categories.ToListAsync();
+            return View(categories);
         }
 
         [HttpPost]
@@ -31,29 +35,26 @@ namespace FBC.Controllers
             string front, string back, string spine, string edge)
         {
             var lastId = await _context.ExchangeRequests.OrderByDescending(e => e.Id).Select(e => e.Id).FirstOrDefaultAsync();
-            var filename = 1;
+            var filename = lastId+1;
             CropData cropData = new();
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
             string filePath;
 
-            var user = HttpContext.Current.User;
-
-            if (user.Identity.IsAuthenticated)
-            {
-                var userId = user.Identity.Name; // Lấy ID người dùng
-                var username = user.Claims.FirstOrDefault(c => c.Type == "name")?.Value; // Lấy tên người dùng
-                var email = user.Claims.FirstOrDefault(c => c.Type == "email")?.Value; // Lấy email người dùng
-            }
-
             ExchangeRequest rq = new()
             {
-                Title = exchangeRequest.Title,
-                Author = exchangeRequest.Author,
-                Publisher = exchangeRequest.Publisher,
-                Description = exchangeRequest.Description,
-                Condition = exchangeRequest.Condition,
+                Title = exchangeRequest.Title.Trim(),
+                Author = exchangeRequest.Author.Trim(),
+                Publisher = exchangeRequest.Publisher.Trim(),
+                Description = exchangeRequest.Description.Trim(),
+                Condition = exchangeRequest.Condition.Trim(),
                 Status = 0,
-                Credit = exchangeRequest.Credit
+                Credit = exchangeRequest.Credit,
+                NoPage = exchangeRequest.NoPage,
+                Weight = exchangeRequest.Weight,
+                Width = exchangeRequest.Width,
+                Height = exchangeRequest.Height,
+                Length = exchangeRequest.Length,
+                Id = User.Identity.GetUserId()
             };
             foreach (var id in categories)
             {
@@ -91,8 +92,21 @@ namespace FBC.Controllers
                 CropSaveImage(cropData,edgeImage, filePath);
                 rq.Image4 = filePath;
             }
-            await Console.Out.WriteLineAsync(rq.ToString());
 
+            var validationContext = new ValidationContext(rq, null, null);
+            var validationResults = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(rq, validationContext, validationResults, true);
+
+            if (!isValid)
+            {
+                foreach (var validationResult in validationResults)
+                {
+                    ViewData["SubmitError"] = "Dữ liệu nhập không hợp lệ, vui lòng kiểm tra lại !";
+                    ViewData["SubmitErrorDetail"] = validationResult.ErrorMessage;
+                }
+            }
+
+            _context.ExchangeRequests.Add(rq);
             _context.SaveChanges();
             return RedirectToAction("Index", "");
         }
