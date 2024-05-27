@@ -1,4 +1,4 @@
-﻿@model ExchangeRequest
+﻿@model IEnumerable<FBC.Models.Category>
 
 @section Stylesheets {
     <link href="~/js/cropper/cropper.css" rel="stylesheet" />
@@ -238,15 +238,15 @@
             <h5 class="roboto mt-4">Select suitable categories:</h5>
             <div class="category-box mt-1">
                 <div>
-                    @for (int i = 0; i < 15; i++)
+                    @foreach (var cat in Model)
                     {
-                        <span onclick="selectCategory(this)" class="category-item m-1" data-category="@i">Category @i</span>
+                        <span onclick="selectCategory(this)" class="category-item m-1" data-category="@cat.CategoryId">@cat.Name</span>
                     }
                 </div>
                 <select id="categories" name="categories" required class="hidden" multiple>
-                    @for (int i = 0; i < 15; i++)
+                    @foreach(var cat in Model)
                     {
-                        <option value="@i">Category @i</option>
+                        <option value="@cat.CategoryId">@cat.Name</option>
                     }
                 </select>
             </div>
