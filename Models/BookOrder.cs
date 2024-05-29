@@ -11,7 +11,7 @@ public partial class BookOrder
     public int? Total { get; set; }
 
     public int? Status { get; set; }
-
+     
     public string? Recipient { get; set; }
 
     public string? Address { get; set; }

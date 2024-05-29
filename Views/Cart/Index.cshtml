@@ -1,7 +1,8 @@
-﻿@model IEnumerable<FBC.Models.CartOrder>
+﻿@model FBC.Models.CartOrder
 
 @{
     ViewData["Title"] = "Cart";
+    var total = ViewData["Total"];
 }
 
 @section Stylesheets {
@@ -28,7 +29,6 @@
             .book-image img {
                 width: 100%;
             }
-
 
     </style>
 }
@@ -63,7 +63,7 @@
                                     <div class="d-flex justify-content-between align-items-center mb-4">
                                         <div>
                                             <p class="mb-1">Shopping cart</p>
-                                            <p class="mb-0">You have 4 items in your cart</p>
+                                            @* <p class="mb-0">You have items in your cart</p> *@
                                         </div>
                                         <div>
                                             <p class="mb-0">
@@ -76,7 +76,7 @@
 
 
 
-                                    @foreach(var item in Model)
+                                    @foreach (var item in Model.Books)
                                     {
                                         <div class="card mb-3">
                                             <div class="card-body">
@@ -95,125 +95,17 @@
                                                     </div>
                                                     <div class="d-flex flex-row align-items-center">
                                                         @* <div style="width: 50px;">
-                                                            <h5 class="fw-normal mb-0">2</h5>
-                                                        </div> *@
+                                                    <h5 class="fw-normal mb-0">2</h5>
+                                                    </div> *@
                                                         <div style="width: 80px;">
-                                                            <h5 class="mb-0">@item.Credit</h5>
+                                                            <h5 class="mb-0">@item.Credit.Value.ToString("#,##0.")</h5>
                                                         </div>
-                                                        <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                                                        <a asp-action="RemoveCart" asp-controller="Cart" asp-route-id="@item.BookId" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     }
-
-
-
-
-
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div>
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
-                                                             class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                                                    </div>
-                                                    <div class="ms-3">
-                                                        <h5>Iphone 11 pro</h5>
-                                                        <p class="small mb-0">256GB, Navy Blue</p>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div style="width: 50px;">
-                                                        <h5 class="fw-normal mb-0">2</h5>
-                                                    </div>
-                                                    <div style="width: 80px;">
-                                                        <h5 class="mb-0">$900</h5>
-                                                    </div>
-                                                    <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div>
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img2.webp"
-                                                             class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                                                    </div>
-                                                    <div class="ms-3">
-                                                        <h5>Samsung galaxy Note 10 </h5>
-                                                        <p class="small mb-0">256GB, Navy Blue</p>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div style="width: 50px;">
-                                                        <h5 class="fw-normal mb-0">2</h5>
-                                                    </div>
-                                                    <div style="width: 80px;">
-                                                        <h5 class="mb-0">$900</h5>
-                                                    </div>
-                                                    <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div>
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img3.webp"
-                                                             class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                                                    </div>
-                                                    <div class="ms-3">
-                                                        <h5>Canon EOS M50</h5>
-                                                        <p class="small mb-0">Onyx Black</p>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div style="width: 50px;">
-                                                        <h5 class="fw-normal mb-0">1</h5>
-                                                    </div>
-                                                    <div style="width: 80px;">
-                                                        <h5 class="mb-0">$1199</h5>
-                                                    </div>
-                                                    <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card mb-3 mb-lg-0">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div>
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img4.webp"
-                                                             class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                                                    </div>
-                                                    <div class="ms-3">
-                                                        <h5>MacBook Pro</h5>
-                                                        <p class="small mb-0">1TB, Graphite</p>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <div style="width: 50px;">
-                                                        <h5 class="fw-normal mb-0">1</h5>
-                                                    </div>
-                                                    <div style="width: 80px;">
-                                                        <h5 class="mb-0">$1799</h5>
-                                                    </div>
-                                                    <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                 </div>
                                 <div class="col-lg-5">
@@ -221,77 +113,85 @@
                                     <div style="background-color:#37a572" class="card text-white rounded-3">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <h5 class="mb-0">Card details</h5>
+                                                <h5 class="mb-0">Order details</h5>
                                             </div>
 
-                                            <p class="small mb-2">Card type</p>
+                                            @* <p class="small mb-2">Card type</p>
                                             <a href="#!" type="submit" class="text-white">
-                                                <i class="fab fa-cc-mastercard fa-2x me-2"></i>
+                                            <i class="fab fa-cc-mastercard fa-2x me-2"></i>
                                             </a>
                                             <a href="#!" type="submit" class="text-white">
-                                                <i class="fab fa-cc-visa fa-2x me-2"></i>
+                                            <i class="fab fa-cc-visa fa-2x me-2"></i>
                                             </a>
                                             <a href="#!" type="submit" class="text-white">
-                                                <i class="fab fa-cc-amex fa-2x me-2"></i>
+                                            <i class="fab fa-cc-amex fa-2x me-2"></i>
                                             </a>
                                             <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
-
-                                            <form class="mt-4">
+                                            *@
+                                            <form class="mt-4" asp-action="Checkout" asp-controller="Cart" method="post">
                                                 <div data-mdb-input-init class="form-outline form-white mb-4">
-                                                    <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
-                                                           placeholder="Cardholder's Name" />
-                                                    <label class="form-label" for="typeName">Cardholder's Name</label>
+                                                    <input name="Recipient" type="text" id="typeName" class="form-control form-control-lg" siez="17"
+                                                           placeholder="Recipient Name" />
+                                                    <label class="form-label" for="typeName">Recipient Name</label>
                                                 </div>
 
                                                 <div data-mdb-input-init class="form-outline form-white mb-4">
-                                                    <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
-                                                           placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" />
-                                                    <label class="form-label" for="typeText">Card Number</label>
+                                                    <input name="Address" type="text" id="typeText" class="form-control form-control-lg" siez="17"
+                                                           placeholder="Address" maxlength="19" />
+                                                    <label class="form-label" for="typeText">Address</label>
                                                 </div>
 
-                                                <div class="row mb-4">
-                                                    <div class="col-md-6">
-                                                        <div data-mdb-input-init class="form-outline form-white">
-                                                            <input type="text" id="typeExp" class="form-control form-control-lg"
-                                                                   placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" />
-                                                            <label class="form-label" for="typeExp">Expiration</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div data-mdb-input-init class="form-outline form-white">
-                                                            <input type="password" id="typeText" class="form-control form-control-lg"
-                                                                   placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
-                                                            <label class="form-label" for="typeText">Cvv</label>
-                                                        </div>
-                                                    </div>
+                                                <div data-mdb-input-init class="form-outline form-white mb-4">
+                                                    <input name="Phone" type="text" id="typeText" class="form-control form-control-lg" siez="17"
+                                                           placeholder="+84-23456789" maxlength="11" />
+                                                    <label class="form-label" for="typeText">Phone Number</label>
                                                 </div>
 
-                                            </form>
+                                                @* <div class=" row mb-4">
+                                                <div class="col-md-6">
+                                                <div data-mdb-input-init class="form-outline form-white">
+                                                <input type="text" id="typeExp" class="form-control form-control-lg"
+                                                placeholder="+84-23456789" size="11" id="exp" minlength="11" maxlength="11" />
+                                                <label class="form-label" for="typeExp">Phone Number</label>
+                                                </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                <div data-mdb-input-init class="form-outline form-white">
+                                                <input type="text" id="typeText" class="form-control form-control-lg"
+                                                placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
+                                                <label class="form-label" for="typeText">Cvv</label>
+                                                </div>
+                                                </div>
+                                                </div> *@
 
-                                            <hr class="my-4">
 
-                                            <div class="d-flex justify-content-between">
-                                                <p class="mb-2">Subtotal</p>
-                                                <p class="mb-2">@Model.Sum(p => p.Credit)</p>
-                                            </div>
+                                                <hr class="my-4">
 
-                                            <div class="d-flex justify-content-between">
-                                                <p class="mb-2">Shipping</p>
-                                                <p class="mb-2">$10</p>
-                                            </div>
-
-                                            <div class="d-flex justify-content-between mb-4">
-                                                <p class="mb-2">Total(Incl. taxes)</p>
-                                                <p class="mb-2">@Model.Sum(p => p.Credit)</p>
-                                            </div>
-
-                                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
                                                 <div class="d-flex justify-content-between">
-                                                    <span>@Model.Sum(p => p.Credit)</span>
-                                                    <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                                    <p class="mb-2">Subtotal</p>
+                                                    <p class="mb-2">@ViewData["CartTotal"] Credit</p>
                                                 </div>
-                                            </button>
 
+                                                <div class="d-flex justify-content-between">
+                                                    <p class="mb-2">Shipping</p>
+                                                    <p class="mb-2">10</p>
+                                                </div>
+
+                                                <div class="d-flex justify-content-between mb-4">
+                                                    <p class="mb-2">Total</p>
+                                                    <p class="mb-2">@ViewData["total"] Credit</p>
+                                                    <input name="Total" value="@ViewData["total"]" hidden />
+                                                </div>
+
+                                                <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span></span>
+                                                        <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                                    </div>
+                                                </button>
+
+                                                <h4 style="color:salmon">@TempData["SuccessMessage"]</h4>
+                                            </form>
                                         </div>
                                     </div>
 

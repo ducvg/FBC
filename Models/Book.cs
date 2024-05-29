@@ -36,7 +36,7 @@ public partial class Book
     public string? Image4 { get; set; }
 
     public int Status { get; set; }
-
+        
     public decimal? Credit { get; set; }
 
     public virtual ICollection<BookOrder> BookOrders { get; set; } = new List<BookOrder>();

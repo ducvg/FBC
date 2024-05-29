@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FBC.Models;
 using FBC.Helpers;
+using FBC.ViewModels;
+using Microsoft.AspNet.Identity;
+using static System.Reflection.Metadata.BlobBuilder;
+using Microsoft.AspNetCore.Identity;
 
 namespace FBC.Controllers
 {
@@ -19,49 +23,148 @@ namespace FBC.Controllers
             _context = context;
         }
 
-        const string CART_KEY = "MYCART";
-        public List<CartOrder> Cart => HttpContext.Session.Get<List<CartOrder>>(CART_KEY) ?? new List<CartOrder>();
 
         // GET: Cart
         public async Task<IActionResult> Index()
         {
-            
-            return View(Cart);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
+            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
+
+            if (cart == null)
+            {
+                return View(new CartOrder()); 
+            }
+            decimal total = (decimal)cart.Books.Sum(b => b.Credit );
+            ViewData["CartTotal"] = total.ToString("#,##0.");
+
+            var cartViewModel = new CartOrder
+            {
+                CartId = cart.CartId,
+                Books = cart.Books.Select(b => new Book
+                {
+                    BookId = b.BookId,
+                    Title = b.Title,
+                    Image1 = b.Image1 ?? string.Empty,
+                    Credit = b.Credit ?? 0,
+                    Condition = b.Condition,
+                }).ToList()
+            };
+            ViewData["Total"] = (total + 10).ToString("#,##0.");
+            return View(cart);
         }
+
 
         public async Task<IActionResult> AddToCart(int id)
         {
-            var cart = Cart;
-            var item = cart.FirstOrDefault(c => c.CartId == id);
-            if(item == null)
+            if (!User.Identity.IsAuthenticated)
             {
-                var books = _context.Books.FirstOrDefault(b => b.BookId == id);
-                if(books == null)
-                {
-                    TempData["Message"] = $"No Book Found with id {id}";
-                    return View("/404");  
-                }
-                else
-                {
-                    item = new CartOrder
-                    {
-                        BookId = books.BookId,
-                        Title = books.Title,
-                        Image1 = books.Image1 ?? string.Empty,
-                        Credit = books.Credit ?? 0,
-                        Condition = books.Condition,
-
-                    };
-                    cart.Add(item);
-                }
+                return RedirectToAction("Login", "Account");
             }
-            else
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
+            var book = _context.Books.Find(id);
+
+            if (book == null)
             {
-                TempData["Message"] = $"Đã thêm vào giỏ hàng";
+                return NotFound();
+            }
+
+            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
+            if (cart == null)
+            {
+                cart = new CartOrder { Id = user.Id };
+                _context.CartOrders.Add(cart);
+            }
+
+            var existingBook = cart.Books.FirstOrDefault(b => b.BookId == id);
+            if (existingBook != null)
+            {
                 return RedirectToAction("Index");
             }
-            HttpContext.Session.Set(CART_KEY, cart);
+            cart.Books.Add(book);
+            _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> RemoveCart(int id)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account"); 
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
+            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
+
+            if (cart == null)
+            {
+                return RedirectToAction("Index"); 
+            }
+
+            var bookToRemove = cart.Books.FirstOrDefault(b => b.BookId == id);
+
+            if (bookToRemove == null)
+            {
+                return RedirectToAction("Index"); 
+            }
+            cart.Books.Remove(bookToRemove);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Checkout(BookOrder order)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
+            var wallet = _context.Wallets.FirstOrDefault(w => w.Id == user.Id);
+
+
+            if (!DeductCredit(order.Total.Value))
+            {
+                TempData["SuccessMessage"] = "Thanh toán không thành công, bạn không đủ điểm thanh toán!";
+                return RedirectToAction("Index");
+            }
+            order.Status = 1;
+            order.Recipient = order.Recipient;
+            order.Address = order.Address;
+            order.Phone = order.Phone;
+            order.Total = order.Total;
+            order.OrderDate = DateTime.Now;
+            order.Id = user.Id;
+            _context.BookOrders.Add(order);
+            _context.SaveChanges();
+
+            var savedOrder = _context.BookOrders.Include(bo => bo.Books).FirstOrDefault(bo => bo.BookOrderId == order.BookOrderId);
+
+            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
+            TempData["orderItem"] = cart.Books.ToList().ToString();
+            if (cart != null)
+            {
+                cart.Books.Clear();
+                _context.SaveChanges();
+            }
+
+            TempData["SuccessMessage"] = "Thanh toán thành công!";
+            return RedirectToAction("Index", "BookOrders", new { id = savedOrder.BookOrderId } );
+        }
+
+        public bool DeductCredit(decimal amount)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
+            var wallet = _context.Wallets.Include(w => w.User).FirstOrDefault(w => w.Id == user.Id);
+            if (wallet.Credit >= amount)
+            {
+                wallet.Credit -= amount;
+                return true;
+            }
+
+            return false;
         }
     }
 }
