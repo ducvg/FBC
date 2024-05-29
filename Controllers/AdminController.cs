@@ -1,5 +1,6 @@
 ﻿using FBC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FBC.Controllers
 {
@@ -12,9 +13,10 @@ namespace FBC.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> ExchangeRequest()
         {
-            return View();
+            List<ExchangeRequest> request = await _context.ExchangeRequests.Include(r => r.User).ToListAsync();
+            return View(request);
         }
     }
 }

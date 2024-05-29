@@ -18,15 +18,14 @@ public partial class ExchangeRequest
     public string? Author { get; set; }
     [Required(ErrorMessage = "Publisher is required.")]
     [StringLength(100, ErrorMessage = "Publisher can't be longer than 100 characters.")]
-
     public string? Publisher { get; set; }
-
     public string? Description { get; set; }
+
     [Required(ErrorMessage = "Condition is required.")]
     [StringLength(50, ErrorMessage = "Condition can't be longer than 50 characters.")]
 
     public string Condition { get; set; } = null!;
-    [Required(ErrorMessage = "NoPage is required.")]
+    [Required(ErrorMessage = "Số trang không hợp lệ")]
     [Range(1, int.MaxValue, ErrorMessage = "Number of pages must be a positive integer.")]
 
     public int? NoPage { get; set; }
@@ -73,5 +72,16 @@ public partial class ExchangeRequest
     [ForeignKey("Id")]
     public virtual User User { get; set; } = null!;
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+
+    public string getStatus()
+    {
+        switch (Status)
+        {
+            case 0: return "Processing";
+            case 1: return "Approved";
+            case 2: return "Canceled";
+        }
+        return "Unknown";
+    }
 
 }

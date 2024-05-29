@@ -8,6 +8,7 @@ using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace FBC.Controllers
 {
@@ -28,13 +29,17 @@ namespace FBC.Controllers
             return View(categories);
         }
 
+        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index([Bind("Title,Author,Publisher,Description,Condition,Credit,NoPage,Weight,Width,Height,Length")] ExchangeRequest exchangeRequest, int[] categories,
             IFormFile frontImage, IFormFile backImage, IFormFile spineImage, IFormFile edgeImage,
             string front, string back, string spine, string edge)
         {
-            var lastId = await _context.ExchangeRequests.OrderByDescending(e => e.Id).Select(e => e.Id).FirstOrDefaultAsync();
+            
+
+            var lastId = await _context.ExchangeRequests.OrderByDescending(e => e.ExchangeId).Select(e => e.ExchangeId).FirstOrDefaultAsync();
             var filename = lastId+1;
             CropData cropData = new();
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
@@ -45,7 +50,7 @@ namespace FBC.Controllers
                 Title = exchangeRequest.Title.Trim(),
                 Author = exchangeRequest.Author.Trim(),
                 Publisher = exchangeRequest.Publisher.Trim(),
-                Description = exchangeRequest.Description.Trim(),
+                Description = exchangeRequest.Description?.Trim(),
                 Condition = exchangeRequest.Condition.Trim(),
                 Status = 0,
                 Credit = exchangeRequest.Credit,
@@ -85,6 +90,7 @@ namespace FBC.Controllers
                 CropSaveImage(cropData, spineImage, filePath);
                 rq.Image3 = filePath;
             }
+
             if (!string.IsNullOrEmpty(edge))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(edge);
@@ -99,11 +105,14 @@ namespace FBC.Controllers
 
             if (!isValid)
             {
+                var errorDetailBuilder = new StringBuilder();
                 foreach (var validationResult in validationResults)
                 {
-                    ViewData["SubmitError"] = "Dữ liệu nhập không hợp lệ, vui lòng kiểm tra lại !";
-                    ViewData["SubmitErrorDetail"] = validationResult.ErrorMessage;
+                    errorDetailBuilder.AppendLine(validationResult.ErrorMessage + "<br>");
                 }
+                TempData["SubmitError"] = "Dữ liệu nhập không hợp lệ, vui lòng kiểm tra lại !";
+                TempData["SubmitErrorDetail"] = errorDetailBuilder.ToString();
+                return RedirectToAction("Index", "Exchange");
             }
 
             _context.ExchangeRequests.Add(rq);
