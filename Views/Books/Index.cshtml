@@ -110,7 +110,8 @@
         </div>
     </div>
     <div class="row mt-4">
-        <div class="col-md-2">
+        @await Component.InvokeAsync("MenuCategory")
+        @* <div class="col-md-2">
             <h5>Price range</h5>
             <div class="price-range">
                 <input type="text" placeholder="From " class="price-range-input"/>
@@ -129,7 +130,7 @@
                     </p>
                 }
             </div>
-        </div>
+        </div> *@
         <div class="col-md-10">
             <div class="filter-bar">
                 <div class="search-result p-2">
@@ -149,6 +150,7 @@
                     </select>
                 </div>
             </div>
+            <h1>@TempData["Message"]</h1>
             <div class="list-book mt-3">
                 @foreach(var item in Model)
                 {
@@ -159,7 +161,7 @@
                             </div>
                             <div class="pt-2 pb-2">
                             <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">@item.Title - @item.Author</h6>
-                            <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">@item.Credit Credit</h6>
+                                <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">@item.Credit.Value.ToString("#,##0.") Credit</h6>
                             </div>
                         </div>
                     </a>

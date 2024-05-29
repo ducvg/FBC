@@ -1,0 +1,26 @@
+﻿@model IEnumerable<FBC.ViewModels.MenuCategoriesVM>
+
+<div class="col-md-2">
+    <h5>Price range</h5>
+    <div class="price-range">
+        <input type="text" placeholder="From " class="price-range-input" />
+        <div class="price-range-line"></div>
+        <input type="text" placeholder="To " class="price-range-input" />
+    </div>
+    <button style="width:100%" type="button" class="mt-3 btn btn-success">APPLY</button>
+    <hr />
+    <h5 style="">Danh Mục</h5>
+    <div class="category-list me-10">
+        <p>
+            <a asp-controller="Books" asp-action="Index" style="color:black; text-decoration: none">
+                All Categories
+            </a>
+        </p>
+        @foreach (var item in Model)
+        {
+            <p>
+                <a asp-route-cate="@item.categoryId" asp-controller="Books" asp-action="Index" style="color:black; text-decoration: none">@item.categoryName</a>
+            </p>
+        }
+    </div>
+</div>

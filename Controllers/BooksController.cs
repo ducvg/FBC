@@ -19,13 +19,24 @@ namespace FBC.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? cate)
         {
-            var booklist = await _context.Books.ToListAsync();
-            var catelist = await _context.Categories.ToListAsync();
-            ViewData["catelist"] = catelist;
+            var booklist = _context.Books.Include(b => b.Categories).ToList();
+            if (cate.HasValue)
+            {
+                booklist = booklist.Where(b => b.Categories.Any(c => c.CategoryId == cate)).ToList();
+                if(booklist == null)
+                {
+                    TempData["Message"] = $"Chưa có sản phẩm";
+                }
+            }
+            if(booklist == null)
+            {
+                TempData["Message"] = $"Chưa có sản phẩm";
+            }
             return View(booklist);
         }
+
         public async Task<IActionResult> testbook(int? id)
         {
             if (id == null)
@@ -40,7 +51,7 @@ namespace FBC.Controllers
                 return NotFound();
             }
 
-            return View(book);;
+            return View(book); 
         }
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -54,6 +65,7 @@ namespace FBC.Controllers
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
+
                 return NotFound();
             }
 

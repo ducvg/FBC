@@ -10,15 +10,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FBC</title>
-@*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
- *@    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
+    @*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    *@
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FBC.styles.css" asp-append-version="true" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Philosopher' rel='stylesheet'>
     <script src="https://kit.fontawesome.com/a21db75261.js" crossorigin="anonymous"></script>
     <style>
-        body{
+        body {
             min-height: 100vh;
             margin: 0;
         }
@@ -26,6 +27,7 @@
         textarea {
             resize: none;
         }
+
         body {
             display: flex;
             flex-direction: column;
@@ -34,6 +36,7 @@
         main {
             flex: 1;
         }
+
         br {
             user-select: none;
         }
@@ -49,11 +52,11 @@
             text-align: center;
         }
 
-        .header-nav a {
-            color: black;
-            text-decoration: none;
-            padding: 0px 10px;
-        }
+            .header-nav a {
+                color: black;
+                text-decoration: none;
+                padding: 0px 10px;
+            }
 
         @@media (min-width: 1666px) {
             .container, .container-xxl {
@@ -65,31 +68,33 @@
             color: white;
         }
 
-        .footer-top ul {
-            list-style-type: none;
-        }
+            .footer-top ul {
+                list-style-type: none;
+            }
 
-        .footer-top li:first-child {
-            color: lightgreen;
-        }
+            .footer-top li:first-child {
+                color: lightgreen;
+            }
 
-        .footer-top li:not(:last-child) {
-            margin-bottom: 10px;
-        }
+            .footer-top li:not(:last-child) {
+                margin-bottom: 10px;
+            }
 
         .footer-top {
             padding: 10px 0;
             background-color: #272727;
         }
-        .footer-bottom{
-            line-height:25px;
+
+        .footer-bottom {
+            line-height: 25px;
         }
+
         .navbar {
             margin-bottom: 0;
         }
     </style>
-        @RenderSection("Stylesheets", required: false)
-    
+    @RenderSection("Stylesheets", required: false)
+
 </head>
 <body>
     <header style="font-family:roboto;font-weight:bold" class="sticky-top">
@@ -112,32 +117,31 @@
                         <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         <a asp-area="" asp-controller="Home" asp-action="About">About</a>
                         <a href="https://www.facebook.com/profile.php?id=61559811297067">Contact us</a>
-                    </li> 
+                    </li>
                     @*  @if(Context.User.Identity.IsAuthenticated)
                     {
-                        <a>@User.Identity.Name</a>
+                    <a>@User.Identity.Name</a>
                     }  *@
                     <li class="col-md-4 d-flex ps-4 pe-4 justify-content-around">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <div class="d-flex">
-                        <a class="ps-0 pe-0"><i class="fa-regular fa-user"></i></a>
-                        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
-                    </div>
-                    <div class="d-flex">
-                                <a class="ps-0 pe-0" href="/Cart"><i class="fas fa-shopping-cart" style="height: 100%;"></i></a>
-                        <a href="#Wallet">0 BookCoin</a>
-                    </div>
-                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-                    </form>
-                }
-                    </li>   
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="d-flex">
+                                <a class="ps-0 pe-0"><i class="fa-regular fa-user"></i></a>
+                                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
+                            </div>
+                            <div class="d-flex">
+                                @await Component.InvokeAsync("Cart")
+                            </div>
+                            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                            </form>
+                        }
+                    </li>
                 </ul>
             </div>
             @* @if (Context.User.Identity.IsAuthenticated)
             {
-                <a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+            <a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
             }  *@
         </nav>
     </header>
@@ -153,7 +157,7 @@
                 <hr style="border: 1.5px solid white;opacity: 1;">
                 <div class="row">
                     <div class="col-md-4" style="text-align:center">
-                        <img src="~/asset/image/logo_blackbg.png" width="69%" style="max-height:150px;width:auto;padding-bottom:10px"/>
+                        <img src="~/asset/image/logo_blackbg.png" width="69%" style="max-height:150px;width:auto;padding-bottom:10px" />
                     </div>
                     <div class="col-md-8">
                         <div class="container-fluid container-fill">
