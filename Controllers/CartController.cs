@@ -11,6 +11,7 @@ using FBC.ViewModels;
 using Microsoft.AspNet.Identity;
 using static System.Reflection.Metadata.BlobBuilder;
 using Microsoft.AspNetCore.Identity;
+using NuGet.Packaging;
 
 namespace FBC.Controllers
 {
@@ -66,20 +67,20 @@ namespace FBC.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
-            var book = _context.Books.Find(id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+            var book = await _context.Books.FindAsync(id);
 
             if (book == null)
             {
                 return NotFound();
             }
 
-            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
-            if (cart == null)
-            {
-                cart = new CartOrder { Id = user.Id };
-                _context.CartOrders.Add(cart);
-            }
+            var cart = await _context.CartOrders.Include(c => c.Books).FirstOrDefaultAsync(c => c.Id == user.Id);
+            //if (cart == null)
+            //{
+            //    cart = new CartOrder { Id = user.Id };
+            //    _context.CartOrders.Add(cart);
+            //}
 
             var existingBook = cart.Books.FirstOrDefault(b => b.BookId == id);
             if (existingBook != null)
@@ -87,7 +88,7 @@ namespace FBC.Controllers
                 return RedirectToAction("Index");
             }
             cart.Books.Add(book);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -146,6 +147,7 @@ namespace FBC.Controllers
             TempData["orderItem"] = cart.Books.ToList().ToString();
             if (cart != null)
             {
+                order.Books.AddRange(cart.Books);
                 cart.Books.Clear();
                 _context.SaveChanges();
             }

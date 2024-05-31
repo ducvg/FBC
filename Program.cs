@@ -44,7 +44,7 @@ namespace FBC
             builder.Services.AddDbContext<Fbc1Context>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<Fbc1Context>();
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<Fbc1Context>();
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 // Thiết lập về Password

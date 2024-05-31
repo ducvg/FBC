@@ -152,31 +152,35 @@
                     <span class="order-details-value">@Model.User.Email</span>
                 </div>
             </div>
-            <div class="order-items">
+           @*  <div class="order-items">
                 <h2>Order Items</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Condition</th>
-                            <th>Credit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Book Test </td>
-                            <td>New</td>
-                            <td>54</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="2">Total:</td>
-                            <td>$144.90</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                @foreach(var item in Model.Books)
+                {
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Condition</th>
+                                <th>Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.Title</td>
+                                <td>@item.Condition</td>
+                                <td>@item.Credit.Value.ToString("#,##0.")</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total:</td>
+                                <td>@Model.Total.Value</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                }
+                
+            </div> *@
             <div class="billing-address">
                 <h2>Billing Address</h2>
                 <p>
