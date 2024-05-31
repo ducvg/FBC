@@ -114,9 +114,10 @@ namespace FBC.Controllers
                 TempData["SubmitErrorDetail"] = errorDetailBuilder.ToString();
                 return RedirectToAction("Index", "Exchange");
             }
+            rq.CreateDate = DateOnly.FromDateTime(DateTime.Now); ;
 
             _context.ExchangeRequests.Add(rq);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "");
         }
 

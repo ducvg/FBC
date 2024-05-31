@@ -4,6 +4,7 @@ using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBC.Migrations
 {
     [DbContext(typeof(Fbc1Context))]
-    partial class Fbc1ContextModelSnapshot : ModelSnapshot
+    [Migration("20240530060207_suadb")]
+    partial class suadb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,16 +247,10 @@ namespace FBC.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateOnly?>("CompleteDate")
-                        .HasColumnType("date");
-
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateOnly>("CreateDate")
-                        .HasColumnType("date");
 
                     b.Property<decimal?>("Credit")
                         .HasColumnType("decimal(30, 5)");
@@ -297,9 +294,6 @@ namespace FBC.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -465,13 +459,13 @@ namespace FBC.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "faef8332-2c9f-4bb9-bdfa-45726f7f19ef",
+                            Id = "562bda45-fbe3-405c-bab0-49931aa75d20",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "8c6a8be9-53c6-48e4-ad21-35161858a2bb",
+                            Id = "f81ad6b8-f3e2-4949-8e75-dfdbc8724c0c",
                             Name = "client",
                             NormalizedName = "client"
                         });
