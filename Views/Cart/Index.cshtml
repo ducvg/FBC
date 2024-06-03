@@ -21,15 +21,6 @@
             text-decoration: none;
         }
 
-        .book-image {
-            text-align: center;
-            aspect-ratio: 1/1;
-        }
-
-            .book-image img {
-                width: 100%;
-            }
-
     </style>
 }
 <div class="container mt-large" style="font-family:Philosopher">
@@ -130,19 +121,19 @@
                                             *@
                                             <form class="mt-4" asp-action="Checkout" asp-controller="Cart" method="post">
                                                 <div data-mdb-input-init class="form-outline form-white mb-4">
-                                                    <input name="Recipient" type="text" id="typeName" class="form-control form-control-lg" siez="17"
-                                                           placeholder="Recipient Name" />
+                                                    <input required name="Recipient" type="text" id="typeName" class="form-control form-control-lg" siez="17"
+                                                           placeholder="Recipient Name"/>
                                                     <label class="form-label" for="typeName">Recipient Name</label>
                                                 </div>
 
                                                 <div data-mdb-input-init class="form-outline form-white mb-4">
-                                                    <input name="Address" type="text" id="typeText" class="form-control form-control-lg" siez="17"
+                                                    <input required name="Address" type="text" id="typeText" class="form-control form-control-lg" siez="17"
                                                            placeholder="Address" maxlength="19" />
                                                     <label class="form-label" for="typeText">Address</label>
                                                 </div>
 
                                                 <div data-mdb-input-init class="form-outline form-white mb-4">
-                                                    <input name="Phone" type="text" id="typeText" class="form-control form-control-lg" siez="17"
+                                                    <input required name="Phone" type="text" id="typeText" class="form-control form-control-lg" siez="17"
                                                            placeholder="+84-23456789" maxlength="11" />
                                                     <label class="form-label" for="typeText">Phone Number</label>
                                                 </div>
@@ -174,7 +165,7 @@
 
                                                 <div class="d-flex justify-content-between">
                                                     <p class="mb-2">Shipping</p>
-                                                    <p class="mb-2">10</p>
+                                                    <p class="mb-2">5</p>
                                                 </div>
 
                                                 <div class="d-flex justify-content-between mb-4">

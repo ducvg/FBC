@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.AspNetCore.Identity;
-using FBC.Services;
 
 namespace FBC
 {
@@ -71,8 +70,6 @@ namespace FBC
                 //options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
             });
 
-            
-            builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
             var app = builder.Build();
 
