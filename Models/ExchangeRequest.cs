@@ -18,15 +18,18 @@ public partial class ExchangeRequest
     public string? Author { get; set; }
     [Required(ErrorMessage = "Publisher is required.")]
     [StringLength(100, ErrorMessage = "Publisher can't be longer than 100 characters.")]
-
     public string? Publisher { get; set; }
-
     public string? Description { get; set; }
+    public string? Response { get; set; }
+    public DateOnly CreateDate { get; set; }
+    public DateOnly? CompleteDate { get; set; }
+
+
     [Required(ErrorMessage = "Condition is required.")]
     [StringLength(50, ErrorMessage = "Condition can't be longer than 50 characters.")]
 
     public string Condition { get; set; } = null!;
-    [Required(ErrorMessage = "NoPage is required.")]
+    [Required(ErrorMessage = "Số trang không hợp lệ")]
     [Range(1, int.MaxValue, ErrorMessage = "Number of pages must be a positive integer.")]
 
     public int? NoPage { get; set; }
@@ -68,10 +71,23 @@ public partial class ExchangeRequest
     [Range(0, double.MaxValue, ErrorMessage = "Credit must be a positive number.")]
 
     public decimal? Credit { get; set; }
-
     public string Id { get; set; }
     [ForeignKey("Id")]
     public virtual User User { get; set; } = null!;
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+
+
+    public string getStatus()
+    {
+        switch (Status)
+        {
+            case 0: return "Pending Approval";
+            case 1: return "Awaiting Transfer";
+            case 2: return "Completed";
+            case 3: return "Canceled";
+            default: return "Unknown";
+
+        }
+    }
 
 }

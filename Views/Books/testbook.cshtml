@@ -162,7 +162,7 @@
                         <span>Category @i, &nbsp;</span>
                     }
                 </div>
-                <h3 style="font-weight:bold;color:#56B280">Credit: @Model.Credit.Value.ToString("#,##0.") </h3>
+                <h3 style="font-weight:bold;color:#56B280">Bookcoin: @Model.Credit.Value.ToString("#,##0.") </h3>
                 <div class="text-center mt-4">
                     <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.BookId">
                         <button type="submit" class="btn btn-outline-success btn-cart">
