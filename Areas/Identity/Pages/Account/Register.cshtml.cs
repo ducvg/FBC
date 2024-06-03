@@ -154,14 +154,14 @@ namespace FBC.Areas.Identity.Pages.Account
                     {
                         Id = user.Id
                     };
-                    _context.CartOrders.AddAsync(cart);  
+                    await _context.CartOrders.AddAsync(cart);
 
                     var wallet = new Wallet
                     {
                         Password = Input.Password,
-                        Id=user.Id,
+                        Id = user.Id,
                     };
-                    _context.Wallets.AddAsync(wallet);
+                    await _context.Wallets.AddAsync(wallet);
                     await _context.SaveChangesAsync();
 
                     var userId = await _userManager.GetUserIdAsync(user);

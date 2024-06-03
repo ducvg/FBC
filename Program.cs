@@ -1,9 +1,10 @@
-﻿using FBC.Models;
+using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.AspNetCore.Identity;
+using FBC.Services;
 
 namespace FBC
 {
@@ -69,6 +70,9 @@ namespace FBC
                 //options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
                 //options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
             });
+
+            
+            builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
             var app = builder.Build();
 

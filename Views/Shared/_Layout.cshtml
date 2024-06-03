@@ -129,7 +129,7 @@
                                 <a class="ps-0 pe-0"><i class="fa-regular fa-user"></i></a>
                                 <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
                             </div>
-                            <div class="d-flex">
+                           <div class="d-flex">
                                 @await Component.InvokeAsync("Cart")
                             </div>
                             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
