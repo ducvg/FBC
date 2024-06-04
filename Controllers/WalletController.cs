@@ -66,7 +66,7 @@ namespace FBC.Controllers
                 BankAcountName = bankname,
                 PaymentCode = code,
                 Amount = Amount,
-                Credit = Amount/1000,
+                Credit = Math.Floor(Amount / 1000),
                 Description = description,
                 CreatedDate = DateTime.Now,
                 Id = user.Id,

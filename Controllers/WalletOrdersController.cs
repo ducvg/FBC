@@ -9,51 +9,23 @@ using FBC.Models;
 
 namespace FBC.Controllers
 {
-    public class BooksController : Controller
+    public class WalletOrdersController : Controller
     {
         private readonly Fbc1Context _context;
 
-        public BooksController(Fbc1Context context)
+        public WalletOrdersController(Fbc1Context context)
         {
             _context = context;
         }
 
-        // GET: Books
-        public async Task<IActionResult> Index(int? cate)
+        // GET: WalletOrders
+        public async Task<IActionResult> Index()
         {
-            var booklist = _context.Books.Include(b => b.Categories).ToList();
-            if (cate.HasValue)
-            {
-                booklist = booklist.Where(b => b.Categories.Any(c => c.CategoryId == cate)).ToList();
-                if(booklist == null)
-                {
-                    TempData["Message"] = $"Chưa có sản phẩm";
-                }
-            }
-            if(booklist == null)
-            {
-                TempData["Message"] = $"Chưa có sản phẩm";
-            }
-            return View(booklist);
+            var fbc1Context = _context.WalletOrders.Include(w => w.User);
+            return View(await fbc1Context.ToListAsync());
         }
 
-        public async Task<IActionResult> testbook(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.BookId == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return View(book); 
-        }
-        // GET: Books/Details/5
+        // GET: WalletOrders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,40 +33,42 @@ namespace FBC.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.Include(b => b.Categories)
-                .FirstOrDefaultAsync(m => m.BookId == id);
-            if (book == null)
+            var walletOrder = await _context.WalletOrders
+                .Include(w => w.User)
+                .FirstOrDefaultAsync(m => m.WalletOrderId == id);
+            if (walletOrder == null)
             {
-
                 return NotFound();
             }
 
-            return View(book);
+            return View(walletOrder);
         }
 
-        // GET: Books/Create
+        // GET: WalletOrders/Create
         public IActionResult Create()
         {
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Books/Create
+        // POST: WalletOrders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Title,Author,Publisher,Description,Condition,NoPage,Weight,Width,Length,Height,Image1,Image2,Image3,Image4,Status,Credit")] Book book)
+        public async Task<IActionResult> Create([Bind("WalletOrderId,BankAcountName,PaymentCode,Description,Amount,Credit,CreatedDate,Id")] WalletOrder walletOrder)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
+                _context.Add(walletOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", walletOrder.Id);
+            return View(walletOrder);
         }
 
-        // GET: Books/Edit/5
+        // GET: WalletOrders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -102,22 +76,23 @@ namespace FBC.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
+            var walletOrder = await _context.WalletOrders.FindAsync(id);
+            if (walletOrder == null)
             {
                 return NotFound();
             }
-            return View(book);
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", walletOrder.Id);
+            return View(walletOrder);
         }
 
-        // POST: Books/Edit/5
+        // POST: WalletOrders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,Author,Publisher,Description,Condition,NoPage,Weight,Width,Length,Height,Image1,Image2,Image3,Image4,Status,Credit")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("WalletOrderId,BankAcountName,PaymentCode,Description,Amount,Credit,CreatedDate,Id")] WalletOrder walletOrder)
         {
-            if (id != book.BookId)
+            if (id != walletOrder.WalletOrderId)
             {
                 return NotFound();
             }
@@ -126,12 +101,12 @@ namespace FBC.Controllers
             {
                 try
                 {
-                    _context.Update(book);
+                    _context.Update(walletOrder);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.BookId))
+                    if (!WalletOrderExists(walletOrder.WalletOrderId))
                     {
                         return NotFound();
                     }
@@ -142,10 +117,11 @@ namespace FBC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", walletOrder.Id);
+            return View(walletOrder);
         }
 
-        // GET: Books/Delete/5
+        // GET: WalletOrders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -153,34 +129,35 @@ namespace FBC.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.BookId == id);
-            if (book == null)
+            var walletOrder = await _context.WalletOrders
+                .Include(w => w.User)
+                .FirstOrDefaultAsync(m => m.WalletOrderId == id);
+            if (walletOrder == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(walletOrder);
         }
 
-        // POST: Books/Delete/5
+        // POST: WalletOrders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book != null)
+            var walletOrder = await _context.WalletOrders.FindAsync(id);
+            if (walletOrder != null)
             {
-                _context.Books.Remove(book);
+                _context.WalletOrders.Remove(walletOrder);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookExists(int id)
+        private bool WalletOrderExists(int id)
         {
-            return _context.Books.Any(e => e.BookId == id);
+            return _context.WalletOrders.Any(e => e.WalletOrderId == id);
         }
     }
 }
