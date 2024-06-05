@@ -170,7 +170,7 @@
             <div class="list-book mt-3">
                 @foreach (var item in Model)
                 {
-                    <a asp-controller="Books" asp-action="testbook" asp-route-id="@item.BookId" style="text-decoration:none;">
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" style="text-decoration:none;">
                         <div class="book pt-2 pb-2">
                             <div class="book-image">
                                 <img src="@item.Image1" />
