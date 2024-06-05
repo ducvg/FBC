@@ -11,6 +11,8 @@ using FBC.ViewModels;
 using Microsoft.AspNet.Identity;
 using static System.Reflection.Metadata.BlobBuilder;
 using Microsoft.AspNetCore.Identity;
+using NuGet.Packaging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FBC.Controllers
 {
@@ -54,7 +56,15 @@ namespace FBC.Controllers
                     Condition = b.Condition,
                 }).ToList()
             };
-            ViewData["Total"] = (total + 10).ToString("#,##0.");
+
+            if (cart.Books.IsNullOrEmpty())
+            {
+                ViewData["Total"] = 0;
+            }
+            else
+            {
+                ViewData["Total"] = (total + 5).ToString("#,##0.");
+            }  
             return View(cart);
         }
 
@@ -66,20 +76,20 @@ namespace FBC.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
-            var book = _context.Books.Find(id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+            var book = await _context.Books.FindAsync(id);
 
             if (book == null)
             {
                 return NotFound();
             }
 
-            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
-            if (cart == null)
-            {
-                cart = new CartOrder { Id = user.Id };
-                _context.CartOrders.Add(cart);
-            }
+            var cart = await _context.CartOrders.Include(c => c.Books).FirstOrDefaultAsync(c => c.Id == user.Id);
+            //if (cart == null)
+            //{
+            //    cart = new CartOrder { Id = user.Id };
+            //    _context.CartOrders.Add(cart);
+            //}
 
             var existingBook = cart.Books.FirstOrDefault(b => b.BookId == id);
             if (existingBook != null)
@@ -87,7 +97,7 @@ namespace FBC.Controllers
                 return RedirectToAction("Index");
             }
             cart.Books.Add(book);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -123,13 +133,22 @@ namespace FBC.Controllers
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
             var wallet = _context.Wallets.FirstOrDefault(w => w.Id == user.Id);
-
+            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
 
             if (!DeductCredit(order.Total.Value))
             {
                 TempData["SuccessMessage"] = "Thanh toán không thành công, bạn không đủ điểm thanh toán!";
                 return RedirectToAction("Index");
             }
+
+            if (order.Total == 0)
+            {
+                TempData["SuccessMessage"] = "You need to add book to checkout";
+                return RedirectToAction("Index");
+            }
+            
+            var book = _context.Books.FirstOrDefault();
+
             order.Status = 1;
             order.Recipient = order.Recipient;
             order.Address = order.Address;
@@ -137,21 +156,23 @@ namespace FBC.Controllers
             order.Total = order.Total;
             order.OrderDate = DateTime.Now;
             order.Id = user.Id;
+            order.Books = cart.Books.ToList();
             _context.BookOrders.Add(order);
             _context.SaveChanges();
 
             var savedOrder = _context.BookOrders.Include(bo => bo.Books).FirstOrDefault(bo => bo.BookOrderId == order.BookOrderId);
 
-            var cart = _context.CartOrders.Include(c => c.Books).FirstOrDefault(c => c.Id == user.Id);
+            
             TempData["orderItem"] = cart.Books.ToList().ToString();
             if (cart != null)
             {
+                order.Books.AddRange(cart.Books);
                 cart.Books.Clear();
                 _context.SaveChanges();
             }
 
             TempData["SuccessMessage"] = "Thanh toán thành công!";
-            return RedirectToAction("Index", "BookOrders", new { id = savedOrder.BookOrderId } );
+            return RedirectToAction("OrderReceiver", "BookOrders", new { id = savedOrder.BookOrderId } );
         }
 
         public bool DeductCredit(decimal amount)

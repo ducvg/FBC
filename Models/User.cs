@@ -21,4 +21,5 @@ public partial class User : IdentityUser
     public virtual ICollection<ExchangeRequest> ExchangeRequests { get; set; } = new List<ExchangeRequest>();
 
     public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+    public virtual ICollection<WalletOrder> WalletOrder { get; set; } = new List<WalletOrder>();
 }

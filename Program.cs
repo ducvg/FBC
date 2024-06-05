@@ -1,4 +1,4 @@
-﻿using FBC.Models;
+using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -44,7 +44,7 @@ namespace FBC
             builder.Services.AddDbContext<Fbc1Context>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<Fbc1Context>();
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<Fbc1Context>();
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 // Thiết lập về Password
@@ -69,6 +69,7 @@ namespace FBC
                 //options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
                 //options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
             });
+
 
             var app = builder.Build();
 

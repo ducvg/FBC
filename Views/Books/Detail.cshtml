@@ -159,10 +159,11 @@
                 <h3>[@Html.DisplayFor(model => model.Condition)] @Html.DisplayFor(model => model.Title)</h3>
                 <div class="book-origin mt-3 mb-1">
                     <span><b>Category: &nbsp;</b></span>
-                    @for (int i = 0; i < 5; i++)
+                   @foreach (var item in Model.Categories)
                     {
-                        <span>Category @i, &nbsp;</span>
+                        <span>@item.Name</span>
                     }
+                    
                 </div>
                 <h3 style="font-weight:bold;color:#56B280">Bookcoin: @Model.Credit.Value.ToString("#,##0.") </h3>
                 <div class="text-center mt-4">

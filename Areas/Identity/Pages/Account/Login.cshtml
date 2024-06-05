@@ -2,11 +2,10 @@
 @model LoginModel
 
 @{
-
     ViewData["Title"] = "Log in";
 }
-@*
-<h1>@ViewData["Title"]</h1>
+
+@* <h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-4">
         <section>
@@ -54,30 +53,30 @@
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
-                            <div>
-                                <p>
-                                    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                                    about setting up this ASP.NET application to support logging in via external services</a>.
-                                </p>
-                            </div>
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
                 }
                 else
                 {
-                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                                <div>
-                                    <p>
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
                                 @foreach (var provider in Model.ExternalLogins!)
                                 {
-                                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                 }
-                                    </p>
-                                </div>
-                            </form>
+                            </p>
+                        </div>
+                    </form>
                 }
             }
         </section>
     </div>
-</div>*@
+</div> *@
 <!doctype html>
 <html lang="en">
 <head>
@@ -136,7 +135,7 @@
                         </form>
                         <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
                         <div class="form-group text-center">
-                            @* <a href="#" class="px-2 py-2 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Facebook</a> *@
+
                             <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                                 <div>
                                     <p>
@@ -149,7 +148,7 @@
                                     </p>
                                 </div>
                             </form>
-                            @* <a asp-controller="Login" asp-action="Login" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Google</a> *@
+
                         </div>
                         @if (ViewData["ValidateMessage"] != null)
                         {
@@ -169,8 +168,6 @@
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"8837ce57185b85f2","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
 </body>
 </html>
-
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

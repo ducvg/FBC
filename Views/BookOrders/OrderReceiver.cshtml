@@ -1,0 +1,203 @@
+﻿@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor
+@model FBC.Models.BookOrder
+@{
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General styles */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container.orderrecive {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Order confirmation content */
+        .order-confirmation {
+            padding: 30px;
+            text-align: left;
+        }
+
+        h1 {
+            color: #37a572;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Order details */
+        .order-details,
+        .order-items,
+        .billing-address {
+            margin-bottom: 20px;
+        }
+
+            .order-details h2,
+            .order-items h2,
+            .billing-address h2 {
+                color: #37a572;
+                margin-bottom: 15px;
+            }
+
+        .order-details-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .order-details-label {
+            font-weight: bold;
+            width: 150px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .order-details-value {
+            display: inline-block;
+        }
+
+        /* Order items table */
+        .order-items table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        .order-items th,
+        .order-items td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-items th {
+            background-color: #37a572;
+            color: #fff;
+        }
+
+        /* Order items total row */
+        .order-items .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 10px;
+        }
+
+        /* Billing address */
+        .billing-address {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Responsive design */
+        Edit
+        (max-width: 768px) {
+            .order-details-row
+
+        {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .order-details-label {
+            margin-bottom: 5px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="orderrecive">
+        <div class="order-confirmation">
+            <h1>Thank you! Your order has been received.</h1>
+            <p>We appreciate your business!</p>
+            <div class="order-details">
+                <div class="order-details-row">
+                    <span class="order-details-label">Order number:</span>
+                    <span class="order-details-value">@Model.BookOrderId </span>
+                </div>
+                <div class="order-details-row">
+                    <span class="order-details-label">Date:</span>
+                    <span class="order-details-value">@Model.OrderDate.Value.ToString("dddd,MMMM yyyy")</span>
+                </div>
+                <div class="order-details-row">
+                    <span class="order-details-label">Total:</span>
+                    <span class="order-details-value">@Model.Total</span>
+                </div>
+                <div class="order-details-row">
+                    <span class="order-details-label">Email:</span>
+                    <span class="order-details-value">@Model.User.Email</span>
+                </div>
+            </div>
+           <div class="order-items">
+                <h2>Order Items</h2>
+                @foreach (var item in Model.Books)
+                {
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book Name</th>
+                                <th>Condition</th>
+                                <th>Credit</th>     
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.Title</td>
+                                <td>@item.Condition</td>
+                                <td>@item.Credit.Value.ToString("#,##0.") Bookcoin</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total:</td>
+                                <td>@Model.Total.Value</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                }
+                
+            </div> 
+            <div class="billing-address">
+                <h2>Billing Address</h2>
+                <p>
+                    <div class="order-details-row">
+                        <span class="order-details-label">Name:</span>
+                        <span class="order-details-value">@Model.Recipient</span>
+                    </div>
+                    <div class="order-details-row">
+                        <span class="order-details-label">Address</span>
+                        <span class="order-details-value">@Model.Address</span>
+                    </div>
+                    <div class="order-details-row">
+                        <span class="order-details-label">Phone Number</span>
+                        <span class="order-details-value">@Model.Phone</span>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

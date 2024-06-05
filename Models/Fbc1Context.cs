@@ -32,6 +32,7 @@ public partial class Fbc1Context : IdentityDbContext<User>
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Wallet> Wallets { get; set; }
+    public virtual DbSet<WalletOrder> WalletOrders { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -44,14 +45,14 @@ public partial class Fbc1Context : IdentityDbContext<User>
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+       base.OnModelCreating(modelBuilder);
 
-        var admin = new IdentityRole("admin");
-        admin.NormalizedName = "admin";
-        var client = new IdentityRole("client");
-        client.NormalizedName = "client";
+       // var admin = new IdentityRole("admin");
+       // admin.NormalizedName = "admin";
+       // var client = new IdentityRole("client");
+       // client.NormalizedName = "client";
 
-       modelBuilder.Entity<IdentityRole>().HasData(admin, client);
+       //modelBuilder.Entity<IdentityRole>().HasData(admin, client);
 
         //modelBuilder.Entity<Account>(entity =>
         //{
@@ -211,6 +212,25 @@ public partial class Fbc1Context : IdentityDbContext<User>
             entity.HasOne(d => d.User).WithMany(p => p.Wallets)
                 .HasForeignKey(d => d.Id)
                 .HasConstraintName("FK__Wallet__UserId__2A4B4B5E");
+        });
+
+        modelBuilder.Entity<WalletOrder>(entity =>
+        {
+            entity.HasKey(e => e.WalletOrderId).HasName("PK__WalletOrder__8VSDVSDVA");
+
+            entity.ToTable("WalletOrder");
+
+            entity.Property(e => e.BankAcountName).HasMaxLength(255);
+            entity.Property(e => e.PaymentCode).HasMaxLength(255);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Credit)
+                .HasDefaultValue(0m)
+                .HasColumnType("decimal(30, 5)");
+
+            entity.HasOne(d => d.User).WithMany(p => p.WalletOrder)
+                .HasForeignKey(d => d.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Wallet__UserId__84D4F90EC43E767F");
         });
 
         OnModelCreatingPartial(modelBuilder);

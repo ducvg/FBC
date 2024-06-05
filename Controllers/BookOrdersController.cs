@@ -1,7 +1,11 @@
-﻿using FBC.Models;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using FBC.Models;
 
 namespace FBC.Controllers
 {
@@ -14,83 +18,156 @@ namespace FBC.Controllers
             _context = context;
         }
 
-
-
-        // GET: BookOrdersController
-        public ActionResult Index(int? id)
+        // GET: BookOrders
+        public async Task<IActionResult> Index()
         {
-            var order = _context.BookOrders.Include(o => o.User).FirstOrDefault(o => o.BookOrderId == id);
+            var fbc1Context = _context.BookOrders.Include(b => b.User);
+            return View(await fbc1Context.ToListAsync());
+        }
+
+        public ActionResult OrderReceiver(int? id)
+        {
+            var order = _context.BookOrders.Include(o => o.Books).Include(o => o.User).FirstOrDefault(o => o.BookOrderId == id);
             return View(order);
         }
 
-
-        // GET: BookOrdersController/Details/5
-        public ActionResult Details(int id)
+        // GET: BookOrders/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //var bookOrder = await _context.BookOrders
+            //    .Include(b => b.User)
+            //    .FirstOrDefaultAsync(m => m.BookOrderId == id);
+            var bookOrder = _context.BookOrders
+                .Include(bo => bo.Books) 
+                .FirstOrDefault(bo => bo.BookOrderId == id);
+
+            if (bookOrder == null)
+            {
+                return NotFound();
+            }
+            
+            return View(bookOrder);
+        }
+
+        // GET: BookOrders/Create
+        public IActionResult Create()
+        {
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // GET: BookOrdersController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: BookOrdersController/Create
+        // POST: BookOrders/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([Bind("BookOrderId,Total,Status,Recipient,Address,OrderDate,ShippedDate,Phone,Id")] BookOrder bookOrder)
         {
-            try
+            if (ModelState.IsValid)
             {
+                _context.Add(bookOrder);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", bookOrder.Id);
+            return View(bookOrder);
         }
 
-        // GET: BookOrdersController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: BookOrders/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var bookOrder = await _context.BookOrders.FindAsync(id);
+            if (bookOrder == null)
+            {
+                return NotFound();
+            }
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", bookOrder.Id);
+            return View(bookOrder);
         }
 
-        // POST: BookOrdersController/Edit/5
+        // POST: BookOrders/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("BookOrderId,Total,Status,Recipient,Address,OrderDate,ShippedDate,Phone,Id")] BookOrder bookOrder)
         {
-            try
+            if (id != bookOrder.BookOrderId)
             {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(bookOrder);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookOrderExists(bookOrder.BookOrderId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", bookOrder.Id);
+            return View(bookOrder);
         }
 
-        // GET: BookOrdersController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: BookOrders/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var bookOrder = await _context.BookOrders
+                .Include(b => b.User)
+                .FirstOrDefaultAsync(m => m.BookOrderId == id);
+            if (bookOrder == null)
+            {
+                return NotFound();
+            }
+
+            return View(bookOrder);
         }
 
-        // POST: BookOrdersController/Delete/5
-        [HttpPost]
+        // POST: BookOrders/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+            var bookOrder = await _context.BookOrders.FindAsync(id);
+            if (bookOrder != null)
             {
-                return RedirectToAction(nameof(Index));
+                _context.BookOrders.Remove(bookOrder);
             }
-            catch
-            {
-                return View();
-            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool BookOrderExists(int id)
+        {
+            return _context.BookOrders.Any(e => e.BookOrderId == id);
         }
     }
 }
