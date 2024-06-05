@@ -1,0 +1,14 @@
+﻿@model FBC.ViewModels.CartModel
+
+<div>
+    <a class="ps-0 pe-0" href="/Cart">
+        <i class="fas fa-shopping-cart" style="height: 100%;"></i>
+        @* <i class="fa fa-shopping-bag fa-2x"></i> *@
+        <span class="position-absolute rounded-circle d-flex align-items-center justify-content-center text-dark px-0" style="background:#57c592; top:2px; margin-left:5px; height: 20px; min-width: 20px;">@Model.Quantity</span>
+    </a>
+</div>
+<div>
+
+    <span class="position-absolute rounded-circle d-flex align-items-center justify-content-center text-dark px-0" style="background:#57c592; top:2px; right:210px; height: 20px; min-width: 20px;">@Model.Quantity</span>
+    <a asp-controller="Wallet" asp-action="Index">@ViewData["Credit"] BookCoin</a>
+</div>

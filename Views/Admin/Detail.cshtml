@@ -1,0 +1,564 @@
+﻿@model FBC.Models.ExchangeRequest
+
+@{
+    var errorDetail = TempData["SubmitErrorDetail"] as string;
+    var today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FBC</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FBC.styles.css" asp-append-version="true" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Philosopher' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/a21db75261.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: url(/asset/image/library.png);
+            margin: 0;
+            font-family: Roboto
+        }
+
+        @@media (min-width: 1666px) {
+            .container, .container-xxl {
+                max-width: 1555px;
+            }
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        main {
+            height: 100vh;
+            height: -webkit-fill-available;
+            max-height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .dropdown-toggle {
+            outline: 0;
+        }
+
+        .btn-toggle {
+            padding: .25rem .5rem;
+            font-weight: 600;
+            color: var(--bs-emphasis-color);
+            background-color: transparent;
+        }
+
+            .btn-toggle:hover,
+            .btn-toggle:focus {
+                color: rgba(var(--bs-emphasis-color-rgb), .85);
+                background-color: #23a423;
+            }
+
+            .btn-toggle::before {
+                width: 1.25em;
+                line-height: 0;
+                content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+                transition: transform .35s ease;
+                transform-origin: .5em 50%;
+            }
+
+            .btn-toggle::before {
+                content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            }
+
+            .btn-toggle[aria-expanded="true"] {
+                color: rgba(var(--bs-emphasis-color-rgb), .85);
+            }
+
+                .btn-toggle[aria-expanded="true"]::before {
+                    transform: rotate(90deg);
+                }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 1.25rem;
+        }
+
+            .btn-toggle-nav a:hover,
+            .btn-toggle-nav a:focus {
+                background-color: var(--bs-tertiary-bg);
+            }
+
+        .scrollarea {
+            overflow-y: auto;
+        }
+
+    </style>
+    <style>
+        .main {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .main-left {
+            width: 444px;
+        }
+
+        .image-box {
+        }
+
+        .square {
+            background: white;
+            aspect-ratio: 1 / 1;
+            text-align: center;
+        }
+
+            .square img {
+                height: 100%;
+            }
+
+        .image-set {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 10px;
+        }
+
+        .book-image {
+            background: white;
+            border: 2px solid #ffffff00;
+            overflow: hidden;
+            text-align: center;
+            aspect-ratio: 1 / 1;
+        }
+
+            .book-image img {
+                height: 100%
+            }
+
+        .active-image {
+            border: 2px solid limegreen !important;
+        }
+
+        .seperate {
+            border-right: 1px solid black;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal-dialog {
+            width: min-content;
+            min-width: 500px;
+            max-width: none !important;
+        }
+
+        .form-select option.active {
+            background: #1967d2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex flex-row flex-nowrap vh-100">
+        <div class="bg-dark d-flex flex-column flex-shrink-0 p-3 max-vh-100" style="width: 230px; max-height: 100vh; ">
+            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+                <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-5 text-white fw-semibold">Collapsible</span>
+            </a>
+            <ul class="flex-grow-1 list-unstyled ps-0 overflow-auto">
+                <li class="mb-1">
+                    <button class="text-white btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true">
+                        Dashboard
+                    </button>
+                    <div class="collapse show" id="dashboard-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Earning</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="text-white btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                        Users
+                    </button>
+                    <div class="collapse show" id="home-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Exchange requests</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Users list</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="text-white btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                        Books
+                    </button>
+                    <div class="collapse" id="orders-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Create</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Update book</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">View Store</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <ul class="list-unstyled ps-0">
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <button class="text-white btn d-inline-flex align-items-center rounded border-0 collapsed">
+                        Logout
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="main d-flex flex-row flex-grow-1 m-4 align-self-center rounded" style="min-width: 1234px;">
+            <div class="main-left ps-3 pe-3 mt-3 mb-3 seperate">
+                <div class="image-box pt-4 pb-4">
+                    <div class="square rounded-3">
+                        <img class="overflow-hidden" src="@Html.DisplayFor(model => model.Image1)" id="main-image" />
+                    </div>
+                    <div class="image-set mt-3">
+                        <div class="book-image active-image p-1">
+                            <img src="@Html.DisplayFor(model => model.Image1)" />
+                        </div>
+                        <div class="book-image p-1">
+                            <img src="@Html.DisplayFor(model => model.Image2)" />
+                        </div>
+                        <div class="book-image p-1">
+                            <img src="@Html.DisplayFor(model => model.Image3)" />
+                        </div>
+                        <div class="book-image p-1">
+                            <img src="@Html.DisplayFor(model => model.Image4)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-right d-flex flex-column flex-grow-1 ps-3 pe-3 mt-3 mb-3 pt-4 pb-4">
+                <div class="title">
+                    <table class="w-100 h5">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table">
+                                <td class="pb-4"><b>Exchange ID:</b> @Model.ExchangeId</td>
+                                <td class="pb-4"><b>Đề Sách:</b> @Model.Title</td>
+                                <td class="pb-4"><b>Người gửi: </b>@Model.User.Email</td>
+                            </tr>
+                            <tr class="mt-4">
+                                <td class="pb-4"><b>Coin muốn: </b>@Model.Credit.Value.ToString("#")</td>
+                                <td class="pb-4"><b>Ngày tạo: </b>@Model.CreateDate.ToString("dd/MM/yyyy")</td>
+                                <td class="pb-4"><b>Trạng thái: </b>@Model.getStatus()</td>
+                            </tr>
+                            <tr>
+                                <td class="pb-4"><b>Tác giả: </b>@Model.Author</td>
+                                <td class="pb-4" colspan="2"><b>Độ mới: </b>@Model.Condition</td>
+                            </tr>
+                            <tr>
+                                <td class="pb-4"><b>Xuất bản: </b>@Model.Publisher</td>
+                                <td class="pb-4" colspan="2"><b>Thể loại: </b>@Model.listCategories()</td>
+                            </tr>
+                            <tr>
+                                <td class="pb-4"><b>Số trang: </b>@Model.NoPage</td>
+                                <td class="pb-4"><b>Cân nặng: </b>@Model.Weight kg</td>
+                                <td class="pb-4"><b>Kích thước: </b>@Model.Height x @Model.Width x @Model.Length cm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="message w-100 flex-grow-1 d-flex flex-column mb-3">
+                    <h5><b>Lời nhắn:</b></h5>
+                    <textarea readonly class="overflow-y-auto" style="text-align: justify;width: 100%;height: 100%;background: none;border: none;">@Model.Description</textarea>
+                </div>
+                <div style="text-align: right;">
+                    @if (Model.Status != 3)
+                    {
+                        <button type="button" class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#cancelModal">Hủy yêu cầu</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary me-4" onclick="cancelReset()" data-bs-toggle="modal" data-bs-target="#cancelModal">Reset Trạng thái yêu cầu</button>
+                    }
+                    @if (Model.Status == 0)
+                    {
+                        <button type="button" class="btn btn-success" onclick="openModal('yes')" data-bs-toggle="modal" data-bs-target="#exampleModal">Chấp thuận</button>
+                    }
+                    else if (Model.Status == 1)
+                    {
+                        <button type="button" class="btn btn-success" onclick="openModal('prepare')" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm vào kho</button>
+                    }
+                    else if (Model.Status == 2)
+                    {
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Xem sách</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header alert alert-warning" id="cancel-modal-header">
+                    <h5 class="modal-title" id="cancel-modal-title">Hủy yêu cầu này ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/Admin/ExchangeRequest/detail/@Model.ExchangeId" method="post" class="h-100" id="cancelForm">
+                        <h5>Lời nhắn:</h5>
+                        <textarea class="overflow-y-hidden w-100" style="height:222px" id="responseCancel" name="response">
+:( Yêu cầu đổi sách của bạn đã bị hủy do không hợp lệ hoặc không đáp ứng điều kiện: 
+Xin lỗi bạn vì sự bất tiện này. 
+Nếu cần hỗ trợ, vui lòng liên hệ qua fbookcycle.business@gmail.com
+                        </textarea>
+                        <input type="number" required value="3" id="statusCancel" name="status" style="display:none;" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button form="cancelForm" type="submit" class="btn btn-success">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="width:100%">
+                <div class="modal-header alert alert-success" id="modal-header">
+                    <h5 class="modal-title" id="modal-title">Có lỗi xảy ra! :(</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.Status == 0)
+                    {
+                        <form action="/Admin/ExchangeRequest/detail/@Model.ExchangeId" method="post" class="h-100" id="responseForm">
+                            <h5>Lời nhắn:</h5>
+                            <textarea class="overflow-y-hidden w-100" style="height:222px" name="response" id="responseCancel">Yêu cầu đổi sách của bạn đã được chấp nhận! &#13;&#10;Cảm ơn bạn đã đóng góp và sử dụng dịch vụ của FBC. &#13;&#10;Số bookcoin sẽ được chuyển tới tài khoản bạn khi sách tới bên chúng mình.
+                                                            </textarea>
+                            <input type="number" required value="1" id="status" name="status" style="display:none;" />
+                        </form>
+                    }
+                    else if (Model.Status == 1)
+                    {
+                        <form action="/Admin/ExchangeRequest/Complete/@Model.ExchangeId" method="post" class="h-100 d-flex" id="responseForm">
+                            <div class="modal-left">
+                                <table class="w-100">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="text" class="form-control" value="@Model.Title" required id="floatingTitle" name="Title" placeholder="Title">
+                                                    <label for="floatingTitle">Đề sách:</label>
+                                                </div>
+                                            </td>
+                                            <td class="me-2">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="text" value="@Model.Author" class="form-control" required id="floatingAuthor" name="Author" placeholder="author">
+                                                    <label for="floatingAuthor">Tác giả:</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-floating mb-2">
+                                                    <input type="text" value="@Model.Publisher" class="form-control" required id="floatingPublisher" name="Publisher" placeholder="publisher">
+                                                    <label for="floatingPublisher">NXB:</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="me-2">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="text" value="@Model.Condition" class="form-control" required id="floatingCondition1" name="Condition" placeholder="condition">
+                                                    <label for="floatingCondition1">Tình trạng sách (chữ): </label>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="number" maxlength="3" required class="form-control" id="floatingCondition2" name="ConditionNum" placeholder="condition" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingCondition2">Tình trạng (%): </label>
+                                                </div>
+                                                <div class="form-floating mb-2">
+                                                    <input type="number" maxlength="5" required class="form-control" id="floatingCredit" name="Credit" placeholder="bookcoin" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingCredit">Bookcoin: </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="me-2">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="number" style="width:15ch" value="@Model.NoPage" maxlength="4" required class="form-control" id="floatingPage" name="NoPage" placeholder="Page" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingPage">Số trang: </label>
+                                                </div>
+                                            </td>
+                                            <td class="me-2">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="text" style="width:15ch" value="@Model.Weight" maxlength="4" required class="form-control" id="floatingWeight" name="Weight" placeholder="Weight" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingWeight">Nặng (kg): </label>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex">
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="text" style="width:10ch" value="@Model.Height" maxlength="4" required class="form-control" id="floatingHeight" name="Height" placeholder="Height" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingHeight">Dài (cm): </label>
+                                                </div>
+                                                <div class="form-floating mb-2 me-2">
+                                                    <input type="text" style="width:10ch" value="@Model.Width" maxlength="4" required class="form-control" id="floatingWidth" name="Width" placeholder="Width" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingWidth">Rộng (cm): </label>
+                                                </div>
+                                                <div class="form-floating mb-2">
+                                                    <input type="text" style="width:10ch" value="@Model.Length" maxlength="4" required class="form-control" id="floatingLength" name="Length" placeholder="Width" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                    <label for="floatingLength">Dày (cm): </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="book-description mb-2">
+                                    <div class="form-floating">
+                                        <textarea required class="form-control w-100 overflow-auto" style="height:150px;resize:none" placeholder="Leave a comment here" name="bookDescription" id="floatingTextarea"></textarea>
+                                        <label for="floatingTextarea">Giới thiệu nội dung sách</label>
+                                    </div>
+                                </div>
+                                <div class="request-message">
+                                    <div class="form-floating">
+                                        <textarea required class="form-control w-100 overflow-auto" style="height:150px;resize:none" placeholder="Leave a comment here" name="response" id="floatingMessage">Yêu cầu hoàn thành, số Bookcoin theo yêu cầu đã được chuyển tới tài khoản của bạn, hãy kiểm tra lại ví của bạn. &#13;&#10;Nội dung thay đổi chi tiết yêu cầu:&#13;&#10;Cảm ơn bạn đã sử dụng dịch vụ của FBC! :) </textarea>
+                                        <label for="floatingMessage">Tin nhắn tới User:</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-right">
+                                <div class="categories h-100">
+                                    <div class="form-floating h-100">
+                                        <select style="width:fit-content" class="form-select h-100" name="categories" multiple id="floatingCategories" aria-label="Floating label select example">
+                                            @foreach (var cat in ViewBag.Categories as List<Category>)
+                                            {
+                                                <option class="p-2" value="@cat.CategoryId">@cat.Name</option>
+                                            }
+                                        </select>
+                                        <label for="floatingCategories">Thể loại sách: </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="number" value="2" id="status" name="status" style="display:none;" />
+                        </form>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button form="responseForm" type="submit" class="btn btn-success">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary hidden" id="launchModalButton" data-bs-toggle="modal" data-bs-target="#errorModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header alert alert-warning" role="alert">
+                    <h5 class="modal-titlealert alert-warning" role="alert" id="errorModalLabel">Có lỗi xảy ra! :(</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @TempData["SubmitError"]<br></br>
+                    @Html.Raw(TempData["SubmitErrorDetail"])
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectElement = document.getElementById("floatingCategories");
+            var rqCategoryCount = @Model.Categories.Count;
+            for (var i = 0; i < rqCategoryCount; i++) {
+                selectElement.options[i].selected = true;
+                selectElement.options[i].classList.add("active");
+            }
+            selectElement.addEventListener("change", function () {
+                // Remove 'active' class from all options first
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    selectElement.options[i].classList.remove("active");
+                }
+
+                // Add 'active' class to the selected options
+                for (var i = 0; i < selectElement.selectedOptions.length; i++) {
+                    selectElement.selectedOptions[i].classList.add("active");
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var errorDetail = '@errorDetail';
+            if (errorDetail) {
+                document.getElementById('launchModalButton').click();
+            }
+        });
+
+        function cancelReset() {
+            document.getElementById('cancel-modal-title').innerHTML = 'Đặt về trạng thái ban đầu ?';
+            document.getElementById('responseCancel').innerHTML = 'Reset trạng thái yêu cầu về ban đầu';
+            document.getElementById('statusCancel').value = 0
+        }
+
+        function openModal(type) {
+            var title = document.getElementById('modal-header');
+            if (type == 'yes') {
+                title.innerHTML = 'Chấp nhận yêu cầu: ';
+                rep.value = 'Yêu cầu đổi sách của bạn đã được chấp nhận! Cảm ơn bạn đã đóng góp và sử dụng dịch vụ của FBC. &#13;&#10;Số bookcoin sẽ được chuyển tới tài khoản bạn khi sách tới bên chúng mình.';
+            } else if (type == 'prepare') {
+                title.innerHTML = 'Thông tin sách vào kho: ';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle mouse enter event for all book images
+            var bookImages = document.querySelectorAll('.book-image');
+
+            function addRedBorder(event) {
+                // Remove the red border from any currently highlighted item
+                var currentRedBorder = document.querySelector('.book-image.active-image');
+                if (currentRedBorder) {
+                    currentRedBorder.classList.remove('active-image');
+                }
+
+                // Add the red border to the hovered item
+                event.currentTarget.classList.add('active-image');
+
+                // Change the main image src to the active image src
+                document.getElementById('main-image').src = event.currentTarget.querySelector('img').src;
+            }
+
+            bookImages.forEach(function (bookImage) {
+                bookImage.addEventListener('mouseenter', addRedBorder);
+            });
+        });
+
+    </script>
+</body>
+</html>

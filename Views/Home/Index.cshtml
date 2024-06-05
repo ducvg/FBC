@@ -1,8 +1,162 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using FBC.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
     ViewData["Title"] = "Home Page";
 }
+@section Stylesheets {
+    <link href='https://fonts.googleapis.com/css?family=Prociono' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Rancho' rel='stylesheet'>
+    <style>
+        .welcome-banner {
+            text-align: center;
+            background-image: url(/asset/image/welcome_banner.png);
+            box-shadow: 0 1px 5px black;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        .welcome-box {
+            max-width: 666px;
+            min-width: 111px;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 69px 0;
+            text-align: -webkit-center;
+            box-shadow: 0 5px 5px black;
+        }
+
+        .near-shadow {
+            text-shadow: 2px 2px rgba(0, 0, 0, 0.1)
+        }
+
+        .welcome-quote {
+            display: inline-block;
+            max-width: 500px;
+        }
+
+        .welcome-btn {
+            font-size: 22px;
+            color: #fff;
+            background-color: #37a572;
+            padding:5px 50px;
+        }
+
+        .new-books {
+            text-align: center;
+            font-family: Roboto
+        }
+
+        .new-list {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 50px;
+        }
+
+        .book img {
+            width: 60%;
+            min-width: 150px;
+            filter: drop-shadow(0 0 5px black);
+        }
+
+        .book {
+            max-width: 456px;
+            box-shadow: 0 5px 25px #00000047;
+            border-radius: 10px;
+        }
+
+        .filler {
+            padding: 50px 50px;
+            background-color: #c4f9c457;
+        }
+
+        .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus{
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,.8);
+        }
+    </style>
+}
+<div class="welcome-banner">
+    <div style="padding: 150px 0;border: 1px solid white;text-align: -webkit-center;">
+        <div class="welcome-box">
+            <div class="welcome-content">
+                <img style="filter: drop-shadow(0 5px 2px rgb(0, 0, 0, 0.4));" src="asset/image/book.png" height="33px" /><br />
+                <h1 class="near-shadow" style="font-family:Prociono">FBookCycle</h1>
+                <span class="welcome-quote near-shadow">One glance at a book and you hear the voice of another person, perhaps someone dead for 1,000 years. To read is to voyage through time.</span><br />
+                @* @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <br />
+                    <a asp-controller="" asp-action="" class="btn btn-outline-success welcome-btn">Get New Books !</a>
+                }  *@             
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <br />
+                    <a href="/Exchange" class="btn btn-outline-success welcome-btn">Show Us Your Books !</a>
+                }
+                else
+                {
+                    <a id="login" asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success welcome-btn">Join Us Now!</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="new-books">
+    <h1>New Books !</h1>
+    <h3> Check out our newly imported books and customer's books !</h3><br /><br />
+    <div class="container new-list">
+        @for (int i = 0; i < 8; i++)
+        {
+            <a href="/Books" style="text-decoration:none;">
+                <div class="book">
+                    <div style="background-color:#0000000f;padding:10px 0">
+                        <img src="~/asset/image/testbook.jpg" />
+                    </div><br />
+                    <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">Name - author</h6>
+                    <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">69.0 Bookcoin</h6>
+                    <br />
+                </div>
+            </a>
+        }
+        <br /><br /><br />
+    </div>
+</div>
+
+<div class="filler">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 style="font-family:Rancho">Fast and Easy from Book to Bookcoin</h1>
+                <h5 style="font-family:Roboto">Today a reader, tomorrow a leader.</h5><br />
+                <ul class="fa-ul">
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Exploring new perspectives: </b>Different books offer different views of the world</p>
+                    </li>
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Avoiding boredom: </b>Different books offer different views of the world</p>
+                    </li>
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Catering to your mood: </b>Different books offer different views of the world</p>
+                    </li>
+                    <li>
+                        <span class="fa-li"><i class="fa-regular fa-circle-check"></i></span>
+                        <p><b>Challenging yourself: </b>Different books offer different views of the world</p>
+                    </li>
+                </ul>
+                <form class="input-group rounded">
+                    <input type="search" class="form-control rounded" placeholder="Find Your Book Here" aria-label="Search" aria-describedby="search-addon" />
+                    <button type="submit" class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                        </btn>
+                </form>
+            </div>
+            <div class="col-md-5">
+                <img src="~/asset/image/reading.jpg" style="max-width:100%;filter: drop-shadow(5px 0px 10px rgb(0, 0, 0, 0.4));" />
+            </div>
+        </div>
+    </div>
 </div>

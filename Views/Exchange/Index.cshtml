@@ -1,0 +1,401 @@
+﻿@model IEnumerable<FBC.Models.Category>
+@{
+    var errorDetail = TempData["SubmitErrorDetail"] as string;
+}
+@section Stylesheets {
+    <link href="~/js/cropper/cropper.css" rel="stylesheet" />
+    <script src="~/js/cropper/cropper.js"></script>
+    <style>
+        .image-box {
+            aspect-ratio: 1 / 1;
+            max-height: 350px;
+            min-height: 150px;
+            background: #f6f3f3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mt-large {
+            margin-top: 3rem;
+        }
+
+        .upload {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .crop-controls {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 1rem;
+        }
+
+            .crop-controls button {
+                padding: 5px 20px;
+            }
+
+        .crop-btn {
+            background: #37a572;
+            color: white;
+        }
+
+        .reset-btn {
+            background: #000000b0;
+            color: white;
+        }
+
+        .crop-btn:focus, .crop-btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,.8);
+        }
+
+        .reset-btn:focus, .reset-btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem #0000008c;
+        }
+
+        .container-shadow {
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        }
+
+        .roboto {
+            font-family: roboto
+        }
+
+        .category-item {
+            display: inline-block;
+            border: 1px solid rgba(40,167,69,.8);
+            border-radius: 10px;
+            padding: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .category-active {
+            background: #37a572;
+            color: white;
+        }
+
+        .w-30 {
+            width: 30% !important
+        }
+
+        .w-875 {
+            width: 87.5% !important;
+        }
+
+        .w-95 {
+            width: 95% !important;
+        }
+
+        .general-info {
+            display: grid;
+            grid-template-columns: 45% 32% 33%;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <style>
+        .input-text {
+            color: rgba(0,0,0,.87);
+            border-bottom-color: rgba(0,0,0,.42);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: .009375em;
+            text-decoration: inherit;
+            text-transform: inherit;
+            align-self: flex-end;
+            box-sizing: border-box;
+            padding: 1px 16px 1px;
+            transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            border-bottom: 1px solid;
+            border-radius: 4px 4px 0 0;
+            background: rgb(245, 245, 245);
+            height: 44px;
+        }
+
+            .input-text : hover {
+                border-bottom-color: rgba(0,0,0,.87);
+                background: #ececec;
+            }
+
+            .input-text:focus {
+                border-color: #37a572;
+            }
+
+        input:focus-visible {
+            outline: 0
+        }
+    </style>
+}
+<h3 class="mt-large" style="text-align:center"><b>Describe Your Book</b></h3>
+<div class="container mt-large container-shadow p-4" style="font-family:Philosopher">
+    <form action="" method="post" enctype="multipart/form-data" id="request-form">
+        <div class="book-images">
+            <h3 class="roboto">Ảnh:</h3>
+            <div class="row mt-4">
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-front" />
+                        <div class="upload" onclick="document.getElementById('front').click()">
+                            <input required id="front" name="frontImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('front')" />
+                            <input class="hidden" type="text" name="front" id="crop-front" />
+                            <div id="placeholder-front">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Front Book's Cover</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls" id="controls-front">
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('front')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('front')">Reset</button>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-back" />
+                        <div class="upload" onclick="document.getElementById('back').click()">
+                            <input required id="back" name="backImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('back')" />
+                            <input class="hidden" type="text" name="back" id="crop-back" />
+                            <div id="placeholder-back">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Back Book's Cover</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls" id="controls-back">
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('back')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('back')">Reset</button>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-spine" />
+                        <div class="upload" onclick="document.getElementById('spine').click()">
+                            <input required id="spine" name="spineImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('spine')" />
+                            <input class="hidden" type="text" name="spine" id="crop-spine" />
+                            <div id="placeholder-spine">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Book's Spine</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls" id="controls-spine">
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('spine')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('spine')">Reset</button>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="image-box">
+                        <img src="" id="image-edge" />
+                        <div class="upload" onclick="document.getElementById('edge').click()">
+                            <input required id="edge" name="edgeImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('edge')" />
+                            <input class="hidden" type="text" name="edge" id="crop-edge" />
+                            <div id="placeholder-edge">
+                                <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
+                                <h5><b>Book's Fore-edge</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls" id="controls-edge">
+                        <button type="button" class="btn btn-outline-success crop-btn" onclick="cropImage('edge')">Crop</button>
+                        <button type="button" class="btn btn-outline-dark reset-btn" onclick="clearCrop('edge')">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-large">
+            <h3 class="roboto">Thông tin chung</h3>
+            <div class="row mt-4" style="text-align: ;">
+                <div class="col-5">
+                    <input required class="input-text w-875" type="text" placeholder="Tiêu đề" name="Title" id="Title">
+                </div>
+                <div class="col-4">
+                    <input required class="input-text w-875" type="text" placeholder="Tác giả" name="Author" id="Author">
+                </div>
+                <div class="col-3">
+                    <input required class="input-text w-95" type="text" placeholder="NXB" name="Publisher" id="Publisher">
+                </div>
+            </div>
+            <div class="row mt-4" style="text-align: ;">
+                <div class="col-5">
+                    <input required class="input-text w-875" type="text" placeholder="Sơ lược tình trạng sách" name="Condition" id="Condition">
+                </div>
+                <div class="col-2">
+                    <input required class="input-text w-75" type="text" placeholder="Số trang" name="NoPage" id="Pages">
+                </div>
+                <div class="col-2">
+                    <input required class="input-text w-75" type="text" placeholder="Nặng (kg)" name="Weight" id="Weight">
+                </div>
+                <div class="col-3">
+                    <input required class="input-text w-30" type="text" placeholder="Dài(cm)" name="Height" id="Height">x
+                    <input required class="input-text w-30" type="text" placeholder="Rộng(cm)" name="Width" id="Width">x
+                    <input required class="input-text w-30" type="text" placeholder="Dày(cm)" name="Length" id="Length">
+                </div>
+            </div>
+            <h5 class="roboto mt-4">Chọn tối đa 5 thể loại:</h5>
+            <div class="category-box mt-1">
+                <div>
+                    @foreach (var cat in Model)
+                    {
+                        <span onclick="selectCategory(this)" class="category-item m-1" data-category="@cat.CategoryId">@cat.Name</span>
+                    }
+                </div>
+                <select id="categories" name="categories" required class="hidden" multiple>
+                    @foreach (var cat in Model)
+                    {
+                        <option value="@cat.CategoryId">@cat.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="desired-bc">
+                <h5 class="roboto mt-4">Số bookcoin mong muốn: &nbsp;  (Không bắt buộc)</h5>
+                <input class="input-text w-30" type="text" placeholder="Desired Bookcoin !" name="Credit" id="Credit">
+            </div>
+            <div class="description">
+                <h5 class="roboto mt-4">Message for us:  &nbsp;&nbsp;(Không bắt buộc)</h5>
+                <textarea id="Description" name="Description" rows="10" style="width:100%"></textarea>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-outline-dark reset-btn pe-4 ps-4 me-4">Cancel</button>
+            <button class="btn btn-outline-success crop-btn  pe-4 ps-4">Submit</button>
+        </div>
+    </form>
+</div>
+
+<button type="button" class="btn btn-primary hidden" id="launchModalButton" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-warning" role="alert">
+                <h5 class="modal-titlealert alert-warning" role="alert" id="exampleModalLabel">Có lỗi xảy ra! :(</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @TempData["SubmitError"]<br></br>
+                @Html.Raw(TempData["SubmitErrorDetail"])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var errorDetail = '@errorDetail';
+        if (errorDetail) {
+            document.getElementById('launchModalButton').click();
+        }
+    });
+
+    function selectCategory(element) {
+        const categoryIndex = element.getAttribute('data-category');
+        const selectElement = document.getElementById('categories');
+        const option = selectElement.querySelector(`option[value="${categoryIndex}"]`);
+        const selectedOptions = selectElement.querySelectorAll('option:checked');
+
+        if (element.classList.contains('category-active')) {
+            element.classList.remove('category-active');
+            option.selected = false;
+        } else {
+            if (selectedOptions.length >= 5) {
+                alert('You can only select up to 5 categories.');
+                return;
+            }
+            element.classList.add('category-active');
+            option.selected = true;
+        }
+    }
+    let croppers = {};
+
+    function uploadImage(inputId) {
+        const input = document.getElementById(inputId);
+        const imgSrc = document.getElementById('image-' + inputId);
+        const placeholderDiv = document.getElementById('placeholder-' + inputId);
+        const controlsDiv = document.getElementById('controls-' + inputId);
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                imgSrc.src = e.target.result;
+                imgSrc.style.display = 'block';
+                placeholderDiv.style.display = 'none';
+                controlsDiv.style.display = 'flex';
+                // Initialize Cropper
+                if (croppers[inputId]) {
+                    croppers[inputId].destroy();
+                }
+                croppers[inputId] = new Cropper(imgSrc, {
+                    aspectRatio: 0,
+                    autoCropArea: 0,
+                    viewMode: 1,
+                    dragMode: 'move'
+                });
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function cropImage(inputId) {
+        const cropper = croppers[inputId];
+        const canvas = cropper.getCroppedCanvas();
+        const croppedImage = canvas.toDataURL('image/png');
+
+        const imgSrc = document.getElementById('image-' + inputId);
+        const input = document.getElementById(inputId);
+        const inputs = document.getElementsByName(inputId);
+
+        imgSrc.src = croppedImage;
+        imgSrc.style.display = 'block';
+        imgSrc.style.height = '100%';
+
+        // Set the value of each hidden input with the cropped image data
+        const temp = JSON.stringify(cropper.getData(true));
+        // document.cookie = `${inputId}CropData=${temp}; path=/;SameSite=Lax`;
+        inputs.forEach(function (input) {
+            input.value = temp;
+        });
+
+        // Destroy Cropper instance after cropping
+        cropper.destroy();
+        croppers[inputId] = null;
+
+    }
+
+    function clearCrop(inputId) {
+        const cropper = croppers[inputId];
+        if (cropper) {
+            cropper.destroy();
+            croppers[inputId] = null;
+        }
+
+        const imgSrc = document.getElementById('image-' + inputId);
+        imgSrc.src = '';
+        imgSrc.style.display = 'none';
+
+        const placeholderDiv = document.getElementById('placeholder-' + inputId);
+        placeholderDiv.style.display = 'block';
+        const input = document.getElementById(inputId);
+        input.value = '';
+
+        const inputs = document.getElementsByName(inputId);
+        inputs.forEach(function (input) {
+            input.value = '';
+        });
+
+    }
+</script>

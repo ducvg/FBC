@@ -1,0 +1,460 @@
+﻿@model IEnumerable<ExchangeRequest>
+@{
+    var today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toISOString().split('T')[0];
+
+            // Set the max attribute to today's date
+            document.getElementById('createDateFrom').setAttribute('max', today);
+            document.getElementById('createDateTo').setAttribute('max', today);
+            document.getElementById('createDateTo').value = today;
+        });
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FBC</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FBC.styles.css" asp-append-version="true" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Philosopher' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/a21db75261.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: url(/asset/image/library.png);
+            margin: 0;
+            font-family: Roboto
+        }
+
+        @@media (min-width: 1666px) {
+            .container, .container-xxl {
+                max-width: 1555px;
+            }
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        main {
+            height: 100vh;
+            height: -webkit-fill-available;
+            max-height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .dropdown-toggle {
+            outline: 0;
+        }
+
+        .btn-toggle {
+            padding: .25rem .5rem;
+            font-weight: 600;
+            color: var(--bs-emphasis-color);
+            background-color: transparent;
+        }
+
+            .btn-toggle:hover,
+            .btn-toggle:focus {
+                color: rgba(var(--bs-emphasis-color-rgb), .85);
+                background-color: #23a423;
+            }
+
+            .btn-toggle::before {
+                width: 1.25em;
+                line-height: 0;
+                content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+                transition: transform .35s ease;
+                transform-origin: .5em 50%;
+            }
+
+            .btn-toggle::before {
+                content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            }
+
+            .btn-toggle[aria-expanded="true"] {
+                color: rgba(var(--bs-emphasis-color-rgb), .85);
+            }
+
+                .btn-toggle[aria-expanded="true"]::before {
+                    transform: rotate(90deg);
+                }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 1.25rem;
+        }
+
+            .btn-toggle-nav a:hover,
+            .btn-toggle-nav a:focus {
+                background-color: var(--bs-tertiary-bg);
+            }
+
+        .scrollarea {
+            overflow-y: auto;
+        }
+
+    </style>
+    <style>
+        :root{
+            --bs-link-color: #22a435 !important;
+            --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(48, 253, 13,  0.25) !important;
+        }
+        .body {
+            min-width: 1550px;
+            min-height: 1030px;
+        }
+
+        .main {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+        }
+
+        .fa-circle-info:before {
+            font-size: 20px
+        }
+
+        .table {
+            --bs-table-border-color: #78b57a5e;
+            ;
+        }
+
+        .main th {
+            border-style: none;
+        }
+
+        .main th, .cell-center {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .form-control {
+            width: unset !important
+        }
+
+        .lh-0 {
+            line-height: none !important;
+        }
+
+        .pointer:hover {
+            cursor: pointer;
+        }
+
+        .border-top {
+            border-top: var(--bs-border-width) var(--bs-border-style) #76b97c !important;
+        }
+
+        .border-bottom {
+            border-bottom: var(--bs-border-width) var(--bs-border-style) #76b97c !important;
+        }
+        .cell-center a{
+            color: black;
+            text-decoration:none;
+        }
+        .active .page-link{
+            background: #22a435;
+            color:white;
+            border-color: #22a435;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex flex-row flex-nowrap vh-100">
+        <div class="bg-dark d-flex flex-column flex-shrink-0 p-3 max-vh-100" style="width: 230px; max-height: 100vh; ">
+            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+                <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-5 text-white fw-semibold">Collapsible</span>
+            </a>
+            <ul class="flex-grow-1 list-unstyled ps-0 overflow-auto">
+                <li class="mb-1">
+                    <button class="text-white btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true">
+                        Dashboard
+                    </button>
+                    <div class="collapse show" id="dashboard-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Earning</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="text-white btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                        Users
+                    </button>
+                    <div class="collapse show" id="home-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Exchange requests</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Users list</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="text-white btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                        Books
+                    </button>
+                    <div class="collapse" id="orders-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Create</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">Update book</a></li>
+                            <li><a href="#" class="text-white link-body-emphasis d-inline-flex text-decoration-none rounded">View Store</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <ul class="list-unstyled ps-0">
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <button class="text-white btn d-inline-flex align-items-center rounded border-0 collapsed">
+                        Logout
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="main d-flex flex-column flex-grow-1 m-4 align-self-center rounded" style="height:90%;min-width:1269px">
+            <div class="ms-2 mt-4 mb-4 me-2">
+                <h5 class="fw-bold mb-2">Filter:</h5>
+
+                <div class="ms-4 d-flex justify-content-between align-items-center">
+                    <form action="/admin/ExchangeRequest/1" method="get" id="search-form" class="d-flex">
+                        <div class="me-4">
+                            User:<br />
+                            <input type="text" class="form-control lh-0" placeholder="User's email" maxlength="100" name="Email" value="" />
+                        </div>
+                        <div class="me-4">
+                            Bookcoin:
+                            <div class="d-flex align-items-center">
+                                <input class="form-control lh-0" type="number" min="0" max="99999" value="0" name="CreditFrom" maxlength="5" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                <span class="ps-1 pe-1">---</span>
+                                <input class="form-control lh-0" type="number" value="99999" min="0" max="99999" name="CreditTo" maxlength="5" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                            </div>
+                        </div>
+                        <div class="me-4">
+                            Status:
+                            <div>
+                                <select name="Status" class="form-select lh-0" aria-label="Default select example">
+                                    <option value="-1" selected>All</option>
+                                    <option value="0">Pending Approval</option>
+                                    <option value="1">Transporting</option>
+                                    <option value="2">Completed</option>
+                                    <option value="3">Canceled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            Request date:<br />
+                            <div class="d-flex align-items-center">
+                                <input class="form-control lh-0" type="date" value="0001-01-01" name="CreateDateFrom" id="createDateFrom" />
+                                <span class="ps-1 pe-1">---</span>
+                                <input class="form-control lh-0" type="date" value="@today" name="CreateDateTo" id="createDateTo" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="me-4 h-fit mt-auto">
+                        <button class="btn btn-secondary me-2" form="search-form" type="reset"><i class="fa fa-refresh"></i> Reset</button>
+                        <button class="btn btn-success" form="search-form" type="submit"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="list ms-2 me-2 flex-grow-1 overflow-y-auto">
+                <table class="table table-striped table-bordered rounded">
+                    <thead class="border-bottom border-black table-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Bookcoin</th>
+                            <th scope="col">Condition</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Open</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var eq in Model)
+                        {
+                            <tr>
+                                <th class="cell-center ps-1 pe-1" scope="row" style="width:50px">@eq.ExchangeId</th>
+                                <td class="cell-center" style="width:1%">
+                                    @eq.User.Email <br />
+                                    <span style="font-weight:normal">@eq.User.UserName</span>
+                                </td>
+                                <td class="cell-center" style="width:1%">@eq.Credit.Value.ToString("#")</td>
+                                <td class="cell-center" style="width:1%; max-width:200px; overflow-y:auto">@eq.Condition</td>
+                                <td>
+                                    <div style="text-align:justify;max-height:100px; overflow-y:auto">
+                                        @eq.Description
+                                    </div>
+                                </td>
+                                <td class="cell-center" style="width:1%">@eq.CreateDate.ToString("dd/MM/yyyy")</td>
+                                <td class="cell-center" style="width:1%">@eq.getStatus()</td>
+                                <td class="cell-center" style="width:1%">
+                                    <a href="/admin/ExchangeRequest/detail/@eq.ExchangeId">
+                                        <i class="pointer fa-solid fa-circle-info"></i>
+
+                                    </a>
+                                    @* <i class="pointer fa-solid fa-circle-info" id="launchModalButton" data-bs-toggle="modal" data-bs-target="#exampleModal"></i> *@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- HTML for pagination links -->
+            <div class="mb-3 mt-3">
+                <div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- Pagination links will be dynamically generated here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header alert alert-success" role="alert">
+                    <h5 class="modal-titlealert alert-warning" role="alert" id="modal-title">Có lỗi xảy ra! :(</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex">
+                        <div class="left">
+                            <div class="modal-image-box">
+                                <img src="" id="main-image" />
+
+                            </div>
+                            <div class="image-set">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <p id="modal-description"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve previously searched values from storage
+            var searchValues = JSON.parse(localStorage.getItem('searchValues')) || {};
+
+            // Set values in the form fields
+            document.querySelector('input[name="Email"]').value = searchValues.Email || '';
+            document.querySelector('input[name="CreditFrom"]').value = searchValues.CreditFrom || 0;
+            document.querySelector('input[name="CreditTo"]').value = searchValues.CreditTo || 99999;
+            document.querySelector('select[name="Status"]').value = searchValues.Status || 0;
+            document.querySelector('input[name="CreateDateFrom"]').value = searchValues.CreateDateFrom || '';
+            document.querySelector('input[name="CreateDateTo"]').value = searchValues.CreateDateTo || '';
+
+        });
+
+        // Save search values to storage when the form is submitted
+        document.getElementById('search-form').addEventListener('submit', function (event) {
+            var searchValues = {
+                Email: document.querySelector('input[name="Email"]').value,
+                CreditFrom: document.querySelector('input[name="CreditFrom"]').value,
+                CreditTo: document.querySelector('input[name="CreditTo"]').value,
+                Status: document.querySelector('select[name="Status"]').value,
+                CreateDateFrom: document.querySelector('input[name="CreateDateFrom"]').value,
+                CreateDateTo: document.querySelector('input[name="CreateDateTo"]').value
+            };
+
+            localStorage.setItem('searchValues', JSON.stringify(searchValues));
+        });
+    </script>
+    <script>
+        // Function to extract page number from URL
+        function getCurrentPageNumber() {
+            var path = window.location.pathname;
+            var parts = path.split('/');
+            var pageNumber = parseInt(parts[parts.length - 1]);
+            return isNaN(pageNumber) ? 1 : pageNumber;
+        }
+
+        // Function to get query parameters from URL
+        function getQueryParams() {
+            var search = window.location.search;
+            return search ? search : '';
+        }
+
+        // Function to generate pagination links
+        function generatePaginationLinks(totalPages, currentPage) {
+            var paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = ''; // Clear existing pagination links
+            var queryParams = getQueryParams();
+
+            // First page link
+            var firstPageLink = document.createElement('li');
+            firstPageLink.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+            firstPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/1' + queryParams + '" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>';
+            paginationElement.appendChild(firstPageLink);
+
+            // Previous page link
+            var prevPageLink = document.createElement('li');
+            prevPageLink.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+            prevPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + (currentPage - 1) + queryParams + '" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
+            paginationElement.appendChild(prevPageLink);
+
+            // Calculate the range of pages to display
+            var startPage = Math.max(1, currentPage - 2);
+            var endPage = Math.min(totalPages, currentPage + 2);
+
+            // Display page links
+            for (var i = startPage; i <= endPage; i++) {
+                var pageLink = document.createElement('li');
+                pageLink.className = 'page-item' + (currentPage === i ? ' active' : '');
+                pageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + i + queryParams + '">' + i + '</a>';
+                paginationElement.appendChild(pageLink);
+            }
+
+            // Next page link
+            var nextPageLink = document.createElement('li');
+            nextPageLink.className = 'page-item' + (currentPage === totalPages ? ' disabled' : '');
+            nextPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + (currentPage + 1) + queryParams + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
+            paginationElement.appendChild(nextPageLink);
+
+            // Last page link
+            var lastPageLink = document.createElement('li');
+            lastPageLink.className = 'page-item' + (currentPage === totalPages ? ' disabled' : '');
+            lastPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + totalPages + queryParams + '" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>';
+            paginationElement.appendChild(lastPageLink);
+        }
+
+        // Generate pagination links when the page loads
+        window.addEventListener('DOMContentLoaded', function () {
+            var totalPage = @ViewData["totalPage"]; // Total number of pages from ViewData
+            var currentPage = getCurrentPageNumber();
+            generatePaginationLinks(totalPage, currentPage);
+        });
+
+    </script>
+</body>
+</html>

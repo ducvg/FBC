@@ -1,0 +1,145 @@
+﻿@model IEnumerable<FBC.Models.WalletOrder>
+
+@{
+    ViewData["Title"] = "Exchanged History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evSX huddled7glt/7zUS+FwS1j8fQSYxA++FUvbsKxBgOSlCzStcZ5zDln7z9+e79/Q" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Header styles */
+        .header {
+            background-color: #57c592;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Soft shadow */
+        }
+
+            .header h1 {
+                color: white;
+                font-size: 24px;
+            }
+
+        /* Create New link styles */
+        .create-link {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+            .create-link a {
+                color: white;
+                text-decoration: none; /* Remove underline */
+            }
+
+        /* Table styles */
+        .table {
+            border-collapse: collapse; /* Adjust border style for a dashed look */
+        }
+
+            .table th,
+            .table td {
+                border: 1px dashed lightgray; /* Dashed border */
+            }
+
+            .table tr:hover {
+                background-color: #f5f5f5; /* Hover effect */
+            }
+
+            /* Buttons (for action links) - adjust as needed */
+            /* .table a {
+                                display: inline-block;
+                                padding: 5px 10px;
+                                margin: 5px;
+                                border: 1px solid #ddd;
+                                border-radius: 5px;
+                                text-decoration: none;
+                                color: #333;
+                                transition: background-color 0.2s ease-in-out;
+                            }
+                 */
+            .table a:hover {
+                background-color: #eee;
+            }
+
+    </style>
+</head>
+
+<header class="header">
+    <h1>@ViewData["Title"]</h1>
+    <p class="create-link">
+    </p>
+</header>
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Account Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAcountName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                Bookcoin Exchanged
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+
+            @* <th></th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BankAcountName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @item.Amount.Value.ToString("#,##0.")
+                </td>
+                <td>
+                    @item.Credit.Value.ToString("#,##0.") Bookcoin
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+
+                @* <td>
+                    <a asp-action="Edit" asp-route-id="@item.WalletOrderId">Edit</a> |
+                    <a style="text-decoration:none;color:black" asp-action="Details" asp-route-id="@item.WalletOrderId">Exchange Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.WalletOrderId">Delete</a>
+                </td> *@
+            </tr>
+        }
+    </tbody>
+</table>
