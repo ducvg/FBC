@@ -4,6 +4,7 @@ using FBC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBC.Migrations
 {
     [DbContext(typeof(Fbc1Context))]
-    partial class Fbc1ContextModelSnapshot : ModelSnapshot
+    [Migration("20240530060207_suadb")]
+    partial class suadb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -244,16 +247,10 @@ namespace FBC.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateOnly?>("CompleteDate")
-                        .HasColumnType("date");
-
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateOnly>("CreateDate")
-                        .HasColumnType("date");
 
                     b.Property<decimal?>("Credit")
                         .HasColumnType("decimal(30, 5)");
@@ -297,9 +294,6 @@ namespace FBC.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -436,49 +430,6 @@ namespace FBC.Migrations
                     b.ToTable("Wallet", (string)null);
                 });
 
-            modelBuilder.Entity("FBC.Models.WalletOrder", b =>
-                {
-                    b.Property<int>("WalletOrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletOrderId"));
-
-                    b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("BankAcountName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<decimal?>("Credit")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(30, 5)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PaymentCode")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("WalletOrderId")
-                        .HasName("PK__WalletOrder__8VSDVSDVA");
-
-                    b.HasIndex("Id");
-
-                    b.ToTable("WalletOrder", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -504,6 +455,20 @@ namespace FBC.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "562bda45-fbe3-405c-bab0-49931aa75d20",
+                            Name = "admin",
+                            NormalizedName = "admin"
+                        },
+                        new
+                        {
+                            Id = "f81ad6b8-f3e2-4949-8e75-dfdbc8724c0c",
+                            Name = "client",
+                            NormalizedName = "client"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -722,17 +687,6 @@ namespace FBC.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FBC.Models.WalletOrder", b =>
-                {
-                    b.HasOne("FBC.Models.User", "User")
-                        .WithMany("WalletOrder")
-                        .HasForeignKey("Id")
-                        .IsRequired()
-                        .HasConstraintName("FK__Wallet__UserId__FDRT5UYHJdotnet ef migrations add NameMigration");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -806,8 +760,6 @@ namespace FBC.Migrations
                     b.Navigation("CartOrders");
 
                     b.Navigation("ExchangeRequests");
-
-                    b.Navigation("WalletOrder");
 
                     b.Navigation("Wallets");
                 });
