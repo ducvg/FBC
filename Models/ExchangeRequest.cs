@@ -24,7 +24,6 @@ public partial class ExchangeRequest
     public DateOnly CreateDate { get; set; }
     public DateOnly? CompleteDate { get; set; }
 
-
     [Required(ErrorMessage = "Condition is required.")]
     [StringLength(50, ErrorMessage = "Condition can't be longer than 50 characters.")]
 
@@ -82,7 +81,7 @@ public partial class ExchangeRequest
         switch (Status)
         {
             case 0: return "Pending Approval";
-            case 1: return "Awaiting Transfer";
+            case 1: return "Transporting";
             case 2: return "Completed";
             case 3: return "Canceled";
             default: return "Unknown";
@@ -90,4 +89,8 @@ public partial class ExchangeRequest
         }
     }
 
+    public string listCategories()
+    {
+        return string.Join(", ", Categories.Select(c => c.Name));
+    }
 }

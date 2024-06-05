@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<ExchangeRequest>
 @{
+    var today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
     Layout = null;
 }
 
@@ -8,10 +9,12 @@
 <head>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var path = window.location.pathname;
-            if (path.endsWith('/exchangerequest')) {
-                window.location.replace(path + '/');
-            }
+            const today = new Date().toISOString().split('T')[0];
+
+            // Set the max attribute to today's date
+            document.getElementById('createDateFrom').setAttribute('max', today);
+            document.getElementById('createDateTo').setAttribute('max', today);
+            document.getElementById('createDateTo').value = today;
         });
     </script>
     <meta charset="utf-8" />
@@ -107,6 +110,15 @@
 
     </style>
     <style>
+        :root{
+            --bs-link-color: #22a435 !important;
+            --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(48, 253, 13,  0.25) !important;
+        }
+        .body {
+            min-width: 1550px;
+            min-height: 1030px;
+        }
+
         .main {
             background-color: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(8px);
@@ -148,6 +160,15 @@
 
         .border-bottom {
             border-bottom: var(--bs-border-width) var(--bs-border-style) #76b97c !important;
+        }
+        .cell-center a{
+            color: black;
+            text-decoration:none;
+        }
+        .active .page-link{
+            background: #22a435;
+            color:white;
+            border-color: #22a435;
         }
     </style>
 </head>
@@ -203,16 +224,12 @@
                 </li>
             </ul>
         </div>
-        <div class="main d-flex flex-column flex-grow-1 m-4 align-self-center rounded" style="height:90%">
+        <div class="main d-flex flex-column flex-grow-1 m-4 align-self-center rounded" style="height:90%;min-width:1269px">
             <div class="ms-2 mt-4 mb-4 me-2">
                 <h5 class="fw-bold mb-2">Filter:</h5>
 
                 <div class="ms-4 d-flex justify-content-between align-items-center">
-                    <form id="search-form" class="d-flex">
-                        <div class="me-4">
-                            Request Id: (0 for all)<br />
-                            <input class="form-control lh-0" type="number" min="0" max="99999" value="0" name="Id" maxlength="5" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
-                        </div>
+                    <form action="/admin/ExchangeRequest/1" method="get" id="search-form" class="d-flex">
                         <div class="me-4">
                             User:<br />
                             <input type="text" class="form-control lh-0" placeholder="User's email" maxlength="100" name="Email" value="" />
@@ -225,26 +242,35 @@
                                 <input class="form-control lh-0" type="number" value="99999" min="0" max="99999" name="CreditTo" maxlength="5" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
                             </div>
                         </div>
-                        <div>
-                            Status(Descending):
+                        <div class="me-4">
+                            Status:
                             <div>
                                 <select name="Status" class="form-select lh-0" aria-label="Default select example">
-                                    <option value="0" selected>Pending Approval</option>
-                                    <option value="1">Awaiting Transfer</option>
+                                    <option value="-1" selected>All</option>
+                                    <option value="0">Pending Approval</option>
+                                    <option value="1">Transporting</option>
                                     <option value="2">Completed</option>
                                     <option value="3">Canceled</option>
                                 </select>
                             </div>
                         </div>
+                        <div>
+                            Request date:<br />
+                            <div class="d-flex align-items-center">
+                                <input class="form-control lh-0" type="date" value="0001-01-01" name="CreateDateFrom" id="createDateFrom" />
+                                <span class="ps-1 pe-1">---</span>
+                                <input class="form-control lh-0" type="date" value="@today" name="CreateDateTo" id="createDateTo" />
+                            </div>
+                        </div>
                     </form>
                     <div class="me-4 h-fit mt-auto">
                         <button class="btn btn-secondary me-2" form="search-form" type="reset"><i class="fa fa-refresh"></i> Reset</button>
-                        <button class="btn btn-success"  form="search-form" type="submit"><i class="fa fa-search"></i> Search</button>
+                        <button class="btn btn-success" form="search-form" type="submit"><i class="fa fa-search"></i> Search</button>
                     </div>
                 </div>
 
             </div>
-            <div class="list ms-2 me-2 flex-grow-1">
+            <div class="list ms-2 me-2 flex-grow-1 overflow-y-auto">
                 <table class="table table-striped table-bordered rounded">
                     <thead class="border-bottom border-black table-dark">
                         <tr>
@@ -253,6 +279,7 @@
                             <th scope="col">Bookcoin</th>
                             <th scope="col">Condition</th>
                             <th scope="col">Message</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Status</th>
                             <th scope="col">Open</th>
                         </tr>
@@ -273,9 +300,14 @@
                                         @eq.Description
                                     </div>
                                 </td>
+                                <td class="cell-center" style="width:1%">@eq.CreateDate.ToString("dd/MM/yyyy")</td>
                                 <td class="cell-center" style="width:1%">@eq.getStatus()</td>
                                 <td class="cell-center" style="width:1%">
-                                    <i class="pointer fa-solid fa-circle-info" id="launchModalButton" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                                    <a href="/admin/ExchangeRequest/detail/@eq.ExchangeId">
+                                        <i class="pointer fa-solid fa-circle-info"></i>
+
+                                    </a>
+                                    @* <i class="pointer fa-solid fa-circle-info" id="launchModalButton" data-bs-toggle="modal" data-bs-target="#exampleModal"></i> *@
                                 </td>
                             </tr>
                         }
@@ -283,7 +315,7 @@
                 </table>
             </div>
             <!-- HTML for pagination links -->
-            <div class="mb-4">
+            <div class="mb-3 mt-3">
                 <div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center" id="pagination">
@@ -303,8 +335,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-image-box">
-                        
+                    <div class="d-flex">
+                        <div class="left">
+                            <div class="modal-image-box">
+                                <img src="" id="main-image" />
+
+                            </div>
+                            <div class="image-set">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <p id="modal-description"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -318,26 +360,31 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
+
+
         document.addEventListener('DOMContentLoaded', function () {
             // Retrieve previously searched values from storage
             var searchValues = JSON.parse(localStorage.getItem('searchValues')) || {};
 
             // Set values in the form fields
-            document.querySelector('input[name="Id"]').value = searchValues.Id || 0;
             document.querySelector('input[name="Email"]').value = searchValues.Email || '';
             document.querySelector('input[name="CreditFrom"]').value = searchValues.CreditFrom || 0;
             document.querySelector('input[name="CreditTo"]').value = searchValues.CreditTo || 99999;
             document.querySelector('select[name="Status"]').value = searchValues.Status || 0;
+            document.querySelector('input[name="CreateDateFrom"]').value = searchValues.CreateDateFrom || '';
+            document.querySelector('input[name="CreateDateTo"]').value = searchValues.CreateDateTo || '';
+
         });
 
         // Save search values to storage when the form is submitted
         document.getElementById('search-form').addEventListener('submit', function (event) {
             var searchValues = {
-                Id: document.querySelector('input[name="Id"]').value,
                 Email: document.querySelector('input[name="Email"]').value,
                 CreditFrom: document.querySelector('input[name="CreditFrom"]').value,
                 CreditTo: document.querySelector('input[name="CreditTo"]').value,
-                Status: document.querySelector('select[name="Status"]').value
+                Status: document.querySelector('select[name="Status"]').value,
+                CreateDateFrom: document.querySelector('input[name="CreateDateFrom"]').value,
+                CreateDateTo: document.querySelector('input[name="CreateDateTo"]').value
             };
 
             localStorage.setItem('searchValues', JSON.stringify(searchValues));
@@ -352,21 +399,28 @@
             return isNaN(pageNumber) ? 1 : pageNumber;
         }
 
+        // Function to get query parameters from URL
+        function getQueryParams() {
+            var search = window.location.search;
+            return search ? search : '';
+        }
+
         // Function to generate pagination links
         function generatePaginationLinks(totalPages, currentPage) {
             var paginationElement = document.getElementById('pagination');
             paginationElement.innerHTML = ''; // Clear existing pagination links
+            var queryParams = getQueryParams();
 
             // First page link
             var firstPageLink = document.createElement('li');
             firstPageLink.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
-            firstPageLink.innerHTML = '<a class="page-link" href="1" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>';
+            firstPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/1' + queryParams + '" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>';
             paginationElement.appendChild(firstPageLink);
 
             // Previous page link
             var prevPageLink = document.createElement('li');
             prevPageLink.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
-            prevPageLink.innerHTML = '<a class="page-link" href="' + (currentPage - 1) + '" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
+            prevPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + (currentPage - 1) + queryParams + '" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
             paginationElement.appendChild(prevPageLink);
 
             // Calculate the range of pages to display
@@ -377,20 +431,20 @@
             for (var i = startPage; i <= endPage; i++) {
                 var pageLink = document.createElement('li');
                 pageLink.className = 'page-item' + (currentPage === i ? ' active' : '');
-                pageLink.innerHTML = '<a class="page-link" href="' + i + '">' + i + '</a>';
+                pageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + i + queryParams + '">' + i + '</a>';
                 paginationElement.appendChild(pageLink);
             }
 
             // Next page link
             var nextPageLink = document.createElement('li');
             nextPageLink.className = 'page-item' + (currentPage === totalPages ? ' disabled' : '');
-            nextPageLink.innerHTML = '<a class="page-link" href="' + (currentPage + 1) + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
+            nextPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + (currentPage + 1) + queryParams + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
             paginationElement.appendChild(nextPageLink);
 
             // Last page link
             var lastPageLink = document.createElement('li');
             lastPageLink.className = 'page-item' + (currentPage === totalPages ? ' disabled' : '');
-            lastPageLink.innerHTML = '<a class="page-link" href="' + totalPages + '" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>';
+            lastPageLink.innerHTML = '<a class="page-link" href="/admin/ExchangeRequest/' + totalPages + queryParams + '" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>';
             paginationElement.appendChild(lastPageLink);
         }
 

@@ -61,12 +61,12 @@ namespace FBC.Controllers
                 Length = exchangeRequest.Length,
                 Id = User.Identity.GetUserId()
             };
-            foreach (var id in categories)
+            foreach (var id in categories.Take(5))
             {
                 var cat = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
                 rq.Categories.Add(cat);
             }
-
+            string serverPath = "/asset/image/exchange/";
             if (!string.IsNullOrEmpty(front))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(front);
@@ -74,21 +74,21 @@ namespace FBC.Controllers
 
                 // Crop and Save image;
                 CropSaveImage(cropData, frontImage, filePath);
-                rq.Image1 = filePath;
+                rq.Image1 = serverPath + filename + "_front.png";
             }
             if (!string.IsNullOrEmpty(back))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(back);
                 filePath = Path.Combine(path, filename + "_back.png");
                 CropSaveImage(cropData, backImage, filePath);
-                rq.Image2 = filePath;
+                rq.Image2 = serverPath + filename + "_back.png";
             }
             if (!string.IsNullOrEmpty(spine))
             {
                 cropData = JsonConvert.DeserializeObject<CropData>(spine);
                 filePath = Path.Combine(path, filename + "_spine.png");
                 CropSaveImage(cropData, spineImage, filePath);
-                rq.Image3 = filePath;
+                rq.Image3 = serverPath + filename + "_spine.png";
             }
 
             if (!string.IsNullOrEmpty(edge))
@@ -96,7 +96,7 @@ namespace FBC.Controllers
                 cropData = JsonConvert.DeserializeObject<CropData>(edge);
                 filePath = Path.Combine(path, filename + "_edge.png");
                 CropSaveImage(cropData,edgeImage, filePath);
-                rq.Image4 = filePath;
+                rq.Image4 = serverPath + filename + "_edge.png";
             }
 
             var validationContext = new ValidationContext(rq, null, null);

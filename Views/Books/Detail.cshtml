@@ -35,6 +35,8 @@
         }
 
         .book-image {
+            border: 2px solid #ffffff00;
+            overflow:hidden;
             text-align: center;
             aspect-ratio: 1/1;
         }
@@ -58,7 +60,7 @@
         }
 
         .active-image {
-            border: 2px solid limegreen;
+            border: 2px solid limegreen !important;
         }
 
         .seperate {
@@ -134,22 +136,22 @@
         <div class="col-md-5 ps-3 pe-3 mt-3 mb-3 seperate">
             <div class="square">
                 <div class="r">
-                    <img src="@Html.DisplayFor(model => model.Image1)" />
+                    <img src="@Html.DisplayFor(model => model.Image1)" id="main-image" />
                 </div>
-                @* <div class="image-set mt-3">
-                <div class="book-image p-1">
-                <img src="@Html.DisplayFor(model => model.Image1)" />
-                </div>
-                <div class="book-image p-1">
-                <img src="@Html.DisplayFor(model => model.Image2)" />
-                </div>
-                <div class="book-image p-1">
-                <img src="@Html.DisplayFor(model => model.Image3)" />
-                </div>
-                <div class="book-image p-1">
-                <img src="@Html.DisplayFor(model => model.Image4)" />
-                </div>
-                </div> *@
+                <div class="image-set mt-3">
+                    <div class="book-image p-1">
+                        <img src="@Html.DisplayFor(model => model.Image1)" />
+                    </div>
+                    <div class="book-image p-1">
+                        <img src="@Html.DisplayFor(model => model.Image2)" />
+                    </div>
+                    <div class="book-image p-1">
+                        <img src="@Html.DisplayFor(model => model.Image3)" />
+                    </div>
+                    <div class="book-image p-1">
+                        <img src="@Html.DisplayFor(model => model.Image4)" />
+                    </div>
+                </div> 
             </div>
         </div>
         <div class="col-md-7 ps-4 pt-3 pb-3 pe-4">
@@ -220,6 +222,8 @@
 
             // Add the red border to the hovered item
             event.currentTarget.classList.add('active-image');
+            document.getElementById('main-image').src = event.currentTarget.querySelector('img').src;
+
         }
 
         bookImages.forEach(function (bookImage) {
