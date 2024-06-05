@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Models/User.cs
 /Models/User.cs
+/appsettings.json
