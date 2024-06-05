@@ -448,7 +448,6 @@ namespace FBC.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("BankAcountName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -728,7 +727,7 @@ namespace FBC.Migrations
                         .WithMany("WalletOrder")
                         .HasForeignKey("Id")
                         .IsRequired()
-                        .HasConstraintName("FK__Wallet__UserId__FDRT5UYHJdotnet ef migrations add NameMigration");
+                        .HasConstraintName("FK__Wallet__UserId__84D4F90EC43E767F");
 
                     b.Navigation("User");
                 });
