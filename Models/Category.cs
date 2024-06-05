@@ -12,4 +12,6 @@ public partial class Category
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
     public virtual ICollection<ExchangeRequest> ExchangeRequests { get; set; } = new List<ExchangeRequest>();
 
+    
+
 }

@@ -94,8 +94,9 @@
             display: grid;
             grid-template-columns: 45% 32% 33%;
         }
-        .hidden{
-            display:none;
+
+        .hidden {
+            display: none;
         }
     </style>
     <style>
@@ -134,16 +135,16 @@
 }
 <h3 class="mt-large" style="text-align:center"><b>Describe Your Book</b></h3>
 <div class="container mt-large container-shadow p-4" style="font-family:Philosopher">
-    <form action="" method="post" enctype="multipart/form-data">
+    <form action="" method="post" enctype="multipart/form-data" id="request-form">
         <div class="book-images">
-            <h3 class="roboto">Images:</h3>
+            <h3 class="roboto">Ảnh:</h3>
             <div class="row mt-4">
                 <div class="col-3">
                     <div class="image-box">
                         <img src="" id="image-front" />
                         <div class="upload" onclick="document.getElementById('front').click()">
                             <input required id="front" name="frontImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('front')" />
-                            <input class="hidden" required type="text" name="front" />
+                            <input class="hidden" type="text" name="front" id="crop-front" />
                             <div id="placeholder-front">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Front Book's Cover</b></h5>
@@ -160,7 +161,7 @@
                         <img src="" id="image-back" />
                         <div class="upload" onclick="document.getElementById('back').click()">
                             <input required id="back" name="backImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('back')" />
-                            <input class="hidden" required type="text" name="back" />
+                            <input class="hidden" type="text" name="back" id="crop-back" />
                             <div id="placeholder-back">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Back Book's Cover</b></h5>
@@ -177,7 +178,7 @@
                         <img src="" id="image-spine" />
                         <div class="upload" onclick="document.getElementById('spine').click()">
                             <input required id="spine" name="spineImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('spine')" />
-                            <input class="hidden" required type="text" name="spine" />
+                            <input class="hidden" type="text" name="spine" id="crop-spine" />
                             <div id="placeholder-spine">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Book's Spine</b></h5>
@@ -194,7 +195,7 @@
                         <img src="" id="image-edge" />
                         <div class="upload" onclick="document.getElementById('edge').click()">
                             <input required id="edge" name="edgeImage" type="file" accept="image/*" class="hidden" onchange="uploadImage('edge')" />
-                            <input class="hidden" required type="text" name="edge" />
+                            <input class="hidden" type="text" name="edge" id="crop-edge" />
                             <div id="placeholder-edge">
                                 <img src="~/asset/image/image_icon.png" style="width:50px" /><br /><br />
                                 <h5><b>Book's Fore-edge</b></h5>
@@ -209,35 +210,35 @@
             </div>
         </div>
         <div class="mt-large">
-            <h3 class="roboto">General Information</h3>
+            <h3 class="roboto">Thông tin chung</h3>
             <div class="row mt-4" style="text-align: ;">
                 <div class="col-5">
-                    <input required class="input-text w-875" type="text" placeholder="Book's Title" name="Title" id="Title">
+                    <input required class="input-text w-875" type="text" placeholder="Tiêu đề" name="Title" id="Title">
                 </div>
                 <div class="col-4">
-                    <input required class="input-text w-875" type="text" placeholder="Author" name="Author" id="Author">
+                    <input required class="input-text w-875" type="text" placeholder="Tác giả" name="Author" id="Author">
                 </div>
                 <div class="col-3">
-                    <input required class="input-text w-95" type="text" placeholder="Publisher" name="Publisher" id="Publisher">
+                    <input required class="input-text w-95" type="text" placeholder="NXB" name="Publisher" id="Publisher">
                 </div>
             </div>
             <div class="row mt-4" style="text-align: ;">
                 <div class="col-5">
-                    <input required class="input-text w-875" type="text" placeholder="Describe Book's condition" name="Condition" id="Condition">
+                    <input required class="input-text w-875" type="text" placeholder="Sơ lược tình trạng sách" name="Condition" id="Condition">
                 </div>
                 <div class="col-2">
-                    <input required class="input-text w-75" type="text" placeholder="Page amount" name="NoPage" id="Pages">
+                    <input required class="input-text w-75" type="text" placeholder="Số trang" name="NoPage" id="Pages">
                 </div>
                 <div class="col-2">
-                    <input required class="input-text w-75" type="text" placeholder="Weight (kg)" name="Weight" id="Weight">
+                    <input required class="input-text w-75" type="text" placeholder="Nặng (kg)" name="Weight" id="Weight">
                 </div>
                 <div class="col-3">
-                    <input required class="input-text w-30" type="text" placeholder="Width (cm)" name="Width" id="Width">x
-                    <input required class="input-text w-30" type="text" placeholder="Height (cm)" name="Height" id="Height">x
-                    <input required class="input-text w-30" type="text" placeholder="Thickness (cm)" name="Length" id="Length">
+                    <input required class="input-text w-30" type="text" placeholder="Dài(cm)" name="Height" id="Height">x
+                    <input required class="input-text w-30" type="text" placeholder="Rộng(cm)" name="Width" id="Width">x
+                    <input required class="input-text w-30" type="text" placeholder="Dày(cm)" name="Length" id="Length">
                 </div>
             </div>
-            <h5 class="roboto mt-4">Select suitable categories:</h5>
+            <h5 class="roboto mt-4">Chọn tối đa 5 thể loại:</h5>
             <div class="category-box mt-1">
                 <div>
                     @foreach (var cat in Model)
@@ -246,18 +247,18 @@
                     }
                 </div>
                 <select id="categories" name="categories" required class="hidden" multiple>
-                    @foreach(var cat in Model)
+                    @foreach (var cat in Model)
                     {
                         <option value="@cat.CategoryId">@cat.Name</option>
                     }
                 </select>
             </div>
             <div class="desired-bc">
-                <h5 class="roboto mt-4">How much you want for this book ?&nbsp;  (Optional)</h5>
+                <h5 class="roboto mt-4">Số bookcoin mong muốn: &nbsp;  (Không bắt buộc)</h5>
                 <input class="input-text w-30" type="text" placeholder="Desired Bookcoin !" name="Credit" id="Credit">
             </div>
             <div class="description">
-                <h5 class="roboto mt-4">Message for us:  &nbsp;&nbsp;(Optional)</h5>
+                <h5 class="roboto mt-4">Message for us:  &nbsp;&nbsp;(Không bắt buộc)</h5>
                 <textarea id="Description" name="Description" rows="10" style="width:100%"></textarea>
             </div>
         </div>
@@ -303,17 +304,20 @@
         const categoryIndex = element.getAttribute('data-category');
         const selectElement = document.getElementById('categories');
         const option = selectElement.querySelector(`option[value="${categoryIndex}"]`);
+        const selectedOptions = selectElement.querySelectorAll('option:checked');
 
-        // Toggle 'category-active' class on the clicked span
         if (element.classList.contains('category-active')) {
             element.classList.remove('category-active');
             option.selected = false;
         } else {
+            if (selectedOptions.length >= 5) {
+                alert('You can only select up to 5 categories.');
+                return;
+            }
             element.classList.add('category-active');
             option.selected = true;
         }
     }
-
     let croppers = {};
 
     function uploadImage(inputId) {
@@ -369,7 +373,7 @@
         // Destroy Cropper instance after cropping
         cropper.destroy();
         croppers[inputId] = null;
-        
+
     }
 
     function clearCrop(inputId) {
