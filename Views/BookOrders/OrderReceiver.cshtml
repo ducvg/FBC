@@ -152,18 +152,19 @@
                     <span class="order-details-value">@Model.User.Email</span>
                 </div>
             </div>
-           <div class="order-items">
+            <div class="order-items">
                 <h2>Order Items</h2>
-                @foreach (var item in Model.Books)
-                {
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Book Name</th>
-                                <th>Condition</th>
-                                <th>Credit</th>     
-                            </tr>
-                        </thead>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Book Name</th>
+                            <th>Condition</th>
+                            <th>Credit</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.Books)
+                    {
                         <tbody>
                             <tr>
                                 <td>@item.Title</td>
@@ -171,16 +172,17 @@
                                 <td>@item.Credit.Value.ToString("#,##0.") Bookcoin</td>
                             </tr>
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">Total:</td>
-                                <td>@Model.Total.Value</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                }
-                
-            </div> 
+                    }
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">Total:</td>
+                            <td>@Model.Total.Value</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+            </div>
             <div class="billing-address">
                 <h2>Billing Address</h2>
                 <p>
