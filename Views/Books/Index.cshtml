@@ -4,30 +4,34 @@
     var cate = (IEnumerable<dynamic>)ViewData["catelist"];
 }
 
-@section Stylesheets{
+@section Stylesheets {
     <style>
-        .input-group-text{
-            background-color:unset;
-            border-left:none;
-            border-right:none;
+        .input-group-text {
+            background-color: unset;
+            border-left: none;
+            border-right: none;
         }
-        .book-search{
-            border-left:none;
-            border-right:none;
+
+        .book-search {
+            border-left: none;
+            border-right: none;
         }
-        .category-list{
-            height:500px;
+
+        .category-list {
+            height: 500px;
             border: 1px solid rgba(0,0,0,0.2);
             padding: 10px;
-            padding-right:0;
+            padding-right: 0;
             box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
         }
-        .price-range{
+
+        .price-range {
             align-items: center;
             display: flex;
             justify-content: space-between;
         }
-        .price-range-input{
+
+        .price-range-input {
             background-color: #fff;
             border: 1px solid rgba(0, 0, 0, .26);
             border-radius: .125rem;
@@ -39,53 +43,62 @@
             padding-left: .3125rem;
             width: 5.375rem;
         }
-        .price-range-line{
+
+        .price-range-line {
             background: #bdbdbd;
             flex: 1;
             height: 1px;
             margin: 0 .625rem;
         }
 
-        .btn-success, .button-active{
-            background-color:limegreen !important;
+        .btn-success, .button-active {
+            background-color: limegreen !important;
         }
-        .filter-bar{
+
+        .filter-bar {
             display: grid;
             grid-template-columns: auto auto;
-            justify-content:space-between;
+            justify-content: space-between;
             background: rgba(0, 0, 0, .05);
         }
-        .filter-item{
+
+        .filter-item {
             align-content: center;
         }
-        .filter-button{
-            background:white;
+
+        .filter-button {
+            background: white;
         }
-        .button-active{
-            color:white;
+
+        .button-active {
+            color: white;
         }
-        .price-sort{
-           
+
+        .price-sort {
         }
-        .list-book{
+
+        .list-book {
             display: grid;
             grid-template-columns: auto auto auto auto auto;
             grid-gap: 30px 5px;
             place-items: center;
         }
-        .book-image{
-            max-width:200px;
-            text-align:center;
+
+        .book-image {
+            max-width: 200px;
+            text-align: center;
             aspect-ratio: 1 / 1;
         }
+
         .book img {
-            height:100%;
+            height: 100%;
         }
 
         .book {
             border: 1px solid rgba(0, 0, 0, .125);
             max-width: 200px;
-            box-shadow: 0 5px 5px #00000047;    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+            box-shadow: 0 5px 5px #00000047;
+            box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
             border-radius: 0px;
         }
     </style>
@@ -95,41 +108,44 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-10">
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                    </svg>
-                </span>
-                <input type="text" class="form-control book-search" placeholder="Find your favourite Titles" aria-label="Input group example" aria-describedby="basic-addon1">
-                <span style="margin:5px 0;border-left: 1px solid #ced4da"></span>
-                <button class="input-group-text" id="basic-addon1">
-                    <span style="color: limegreen">Search</span>
-                </button>
-            </div>
+            <form asp-action="Index" asp-controller="Books">
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                        </svg>
+                    </span>
+                    <input name="search" type="text" class="form-control book-search" placeholder="Find your favourite Titles" aria-label="Input group example" aria-describedby="basic-addon1">
+                    <span style="margin:5px 0;border-left: 1px solid #ced4da"></span>
+                    <button type="submit" class="input-group-text" id="basic-addon1">
+                        <span style="color: limegreen">Search</span>
+                    </button>
+                </div>
+            </form>
+
         </div>
     </div>
     <div class="row mt-4">
         @await Component.InvokeAsync("MenuCategory")
         @* <div class="col-md-2">
-            <h5>Price range</h5>
-            <div class="price-range">
-                <input type="text" placeholder="From " class="price-range-input"/>
-                <div class="price-range-line"></div>
-                <input type="text" placeholder="To " class="price-range-input"/>
-            </div>
-            <button style="width:100%" type="button" class="mt-3 btn btn-success">APPLY</button>
-            <hr />
-            <h5 style="">Discovery by Category</h5>
-            <div class="category-list me-10">
-                <p>All Categories</p>
-                @foreach(var item in cate)
-                {
-                    <p>
-                        <a>@item.Name</a>
-                    </p>
-                }
-            </div>
+        <h5>Price range</h5>
+        <div class="price-range">
+        <input type="text" placeholder="From " class="price-range-input"/>
+        <div class="price-range-line"></div>
+        <input type="text" placeholder="To " class="price-range-input"/>
+        </div>
+        <button style="width:100%" type="button" class="mt-3 btn btn-success">APPLY</button>
+        <hr />
+        <h5 style="">Discovery by Category</h5>
+        <div class="category-list me-10">
+        <p>All Categories</p>
+        @foreach(var item in cate)
+        {
+        <p>
+        <a>@item.Name</a>
+        </p>
+        }
+        </div>
         </div> *@
         <div class="col-md-10">
             <div class="filter-bar">
@@ -152,7 +168,7 @@
             </div>
             <h1>@TempData["Message"]</h1>
             <div class="list-book mt-3">
-                @foreach(var item in Model)
+                @foreach (var item in Model)
                 {
                     <a asp-controller="Books" asp-action="testbook" asp-route-id="@item.BookId" style="text-decoration:none;">
                         <div class="book pt-2 pb-2">
@@ -160,7 +176,7 @@
                                 <img src="@item.Image1" />
                             </div>
                             <div class="pt-2 pb-2">
-                            <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">@item.Title - @item.Author</h6>
+                                <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">@item.Title - @item.Author</h6>
                                 <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">@item.Credit.Value.ToString("#,##0.") Bookcoin</h6>
                             </div>
                         </div>

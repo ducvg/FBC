@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FBC.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FBC.Controllers
 {
@@ -19,7 +20,7 @@ namespace FBC.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(int? cate)
+        public async Task<IActionResult> Index(int? cate, string? search)
         {
             var booklist = _context.Books.Include(b => b.Categories).ToList();
             if (cate.HasValue)
@@ -30,7 +31,23 @@ namespace FBC.Controllers
                     TempData["Message"] = $"Chưa có sản phẩm";
                 }
             }
-            if(booklist == null)
+            if(!search.IsNullOrEmpty())
+            {
+                booklist = booklist.Where(b=>b.Title.ToLower().Contains(search.ToLower())).ToList();
+                if (booklist == null)
+                {
+                    TempData["Message"] = $"Chưa có sản phẩm";
+                }
+            }
+            if (!search.IsNullOrEmpty() && cate.HasValue)
+            {
+                booklist = booklist.Where(b => b.Title.ToLower().Contains(search.ToLower()) && b.Categories.Any(c => c.CategoryId == cate)).ToList();
+                if (booklist == null)
+                {
+                    TempData["Message"] = $"Chưa có sản phẩm";
+                }
+            }
+            if (booklist == null)
             {
                 TempData["Message"] = $"Chưa có sản phẩm";
             }
@@ -44,7 +61,7 @@ namespace FBC.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books
+            var book = await _context.Books.Include(b => b.Categories)
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
@@ -53,6 +70,8 @@ namespace FBC.Controllers
 
             return View(book); 
         }
+
+       
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -61,8 +80,7 @@ namespace FBC.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.Include(b => b.Categories)
-                .FirstOrDefaultAsync(m => m.BookId == id);
+            var book = await _context.Books.Include(b => b.Categories).FirstOrDefaultAsync(b => b.BookId == id);
             if (book == null)
             {
 
