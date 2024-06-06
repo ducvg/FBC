@@ -24,7 +24,11 @@ pipeline {
     stage('Relase') {
       steps {
         sh 'ls -la'
+        sh 'tmux list-sessions'
+        sh 'tmux kill-session -a'
+        sh 'tmux new-session -A -s fbc-session'
         sh 'dotnet publish/FBC.dll'
+        sh 'tmux detach'
       }
     }
   }
