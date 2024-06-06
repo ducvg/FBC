@@ -26,7 +26,7 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          sh "echo 'root' | su -c 'pkill -f FBC'"
+          sh "echo 'root' | su -c 'pkill -f FBC &'"
           sh 'curl fbookcycle.store'
           sh "echo 'root' | su -c 'whoami'"
           sh "echo 'root' | su -c 'nohup dotnet publish/FBC.dll &'"
