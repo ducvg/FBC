@@ -24,6 +24,7 @@ pipeline {
     stage('Release') {
       steps {
         sh 'ls -la'
+        sh 'PID=$(pgrep -f "dotnet publish/FBC.dll"); kill $PID'
         sh 'dotnet publish/FBC.dll &'
       }
     }
