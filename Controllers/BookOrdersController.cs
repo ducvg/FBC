@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FBC.Models;
+using Microsoft.AspNet.Identity;
 
 namespace FBC.Controllers
 {
@@ -21,8 +22,8 @@ namespace FBC.Controllers
         // GET: BookOrders
         public async Task<IActionResult> Index()
         {
-            var fbc1Context = _context.BookOrders.Include(b => b.User);
-            return View(await fbc1Context.ToListAsync());
+            var fbc1Context = await _context.BookOrders.Include(b => b.User).Where(b => b.Id == User.Identity.GetUserId()).ToListAsync();
+            return View(fbc1Context);
         }
 
         public ActionResult OrderReceiver(int? id)
