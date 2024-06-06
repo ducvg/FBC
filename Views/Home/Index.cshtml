@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using FBC.Models
+@model List<Book>
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -73,6 +74,15 @@
         .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus{
             box-shadow: 0 0 0 0.2rem rgba(40,167,69,.8);
         }
+        .book-image{
+            background-color: #0000000f;
+            padding: 10px 0;
+            text-align: center;
+            aspect-ratio: 1 / 1;
+        }
+        .book-image img{
+            height:100%
+        }
     </style>
 }
 <div class="welcome-banner">
@@ -106,7 +116,7 @@
     <h1>New Books !</h1>
     <h3> Check out our newly imported books and customer's books !</h3><br /><br />
     <div class="container new-list">
-        @for (int i = 0; i < 8; i++)
+  @*       @for (int i = 0; i < 8; i++)
         {
             <a href="/Books" style="text-decoration:none;">
                 <div class="book">
@@ -115,6 +125,19 @@
                     </div><br />
                     <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">Name - author</h6>
                     <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">69.0 Bookcoin</h6>
+                    <br />
+                </div>
+            </a>
+        } *@
+        @foreach (var a in Model)
+        {
+            <a href="/Books/Details/@a.BookId" style="text-decoration:none;">
+                <div class="book">
+                    <div class="book-image">
+                        <img src="@a.Image1" />
+                    </div><br />
+                    <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">@a.Title</h6>
+                    <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">@a.Credit.Value.ToString("#,##0.") Bookcoin</h6>
                     <br />
                 </div>
             </a>
