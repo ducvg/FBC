@@ -8,7 +8,9 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git credentialsId: env.GIT_CREDENTIALS_ID, url: 'https://github.com/ducvg/FBC.git', branch: 'master'
+        git credentialsId: env.GIT_CREDENTIALS_ID,
+        url: 'https://github.com/ducvg/FBC.git',
+        branch: 'master'
       }
     }
     stage('Build') {
@@ -17,6 +19,13 @@ pipeline {
         sh 'dotnet build'
         sh 'dotnet publish -c Release -o ./publish'
         sh 'ls -la'
+      }
+    }
+    stage('Relase') {
+      steps {
+        sh 'cd /bin/Release/net8.0'
+        sh 'ls -la'
+        sh 'dotnet FBC.dll'
       }
     }
   }
