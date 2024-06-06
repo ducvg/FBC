@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace FBC.Areas.Identity.Pages.Account
 {
@@ -30,13 +31,15 @@ namespace FBC.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly Fbc1Context _context;
 
         public ExternalLoginModel(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             IUserStore<User> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            Fbc1Context context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -44,6 +47,7 @@ namespace FBC.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -164,6 +168,22 @@ namespace FBC.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+
+                        await _userManager.AddToRoleAsync(user, "client");
+
+                        var cart = new CartOrder
+                        {
+                            Id = user.Id
+                        };
+                        await _context.CartOrders.AddAsync(cart);
+
+                        var wallet = new Wallet
+                        {
+                            Password = "N/A",
+                            Id = user.Id,
+                        };
+                        await _context.Wallets.AddAsync(wallet);
+                        await _context.SaveChangesAsync();
 
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
