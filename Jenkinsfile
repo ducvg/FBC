@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         GIT_CREDENTIALS_ID = 'chu0jz013-github-token'
+        DOCKER_IMAGE = 'fbc'
     }
 
   stages {
@@ -13,7 +14,7 @@ pipeline {
         branch: 'master'
       }
     }
-    stage('Build') {
+    stage('Dotnet Build') {
       steps {
         sh 'dotnet --version'
         sh 'dotnet build'
@@ -21,14 +22,13 @@ pipeline {
         sh 'ls -la'
       }
     }
-    stage('Release') {
+
+    stage('Deploy') {
       steps {
-        sh 'ls -la'
         script {
-          sh '''
-          nohup dotnet ./publish/FBC.dll &
-          '''
+          sh "pkill -f FBC"
         }
+        sh 'nohup dotnet publish/FBC.dll &'
       }
     }
   }
