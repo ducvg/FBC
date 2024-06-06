@@ -21,11 +21,15 @@ pipeline {
         sh 'ls -la'
       }
     }
-    stage('Relase') {
+    stage('Release') {
       steps {
         sh 'ls -la'
         sh 'tmux -V'
-        sh 'tmux ls | cut -d: -f1 | xargs -t -n1 tmux kill-session -t'
+
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+          sh 'tmux ls | cut -d: -f1 | xargs -t -n1 tmux kill-session -t'
+        }
+        
         sh 'tmux new-session -A -s fbc-session'
         sh 'nohup dotnet publish/FBC.dll'
         sh 'tmux detach'
