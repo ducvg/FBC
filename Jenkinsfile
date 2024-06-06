@@ -33,7 +33,7 @@ pipeline {
         }
         script {
           try {
-            sh 'dotnet publish/FBC.dll'
+            sh 'dotnet publish/FBC.dll &'
           } catch (Exception e) {
             echo " ${e.message}"
           }
