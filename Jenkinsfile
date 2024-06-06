@@ -14,6 +14,9 @@ pipeline {
     stage('Build') {
       steps {
         sh 'dotnet --version'
+        sh 'dotnet build'
+        sh 'dotnet publish -c Release -o ./publish'
+        sh 'ls -la'
       }
     }
   }
