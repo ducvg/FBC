@@ -24,17 +24,16 @@ pipeline {
     stage('Release') {
       steps {
         sh 'ls -la'
-
         script {
-          try {
-            sh 'PID=$(pgrep -f "dotnet publish/FBC.dll"); kill $PID'
-          } catch (Exception e) {
-            echo "Failed to kill the dotnet process: ${e.message}"
-          }
+            try {
+                sh 'PID=$(pgrep -f "dotnet publish/FBC.dll"); kill $PID'
+            } catch (Exception e) {
+                echo "Failed to kill the dotnet process: ${e.message}"
+            }
         }
-        bat 'dotnet publish/FBC.dll &'
+        sh 'nohup dotnet publish/FBC.dll > /dev/null 2>&1 &'
         sh 'curl fbookcycle.store'
-       }
+      }
     }
   }
 }
