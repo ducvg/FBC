@@ -7,18 +7,17 @@ pipeline {
         git branch: 'master', url: 'https://github.com/ducvg/FBC.git'
       }
     }
-  }
-
-  stage('Build') {
-    steps {
-      // Build the project
-      sh 'dotnet --version'
+    stage('Build') {
+      steps {
+        // Build the project
+        sh 'dotnet --version'
+      }
     }
   }
-}
 
-post {
-  always {
-    cleanWs()
+  post {
+    always {
+      cleanWs()
+    }
   }
 }
