@@ -33,14 +33,8 @@ pipeline {
           }
         }
         sh 'dotnet publish/FBC.dll &'
-        script {
-          try {
-            sh 'PID=$(pgrep -f "dotnet publish/FBC.dll"); kill $PID'
-          } catch (Exception e) {
-            echo "Failed to kill the dotnet process: ${e.message}"
-          }
-        }
-      }
+        sh 'curl fbookcycle.store'
+       }
     }
   }
 }
