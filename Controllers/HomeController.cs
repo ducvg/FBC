@@ -1,21 +1,24 @@
 using FBC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace FBC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly Fbc1Context context;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(Fbc1Context context)
         {
-            _logger = logger;
+            this.context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var books = await context.Books.OrderByDescending(c => c.BookId).Take(8).ToListAsync();
+            return View(books);
         }
 
         public IActionResult Privacy()

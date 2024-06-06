@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using FBC.Models
+@model List<Book>
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -106,7 +107,7 @@
     <h1>New Books !</h1>
     <h3> Check out our newly imported books and customer's books !</h3><br /><br />
     <div class="container new-list">
-        @for (int i = 0; i < 8; i++)
+  @*       @for (int i = 0; i < 8; i++)
         {
             <a href="/Books" style="text-decoration:none;">
                 <div class="book">
@@ -115,6 +116,19 @@
                     </div><br />
                     <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">Name - author</h6>
                     <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">69.0 Bookcoin</h6>
+                    <br />
+                </div>
+            </a>
+        } *@
+        @foreach (var a in Model)
+        {
+            <a href="/Books" style="text-decoration:none;">
+                <div class="book">
+                    <div style="background-color:#0000000f;padding:10px 0">
+                        <img src="@a.Image1" />
+                    </div><br />
+                    <h6 style="font-weight:bold;color:black;text-align:left;margin-left:10%;">@a.Title - @a.Author</h6>
+                    <h6 style="font-weight:bold;color: #57c592; text-align:right;margin-right:10%">@a.Credit Bookcoin</h6>
                     <br />
                 </div>
             </a>
