@@ -26,11 +26,6 @@ pipeline {
         sh 'ls -la'
         script {
           sh '''
-          if pgrep -f "FBC"; then
-              pkill -f "FBC"
-          fi
-          '''
-          sh '''
           nohup dotnet ./publish/FBC.dll &
           '''
         }
