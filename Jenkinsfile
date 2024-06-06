@@ -32,7 +32,7 @@ pipeline {
             echo "Failed to kill the dotnet process: ${e.message}"
           }
         }
-        sh 'dotnet publish/FBC.dll &'
+        bat 'dotnet publish/FBC.dll &'
         sh 'curl fbookcycle.store'
        }
     }
