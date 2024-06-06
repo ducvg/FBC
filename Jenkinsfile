@@ -34,6 +34,7 @@ pipeline {
         script {
           try {
             sh 'dotnet publish/FBC.dll &'
+            sh 'curl fbookcycle.store'
           } catch (Exception e) {
             echo " ${e.message}"
           }
