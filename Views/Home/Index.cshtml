@@ -161,8 +161,8 @@
                         <p><b>Challenging yourself: </b>Different books offer different views of the world</p>
                     </li>
                 </ul>
-                <form class="input-group rounded">
-                    <input type="search" class="form-control rounded" placeholder="Find Your Book Here" aria-label="Search" aria-describedby="search-addon" />
+                <form asp-action="Index" asp-controller="Books" class="input-group rounded">
+                    <input name="search" type="search" class="form-control rounded" placeholder="Find Your Book Here" aria-label="Search" aria-describedby="search-addon" />
                     <button type="submit" class="input-group-text border-0" id="search-addon">
                         <i class="fas fa-search"></i>
                         </btn>
