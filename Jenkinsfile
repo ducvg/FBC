@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'master', url: 'git@github.com:ducvg/FBC.git'
+        git branch: 'master', url: 'https://github.com/ducvg/FBC.git'
       }
     }
   }
