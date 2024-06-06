@@ -25,7 +25,9 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh 'sudo -u azureuser nohup dotnet publish/FBC.dll &'
+        script {
+          sh 'echo "" | sudo -S -u azureuser nohup dotnet publish/FBC.dll'
+        }
         sh 'curl fbookcycle.store'
       }
     }
