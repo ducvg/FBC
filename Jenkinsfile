@@ -27,11 +27,11 @@ pipeline {
         sh 'tmux -V'
 
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          sh 'tmux ls | cut -d: -f1 | xargs -t -n1 tmux kill-session -t'
+          sh 'tmux -S /tmp/tmux-1000/default kill-session -t fbc-session'
         }
-        
-        sh 'tmux new-session -A -s fbc-session'
-        sh 'nohup dotnet publish/FBC.dll'
+
+        sh 'tmux -S /tmp/tmux-1000/default new-session -A -s fbc-session'
+        sh 'dotnet publish/FBC.dll'
         sh 'tmux detach'
       }
     }
