@@ -26,9 +26,10 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          sh "pkill -f FBC"
+          sh 'pkill -f FBC'
         }
         sh 'nohup dotnet publish/FBC.dll &'
+        sh 'curl fbookcycle.store'
       }
     }
   }
