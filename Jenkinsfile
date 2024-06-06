@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Relase') {
       steps {
-        sh 'cd /bin/Release/net8.0'
+        sh 'cd bin/Release/net8.0'
         sh 'ls -la'
         sh 'dotnet FBC.dll'
       }
