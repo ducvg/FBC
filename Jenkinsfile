@@ -24,15 +24,7 @@ pipeline {
     stage('Release') {
       steps {
         sh 'ls -la'
-        sh 'tmux -V'
-
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          sh 'sudo tmux kill-session -t fbc-session'
-        }
-
-        sh 'sudo tmux new-session -A -s fbc-session'
-        sh 'dotnet publish/FBC.dll'
-        sh 'sudo tmux detach'
+        sh 'dotnet publish/FBC.dll &'
       }
     }
   }
