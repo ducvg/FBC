@@ -24,7 +24,14 @@ pipeline {
     stage('Release') {
       steps {
         sh 'ls -la'
-        sh 'PID=$(pgrep -f "dotnet publish/FBC.dll"); kill $PID'
+
+        script {
+          try {
+            sh 'PID=$(pgrep -f "dotnet publish/FBC.dll"); kill $PID'
+          } catch (Exception e) {
+            echo "Failed to kill the dotnet process: ${e.message}"
+          }
+        }
         sh 'dotnet publish/FBC.dll &'
       }
     }
