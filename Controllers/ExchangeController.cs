@@ -34,8 +34,8 @@ namespace FBC.Controllers
             var lastId = await _context.ExchangeRequests.OrderByDescending(e => e.ExchangeId).Select(e => e.ExchangeId).FirstOrDefaultAsync();
             var filename = lastId + 1;
             CropData cropData = new();
-            //string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
-            string path = Path.Combine("wwwroot/asset/image/exchange");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
+            //string path = Path.Combine("wwwroot/asset/image/exchange");
             string filePath;
 
             ExchangeRequest rq = new()
@@ -60,37 +60,37 @@ namespace FBC.Controllers
                 rq.Categories.Add(cat);
             }
             string serverPath = "/asset/image/exchange/";
-            //if (!string.IsNullOrEmpty(front))
-            //{
-            //    cropData = JsonConvert.DeserializeObject<CropData>(front);
-            //    filePath = Path.Combine(path, filename + "_front.png");
+            if (!string.IsNullOrEmpty(front))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(front);
+                filePath = Path.Combine(path, filename + "_front.png");
 
-            //    // Crop and Save image
-            //    CropSaveImage(cropData, frontImage, filePath);
-            //    rq.Image1 = serverPath + filename + "_front.png";
-            //}
-            //if (!string.IsNullOrEmpty(back))
-            //{
-            //    cropData = JsonConvert.DeserializeObject<CropData>(back);
-            //    filePath = Path.Combine(path, filename + "_back.png");
-            //    CropSaveImage(cropData, backImage, filePath);
-            //    rq.Image2 = serverPath + filename + "_back.png";
-            //}
-            //if (!string.IsNullOrEmpty(spine))
-            //{
-            //    cropData = JsonConvert.DeserializeObject<CropData>(spine);
-            //    filePath = Path.Combine(path, filename + "_spine.png");
-            //    CropSaveImage(cropData, spineImage, filePath);
-            //    rq.Image3 = serverPath + filename + "_spine.png";
-            //}
+                // Crop and Save image
+                CropSaveImage(cropData, frontImage, filePath);
+                rq.Image1 = serverPath + filename + "_front.png";
+            }
+            if (!string.IsNullOrEmpty(back))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(back);
+                filePath = Path.Combine(path, filename + "_back.png");
+                CropSaveImage(cropData, backImage, filePath);
+                rq.Image2 = serverPath + filename + "_back.png";
+            }
+            if (!string.IsNullOrEmpty(spine))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(spine);
+                filePath = Path.Combine(path, filename + "_spine.png");
+                CropSaveImage(cropData, spineImage, filePath);
+                rq.Image3 = serverPath + filename + "_spine.png";
+            }
 
-            //if (!string.IsNullOrEmpty(edge))
-            //{
-            //    cropData = JsonConvert.DeserializeObject<CropData>(edge);
-            //    filePath = Path.Combine(path, filename + "_edge.png");
-            //    CropSaveImage(cropData, edgeImage, filePath);
-            //    rq.Image4 = serverPath + filename + "_edge.png";
-            //}
+            if (!string.IsNullOrEmpty(edge))
+            {
+                cropData = JsonConvert.DeserializeObject<CropData>(edge);
+                filePath = Path.Combine(path, filename + "_edge.png");
+                CropSaveImage(cropData, edgeImage, filePath);
+                rq.Image4 = serverPath + filename + "_edge.png";
+            }
 
             var validationContext = new ValidationContext(rq, null, null);
             var validationResults = new List<ValidationResult>();
@@ -128,10 +128,10 @@ namespace FBC.Controllers
                             canvas.DrawBitmap(original, cropRect, new SKRect(0, 0, cropRect.Width, cropRect.Height));
                         }
 
-                        using (var imageFileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            cropped.Encode(imageFileStream, SKEncodedImageFormat.Png, 100);
-                        }
+                        //using (var imageFileStream = new FileStream(filePath, FileMode.Create))
+                        //{
+                        //    cropped.Encode(imageFileStream, SKEncodedImageFormat.Png, 100);
+                        //}
                     }
                 }
             }
