@@ -34,7 +34,8 @@ namespace FBC.Controllers
             var lastId = await _context.ExchangeRequests.OrderByDescending(e => e.ExchangeId).Select(e => e.ExchangeId).FirstOrDefaultAsync();
             var filename = lastId + 1;
             CropData cropData = new();
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
+            //string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/asset/image/exchange");
+            string path = Path.Combine("wwwroot/asset/image/exchange");
             string filePath;
 
             ExchangeRequest rq = new()
