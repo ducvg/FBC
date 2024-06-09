@@ -37,7 +37,8 @@ pipeline {
           sh 'curl fbookcycle.store'
           sh "echo 'root' | su -c 'whoami'"
           sh "echo 'root' | su -c 'nohup dotnet run &'"
-          sleep 1
+          sleep 3
+          sh "cat nohup.out"
         }
         sh 'curl fbookcycle.store'
       }
