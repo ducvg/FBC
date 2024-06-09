@@ -17,8 +17,8 @@ pipeline {
     stage('Dotnet Build') {
       steps {
         sh 'dotnet --version'
-        sh 'dotnet build'
-        sh 'dotnet publish -c Release -o ./publish'
+        // sh 'dotnet build'
+        // sh 'dotnet publish -c Release -o ./publish'
         sh 'ls -la'
       }
     }
@@ -34,12 +34,8 @@ pipeline {
         // }
         script {
           sh "echo 'root' | su -c 'pkill -f FBC &'"
-          sh 'curl fbookcycle.store'
-          sh "echo 'root' | su -c 'whoami'"
-          sh "echo 'root' | su -c 'nohup dotnet run &'"
-          sleep 3
+          sh "echo 'root' | su -c 'dotnet run'"
         }
-        sh 'curl fbookcycle.store'
       }
     }
   }
