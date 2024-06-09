@@ -33,7 +33,8 @@ pipeline {
         //   sleep 1
         // }
         script {
-          sh "echo 'root' | su -c 'nohup dotnet run &'"
+          sh "echo 'root' | su -c 'pkill -f FBC &'"
+          sh "echo 'root' | su -c 'dotnet run'"
         }
       }
     }
