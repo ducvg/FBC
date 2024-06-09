@@ -5,7 +5,9 @@ using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using SkiaSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace FBC.Controllers
 {
@@ -120,31 +122,33 @@ namespace FBC.Controllers
 
         private void CropSaveImage(CropData? cropData, IFormFile image, string filePath)
         {
-            var validImageTypes = new[] { "image/jpeg", "image/png"};
-            if (!validImageTypes.Contains(image.ContentType))
+            if (cropData == null)
             {
-                throw new Exception("Unsupported image format.");
+                throw new ArgumentNullException(nameof(cropData));
             }
-            using (var inputStream = image.OpenReadStream())
+
+            using (var stream = image.OpenReadStream())
+            using (Image<Rgba32> img = Image.Load<Rgba32>(stream))
             {
-
-                using (var original = SKBitmap.Decode(inputStream))
+                // Apply optional transformations
+                if (cropData.rotate.HasValue)
                 {
-                    var cropRect = new SKRectI(cropData.x, cropData.y, cropData.x + cropData.width, cropData.y + cropData.height);
-                    using (var cropped = new SKBitmap(cropRect.Width, cropRect.Height))
-                    {
-                        using (var canvas = new SKCanvas(cropped))
-                        {
-                            canvas.DrawBitmap(original, cropRect, new SKRect(0, 0, cropRect.Width, cropRect.Height));
-                        }
-
-                        using (var imageFileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            cropped.Encode(imageFileStream, SKEncodedImageFormat.Png, 100);
-                        }
-                    }
+                    img.Mutate(x => x.Rotate((float)cropData.rotate.Value));
                 }
 
+                if (cropData.scaleX.HasValue || cropData.scaleY.HasValue)
+                {
+                    int scaleX = cropData.scaleX ?? 1;
+                    int scaleY = cropData.scaleY ?? 1;
+                    img.Mutate(x => x.Resize(img.Width * scaleX, img.Height * scaleY));
+                }
+
+                // Apply cropping
+                var cropRectangle = new Rectangle(cropData.x, cropData.y, cropData.width, cropData.height);
+                img.Mutate(x => x.Crop(cropRectangle));
+
+                // Save the result
+                img.Save(filePath);
             }
         }
     }
