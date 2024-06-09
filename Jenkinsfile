@@ -14,14 +14,14 @@ pipeline {
         branch: 'master'
       }
     }
-    stage('Dotnet Build') {
-      steps {
-        sh 'dotnet --version'
-        sh 'dotnet build'
-        sh 'dotnet publish -c Release -o ./publish'
-        sh 'ls -la'
-      }
-    }
+    // stage('Dotnet Build') {
+    //   steps {
+    //     sh 'dotnet --version'
+    //     sh 'dotnet build'
+    //     sh 'dotnet publish -c Release -o ./publish'
+    //     sh 'ls -la'
+    //   }
+    // }
 
     stage('Deploy') {
       steps {
