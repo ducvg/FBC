@@ -120,24 +120,31 @@ namespace FBC.Controllers
 
         private void CropSaveImage(CropData? cropData, IFormFile image, string filePath)
         {
+            var validImageTypes = new[] { "image/jpeg", "image/png"};
+            if (!validImageTypes.Contains(image.ContentType))
+            {
+                throw new Exception("Unsupported image format.");
+            }
             using (var inputStream = image.OpenReadStream())
             {
+
                 using (var original = SKBitmap.Decode(inputStream))
                 {
                     var cropRect = new SKRectI(cropData.x, cropData.y, cropData.x + cropData.width, cropData.y + cropData.height);
                     using (var cropped = new SKBitmap(cropRect.Width, cropRect.Height))
                     {
-                        //using (var canvas = new SKCanvas(cropped))
-                        //{
-                        //    canvas.DrawBitmap(original, cropRect, new SKRect(0, 0, cropRect.Width, cropRect.Height));
-                        //}
+                        using (var canvas = new SKCanvas(cropped))
+                        {
+                            canvas.DrawBitmap(original, cropRect, new SKRect(0, 0, cropRect.Width, cropRect.Height));
+                        }
 
-                        //using (var imageFileStream = new FileStream(filePath, FileMode.Create))
-                        //{
-                        //    cropped.Encode(imageFileStream, SKEncodedImageFormat.Png, 100);
-                        //}
+                        using (var imageFileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            cropped.Encode(imageFileStream, SKEncodedImageFormat.Png, 100);
+                        }
                     }
                 }
+
             }
         }
     }
