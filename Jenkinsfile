@@ -25,11 +25,18 @@ pipeline {
 
     stage('Deploy') {
       steps {
+        // script {
+        //   sh "echo 'root' | su -c 'pkill -f FBC &'"
+        //   sh 'curl fbookcycle.store'
+        //   sh "echo 'root' | su -c 'whoami'"
+        //   sh "echo 'root' | su -c 'nohup dotnet publish/FBC.dll &'"
+        //   sleep 1
+        // }
         script {
           sh "echo 'root' | su -c 'pkill -f FBC &'"
           sh 'curl fbookcycle.store'
           sh "echo 'root' | su -c 'whoami'"
-          sh "echo 'root' | su -c 'nohup dotnet publish/FBC.dll &'"
+          sh "echo 'root' | su -c 'nohup dotnet run &'"
           sleep 1
         }
         sh 'curl fbookcycle.store'
