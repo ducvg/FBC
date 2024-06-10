@@ -17,25 +17,23 @@ pipeline {
     stage('Dotnet Build') {
       steps {
         sh 'dotnet --version'
-        // sh 'dotnet build'
-        // sh 'dotnet publish -c Release -o ./publish'
+        sh 'dotnet build'
+        sh 'dotnet publish -c Release -o ./publish'
         sh 'ls -la'
       }
     }
 
     stage('Deploy') {
       steps {
-        // script {
-        //   sh "echo 'root' | su -c 'pkill -f FBC &'"
-        //   sh 'curl fbookcycle.store'
-        //   sh "echo 'root' | su -c 'whoami'"
-        //   sh "echo 'root' | su -c 'nohup dotnet publish/FBC.dll &'"
-        //   sleep 1
-        // }
         script {
           sh "echo 'root' | su -c 'pkill -f FBC &'"
-          sh "echo 'root' | su -c 'dotnet run'"
+          sh 'curl fbookcycle.store'
+          sh "echo 'root' | su -c 'whoami'"
+          sh "echo 'root' | su -c 'nohup dotnet publish/FBC.dll &'"
+          sh 'curl fbookcycle.store'
+          sleep 1
         }
+        sh 'curl fbookcycle.store'
       }
     }
   }
