@@ -26,7 +26,13 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          sh "echo 'root' | su -c 'pkill -f FBC &'"
+          try {
+            timeout(time: 5, unit: 'SECONDS') {
+              sh "echo 'root' | su -c 'pkill -f FBC &'"
+            }
+          } catch (e) {
+            echo "pkill command timed out: ${e}"
+          }
           sh 'curl fbookcycle.store'
           sh "echo 'root' | su -c 'whoami'"
           sh "echo 'root' | su -c 'nohup dotnet publish/FBC.dll &'"
