@@ -39,6 +39,11 @@ pipeline {
           sh 'curl fbookcycle.store'
           sleep 1
         }
+
+        // script {
+        //   sh "echo 'root' | su -c 'whoami'"
+        //   sh "echo 'root' | su -c 'bash run.sh'"
+        // }
         sh 'curl fbookcycle.store'
       }
     }
