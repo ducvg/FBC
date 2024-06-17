@@ -43,6 +43,7 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
+	  <Folder Include="Migrations\" />
 	  <Folder Include="Views\NewFolder\" />
 	  <Folder Include="wwwroot\asset\image\books\" />
 	  <Folder Include="wwwroot\js\cropper\" />
