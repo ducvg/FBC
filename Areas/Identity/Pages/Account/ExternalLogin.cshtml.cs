@@ -169,7 +169,7 @@ namespace FBC.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-                        await _userManager.AddToRoleAsync(user, "client");
+                        //await _userManager.AddToRoleAsync(user, "client");
 
                         var cart = new CartOrder
                         {
